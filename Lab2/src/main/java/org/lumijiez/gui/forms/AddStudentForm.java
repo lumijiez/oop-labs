@@ -43,8 +43,11 @@ public class AddStudentForm extends JFrame {
             String faculty = facultyField.getText();
             FullStudentData data = new FullStudentData(name, surname, group, faculty);
             if (!name.isEmpty() && !surname.isEmpty() && !group.isEmpty() && !faculty.isEmpty()) {
-                sv.getFm().getGm().getSm().addStudent(data);
+                sv.getFm().getGm().getSm().addStudent(data, sv);
                 outputTextArea.setText("===== Students =====\n" + sv.getStudentsText());
+                System.out.println(data);
+                System.out.println("LOL");
+                System.out.println(sv.getStudentsText());
                 this.dispose();
             } else JOptionPane.showMessageDialog(this, "Please fill in all fields.");
         });

@@ -25,7 +25,6 @@ public class StudentManagementGUI {
         int centerY = (int) ((screenSize.getHeight() - frame.getHeight()) / 2);
         frame.setLocation(centerX, centerY);
 
-
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
 
@@ -36,6 +35,21 @@ public class StudentManagementGUI {
         JScrollPane scrollPane = new JScrollPane(outputTextArea);
 
         mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        String[] options = {"Option 1", "Option 2", "Option 3"};
+        JComboBox<String> dropdown = new JComboBox<>(options);
+
+        JButton button = new JButton("Show Selected Option");
+
+        button.addActionListener(e -> {
+            String selectedOption = (String) dropdown.getSelectedItem();
+            System.out.println(selectedOption);
+        });
+
+        button.setSize(new Dimension(100, 100));
+
+        mainPanel.add(dropdown);
+        mainPanel.add(button);
 
         JPanel buttonPanel = new JPanel(new GridLayout(0, 1));
 

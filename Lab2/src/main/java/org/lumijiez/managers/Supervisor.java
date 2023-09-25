@@ -17,10 +17,8 @@ public class Supervisor implements Serializable {
 
     public String getStudentsText() {
         StringBuilder info = new StringBuilder();
-        for (Group group : fm.getGm().getGroups()) {
-            for (Student student : group.getStudents()) {
-                info.append(student.getFullname()).append(" ").append(student.getGroup().getName()).append("\n");
-            }
+        for (Student st : fm.getGm().getSm().getStudents()) {
+            info.append(st.getFullname()).append(" ").append(st.getGroup().getName()).append("\n");
         }
         return info.toString();
     }

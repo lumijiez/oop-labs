@@ -1,10 +1,10 @@
 package org.lumijiez.util;
 
 
-import org.lumijiez.base.Faculty;
+import java.io.Serializable;
 
 // Helper class for easier management of names, surnames, and groups
-public class FullStudentData {
+public class FullStudentData implements Serializable {
     private final String name;
     private final String surname;
     private final String groupName;
@@ -35,9 +35,14 @@ public class FullStudentData {
     }
 
     public boolean equals(FullStudentData data) {
-            return this.name.equals(data.name())
-                    && this.surname.equals(data.surname())
-                    && this.groupName.equals(data.group())
-                    && this.facultyName.equals(data.faculty());
+        return this.name.equals(data.name())
+                && this.surname.equals(data.surname())
+                && this.groupName.equals(data.group())
+                && this.facultyName.equals(data.faculty());
+    }
+
+    @Override
+    public String toString() {
+        return name + " " + surname + " " + groupName + " " + facultyName + "\n";
     }
 }

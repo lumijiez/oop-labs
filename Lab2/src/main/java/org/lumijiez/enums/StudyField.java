@@ -1,6 +1,9 @@
 package org.lumijiez.enums;
 
-public enum StudyField {
+import java.io.Serializable;
+
+public enum StudyField implements Serializable {
+    DEFAULT_UNASSIGNED("Unassigned", "None"),
     MECHANICAL_ENGINEERING("Mechanical Engineering", "ME"),
     SOFTWARE_ENGINEERING("Software Engineering", "FAF"),
     FOOD_TECHNOLOGY("Food Technology", "FT"),

@@ -30,6 +30,7 @@ public class Student implements Serializable {
     private FullStudentData FSD;
     private final List<Grade> grades = new ArrayList<>();
 
+
     // Student stores a reference to its own Group and Faculty, bidirectional association
 
     public Faculty getFaculty() {

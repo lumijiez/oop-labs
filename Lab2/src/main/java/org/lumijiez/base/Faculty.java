@@ -2,9 +2,10 @@ package org.lumijiez.base;
 
 import org.lumijiez.enums.StudyField;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Faculty {
+public class Faculty implements Serializable {
 
     public Faculty(String name, String abbreviation, StudyField field) {
         this.name = name;
