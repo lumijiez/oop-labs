@@ -1,5 +1,6 @@
-package org.lumijiez.base;
+package org.lumijiez.util;
 
+// Helper class for easier management of names, surnames, and groups
 public class NameSurnameGroup {
     private final String name;
     private final String surname;

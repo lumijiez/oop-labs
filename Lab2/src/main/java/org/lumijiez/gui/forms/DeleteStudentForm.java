@@ -1,13 +1,13 @@
 package org.lumijiez.gui.forms;
 
-import org.lumijiez.base.NameSurnameGroup;
-import org.lumijiez.managers.Manager;
+import org.lumijiez.util.NameSurnameGroup;
+import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class DeleteStudentForm extends JFrame {
-    public DeleteStudentForm(int centerX, int centerY, Manager studentManager, JTextArea outputTextArea) {
+    public DeleteStudentForm(int centerX, int centerY, Supervisor studentManager, JTextArea outputTextArea) {
         this.setTitle("Delete Student");
         this.setSize(400, 300);
         this.setLocation(centerX, centerY);
@@ -33,14 +33,14 @@ public class DeleteStudentForm extends JFrame {
         this.add(formPanel);
 
         submitButton.addActionListener(e -> {
-                String name = nameField.getText();
-                String surname = surnameField.getText();
-                String group = groupField.getText();
-                if (!name.isEmpty() && !surname.isEmpty() && !group.isEmpty()) {
-                    studentManager.removeStudent(new NameSurnameGroup(name, surname, group));
-                    outputTextArea.setText("===== Students =====\n" + studentManager.getStudentsText());
-                    this.dispose();
-                } else JOptionPane.showMessageDialog(this, "Please fill in all fields.");
+            String name = nameField.getText();
+            String surname = surnameField.getText();
+            String group = groupField.getText();
+            if (!name.isEmpty() && !surname.isEmpty() && !group.isEmpty()) {
+                studentManager.removeStudent(new NameSurnameGroup(name, surname, group));
+                outputTextArea.setText("===== Students =====\n" + studentManager.getStudentsText());
+                this.dispose();
+            } else JOptionPane.showMessageDialog(this, "Please fill in all fields.");
         });
         this.setVisible(true);
     }

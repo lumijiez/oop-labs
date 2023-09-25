@@ -1,13 +1,13 @@
 package org.lumijiez.gui.forms;
 
-import org.lumijiez.base.NameSurnameGroup;
-import org.lumijiez.managers.Manager;
+import org.lumijiez.util.NameSurnameGroup;
+import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ChangeGroupForm extends JFrame {
-    public ChangeGroupForm(int centerX, int centerY, Manager studentManager, JTextArea outputTextArea) {
+    public ChangeGroupForm(int centerX, int centerY, Supervisor studentManager, JTextArea outputTextArea) {
         this.setTitle("Change Group");
         this.setSize(400, 300);
         this.setLocation(centerX, centerY);

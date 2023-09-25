@@ -1,6 +1,6 @@
 package org.lumijiez.data;
 
-import org.lumijiez.managers.Manager;
+import org.lumijiez.managers.Supervisor;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,12 +8,12 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 
 public class DataDeserializer {
-    public static Manager deserialize() {
+    public static Supervisor deserialize() {
         File serializedFile = new File("manager.ser");
-        Manager manager = new Manager();
+        Supervisor manager = new Supervisor();
         if (serializedFile.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(serializedFile))) {
-                manager = (Manager) ois.readObject();
+                manager = (Supervisor) ois.readObject();
                 System.out.println("Manager object deserialized successfully.");
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();

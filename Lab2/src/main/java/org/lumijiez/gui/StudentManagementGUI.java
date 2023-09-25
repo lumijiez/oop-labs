@@ -3,12 +3,13 @@ package org.lumijiez.gui;
 import org.lumijiez.data.DataDeserializer;
 import org.lumijiez.data.DataSerializer;
 import org.lumijiez.gui.forms.*;
-import org.lumijiez.managers.Manager;
+import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
 import java.awt.*;
-public class StudentManagementGUI{
-    private final Manager studentManager;
+
+public class StudentManagementGUI {
+    private final Supervisor studentManager;
     private final JFrame frame;
     private final JTextArea outputTextArea;
 

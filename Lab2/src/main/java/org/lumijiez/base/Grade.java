@@ -3,8 +3,16 @@ package org.lumijiez.base;
 import java.io.Serializable;
 
 public class Grade implements Serializable {
-    private final String subject;
-    private final int grade;
+    private String subject;
+    private int grade;
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setGrade(int grade) {
+        this.grade = grade;
+    }
 
     public Grade(String subject, int grade) {
         this.subject = subject;

@@ -1,13 +1,13 @@
 package org.lumijiez.gui.forms;
 
-import org.lumijiez.base.NameSurnameGroup;
-import org.lumijiez.managers.Manager;
+import org.lumijiez.util.NameSurnameGroup;
+import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ShowGradesForm extends JFrame {
-    public ShowGradesForm(int centerX, int centerY, Manager studentManager, JTextArea outputTextArea) {
+    public ShowGradesForm(int centerX, int centerY, Supervisor studentManager, JTextArea outputTextArea) {
         this.setTitle("Show Grades Student");
         this.setSize(400, 300);
         this.setLocation(centerX, centerY);
