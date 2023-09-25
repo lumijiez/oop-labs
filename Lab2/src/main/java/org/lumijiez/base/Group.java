@@ -9,6 +9,8 @@ public class Group implements Serializable {
 
     private Faculty faculty;
 
+    private List<Student> students = new ArrayList<>();
+
     public void setName(String name) {
         this.name = name;
     }
@@ -24,8 +26,6 @@ public class Group implements Serializable {
     public void setStudents(List<Student> students) {
         this.students = students;
     }
-
-    private List<Student> students = new ArrayList<>();
 
     public Group(String name) {
         this.name = name;

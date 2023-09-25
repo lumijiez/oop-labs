@@ -33,17 +33,7 @@ public class GroupManager implements Serializable {
         return groups;
     }
 
-    public String getGroupsText() {
-        StringBuilder builder = new StringBuilder();
-        for (Group gr : groups)
-            builder.append(gr.getName()).append("\n");
-        return builder.toString();
-    }
-
-    public Group findGroup(String name) {
-        for (Group gr : groups) {
-            if (gr.getName().equals(name)) return gr;
-        }
-        return null;
+    public StudentManager getSm() {
+        return sm;
     }
 }

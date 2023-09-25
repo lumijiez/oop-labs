@@ -1,40 +1,53 @@
 package org.lumijiez.base;
 
+import org.lumijiez.util.FullStudentData;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class Student implements Serializable {
+
+    public Student(String name, String surname, Group group, Faculty faculty) {
+        this.name = name;
+        this.surname = surname;
+        this.fullname = name + " " + surname;
+        this.group = group;
+        this.FSD = new FullStudentData(name, surname, group.getName(), faculty.getName());
+    }
+
+
     private String name;
     private String surname;
     private String fullname;
     private String email;
     private Date enrollmentDate;
-
     private Date dateOfBirth;
+    private Faculty faculty;
+    private Group group;
+    // This acts like an identification serial number for each student
+    private FullStudentData FSD;
+    private final List<Grade> grades = new ArrayList<>();
 
     // Student stores a reference to its own Group and Faculty, bidirectional association
-    private Group group;
 
     public Faculty getFaculty() {
         return faculty;
+    }
+
+    public FullStudentData getFSD() {
+        return FSD;
+    }
+
+    public void setFSD(FullStudentData FSD) {
+        this.FSD = FSD;
     }
 
     public void setFaculty(Faculty faculty) {
         this.faculty = faculty;
     }
 
-    private Faculty faculty;
-
-    private final List<Grade> grades = new ArrayList<>();
-
-    public Student(String name, String surname, Group group) {
-        this.name = name;
-        this.surname = surname;
-        this.fullname = name + " " + surname;
-        this.group = group;
-    }
 
     public void setGroup(Group gr) {
         this.group.deleteStudent(this);

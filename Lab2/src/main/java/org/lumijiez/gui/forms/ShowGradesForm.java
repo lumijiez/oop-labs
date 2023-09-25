@@ -1,13 +1,13 @@
 package org.lumijiez.gui.forms;
 
-import org.lumijiez.util.NameSurnameGroup;
+import org.lumijiez.util.FullStudentData;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class ShowGradesForm extends JFrame {
-    public ShowGradesForm(int centerX, int centerY, Supervisor studentManager, JTextArea outputTextArea) {
+    public ShowGradesForm(int centerX, int centerY, Supervisor sv, JTextArea outputTextArea) {
         this.setTitle("Show Grades Student");
         this.setSize(400, 300);
         this.setLocation(centerX, centerY);
@@ -20,6 +20,8 @@ public class ShowGradesForm extends JFrame {
         JTextField surnameField = new JTextField();
         JLabel groupLabel = new JLabel("Group:");
         JTextField groupField = new JTextField();
+        JLabel facultyLabel = new JLabel("Faculty:");
+        JTextField facultyField = new JTextField();
         JButton submitButton = new JButton("Submit");
 
         formPanel.add(nameLabel);
@@ -28,6 +30,8 @@ public class ShowGradesForm extends JFrame {
         formPanel.add(surnameField);
         formPanel.add(groupLabel);
         formPanel.add(groupField);
+        formPanel.add(facultyLabel);
+        formPanel.add(facultyField);
         formPanel.add(submitButton);
 
         this.add(formPanel);
@@ -36,9 +40,10 @@ public class ShowGradesForm extends JFrame {
             String name = nameField.getText();
             String surname = surnameField.getText();
             String group = groupField.getText();
-            if (!name.isEmpty() && !surname.isEmpty() && !group.isEmpty()) {
-                NameSurnameGroup nsg = new NameSurnameGroup(name, surname, group);
-                outputTextArea.setText("===== Grades =====\n" + name + " " + surname + "\n" + studentManager.getGradesText(nsg));
+            String faculty = facultyField.getText();
+            FullStudentData data = new FullStudentData(name, surname, group, faculty);
+            if (!name.isEmpty() && !surname.isEmpty() && !group.isEmpty() && !faculty.isEmpty()) {
+                outputTextArea.setText("===== Grades =====\n" + name + " " + surname + "\n" + sv.getGradesText(data));
                 this.dispose();
             } else JOptionPane.showMessageDialog(this, "Please fill in all fields.");
         });

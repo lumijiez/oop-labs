@@ -8,18 +8,19 @@ import java.util.List;
 
 public class FacultyManager implements Serializable {
 
-    public FacultyManager(GroupManager gm, StudentManager sm) {
-        this.gm = new GroupManager(sm);
-        this.sm = sm;
-    }
-    private final GroupManager gm;
-    private final StudentManager sm;
+    private final StudentManager sm = new StudentManager();
+    private final GroupManager gm = new GroupManager(sm);
+
     private final List<Faculty> faculties = new ArrayList<>();
 
-    public Faculty getFaculty(String facultyName, GroupManager gm) {
+    public Faculty getFaculty(String facultyName) {
         for (Faculty fc : faculties)
             if (fc.getName().equals(facultyName)) return fc;
         return null;
+    }
+
+    public GroupManager getGm() {
+        return gm;
     }
 
     public void addFaculty(Faculty faculty) {
@@ -33,13 +34,4 @@ public class FacultyManager implements Serializable {
     public List<Faculty> getFaculties() {
         return faculties;
     }
-
-    public String getFacultiesText() {
-        StringBuilder builder = new StringBuilder();
-        for (Faculty fc : faculties)
-            builder.append(fc.getName()).append("\n");
-        return builder.toString();
-    }
-
-
 }
