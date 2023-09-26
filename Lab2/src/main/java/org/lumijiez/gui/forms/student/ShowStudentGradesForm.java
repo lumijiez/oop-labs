@@ -13,12 +13,11 @@ public class ShowStudentGradesForm extends JFrame {
 
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JButton cancelButton;
-    private JComboBox<String> studentCombo;
-    private JLabel studentLabel;
-    private JButton submitButton;
-    private JLabel titleLabel;
-
+    private final JButton cancelButton = new JButton();
+    private final JComboBox<String> studentCombo = new JComboBox<>();
+    private final JLabel studentLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
 
     public ShowStudentGradesForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
@@ -28,28 +27,22 @@ public class ShowStudentGradesForm extends JFrame {
 
     private void initComponents() {
 
-        titleLabel = new JLabel();
-        studentCombo = new JComboBox<>();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        studentLabel = new JLabel();
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-        titleLabel.setText("Show Grades");
 
-        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        titleLabel.setText("Show Grades");
+        studentLabel.setText("Student:");
+        submitButton.setText("Submit");
+        cancelButton.setText("Cancel");
 
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
+
+        submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        studentLabel.setText("Student:");
+        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -72,8 +65,8 @@ public class ShowStudentGradesForm extends JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(50, 50, 50)
                                                 .addComponent(titleLabel)))
-                                .addContainerGap(30, Short.MAX_VALUE))
-        );
+                                .addContainerGap(30, Short.MAX_VALUE)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -87,9 +80,7 @@ public class ShowStudentGradesForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addContainerGap(22, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(22, Short.MAX_VALUE)));
         pack();
     }
 

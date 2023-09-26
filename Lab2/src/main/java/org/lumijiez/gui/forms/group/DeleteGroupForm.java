@@ -4,49 +4,55 @@
  */
 package org.lumijiez.gui.forms.group;
 
+import org.lumijiez.base.Faculty;
+import org.lumijiez.base.Group;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class DeleteGroupForm extends JFrame {
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JButton cancelButton;
-    private JComboBox<String> groupCombo;
-    private JLabel groupLabel;
-    private JButton submitButton;
-    private JLabel titleLabel;
+    private final JButton cancelButton = new JButton();
+    private final JComboBox<Group> groupCombo;
+    private final JLabel groupLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
+
     public DeleteGroupForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
         initComponents();
     }
 
     private void initComponents() {
 
-        titleLabel = new JLabel();
-        groupCombo = new JComboBox<>();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        groupLabel = new JLabel();
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-        titleLabel.setText("Delete a group");
 
-        groupCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        titleLabel.setText("Delete a group");
+        submitButton.setText("Submit");
+        cancelButton.setText("Cancel");
+        groupLabel.setText("Group:");
 
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
+
+        submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        groupLabel.setText("Group:");
+        groupCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Group)
+                    setText(((Group) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,8 +73,8 @@ public class DeleteGroupForm extends JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(54, 54, 54)
                                                 .addComponent(titleLabel)))
-                                .addContainerGap(29, Short.MAX_VALUE))
-        );
+                                .addContainerGap(29, Short.MAX_VALUE)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -82,13 +88,12 @@ public class DeleteGroupForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addContainerGap(18, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(18, Short.MAX_VALUE)));
         pack();
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
+        sv.deleteGroup(((Group)groupCombo.getSelectedItem()));
         this.dispose();
     }
 

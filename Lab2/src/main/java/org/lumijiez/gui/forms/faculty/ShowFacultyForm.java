@@ -4,50 +4,57 @@
  */
 package org.lumijiez.gui.forms.faculty;
 
+import org.lumijiez.base.Faculty;
+import org.lumijiez.base.Group;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class ShowFacultyForm extends JFrame {
 
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JButton cancelButton;
-    private JComboBox<String> facultyCombo;
-    private JLabel facultyLabel;
-    private JButton submitButton;
-    private JLabel titleLabel;
+    private final JButton cancelButton = new JButton();
+    private final JComboBox<Faculty> facultyCombo;
+    private final JLabel facultyLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
+
     public ShowFacultyForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         initComponents();
     }
 
     private void initComponents() {
 
-        titleLabel = new JLabel();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        facultyCombo = new JComboBox<>();
-        facultyLabel = new JLabel();
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+
         titleLabel.setText("Show a faculty");
+        submitButton.setText("Submit");
+        cancelButton.setText("Cancel");
+        facultyLabel.setText("Faculty:");
 
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
+
+        submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        facultyCombo.addActionListener(this::facultyComboActionPerformed);
 
-        facultyCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        facultyLabel.setText("Faculty:");
+        facultyCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Faculty)
+                    setText(((Faculty) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,8 +75,8 @@ public class ShowFacultyForm extends JFrame {
                                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(submitButton))
                                                                 .addComponent(facultyCombo, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)))))
-                                .addContainerGap(27, Short.MAX_VALUE))
-        );
+                                .addContainerGap(27, Short.MAX_VALUE)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -83,13 +90,23 @@ public class ShowFacultyForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addContainerGap(24, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(24, Short.MAX_VALUE)));
         pack();
     }
 
+    private void facultyComboActionPerformed(ActionEvent actionEvent) {
+    }
+
     private void submitButtonActionPerformed(ActionEvent evt) {
+        StringBuilder builder = new StringBuilder();
+        Faculty fac = (Faculty) facultyCombo.getSelectedItem();
+        assert fac != null;
+        builder.append("Name: ").append(fac.getName()).append("\n");
+        builder.append("Specialty: ").append(fac.getField()).append("\n");
+        builder.append("Groups: ").append("\n");
+        for (Group gr : fac.getGroups())
+            builder.append(gr.getName()).append("\n");
+        mainTextLabel.setText(builder.toString());
         this.dispose();
     }
 

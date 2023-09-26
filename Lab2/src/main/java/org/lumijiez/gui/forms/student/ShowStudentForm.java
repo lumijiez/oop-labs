@@ -13,11 +13,11 @@ public class ShowStudentForm extends JFrame {
 
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JButton cancelButton;
-    private JComboBox<String> studentCombo;
-    private JLabel studentLabel;
-    private JButton submitButton;
-    private JLabel titleLabel;
+    private final JButton cancelButton = new JButton();
+    private final JComboBox<String> studentCombo = new JComboBox<>();
+    private final JLabel studentLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
 
     public ShowStudentForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
@@ -27,28 +27,22 @@ public class ShowStudentForm extends JFrame {
 
     private void initComponents() {
 
-        titleLabel = new JLabel();
-        studentCombo = new JComboBox<>();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        studentLabel = new JLabel();
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-        titleLabel.setText("Show Student");
 
-        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        titleLabel.setText("Show Student");
+        submitButton.setText("Submit");
+        studentLabel.setText("Student:");
+        cancelButton.setText("Cancel");
 
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
+
+        submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        studentLabel.setText("Student:");
+        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -71,8 +65,8 @@ public class ShowStudentForm extends JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(52, 52, 52)
                                                 .addComponent(titleLabel)))
-                                .addContainerGap(23, Short.MAX_VALUE))
-        );
+                                .addContainerGap(23, Short.MAX_VALUE)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -86,9 +80,7 @@ public class ShowStudentForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addContainerGap(22, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(22, Short.MAX_VALUE)));
         pack();
     }
 

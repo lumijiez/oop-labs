@@ -13,15 +13,15 @@ public class GradeStudentForm extends JFrame {
 
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JButton cancelButton;
-    private JTextField gradeField;
-    private JLabel gradeLabel;
-    private JComboBox<String> studentCombo;
-    private JLabel studentLabel;
-    private JComboBox<String> subjectCombo;
-    private JLabel subjectLabel;
-    private JButton submitButton;
-    private JLabel titleLabel;
+    private final JButton cancelButton = new JButton();
+    private final JTextField gradeField = new JTextField();
+    private final JLabel gradeLabel = new JLabel();
+    private final JComboBox<String> studentCombo = new JComboBox<>();
+    private final JLabel studentLabel = new JLabel();
+    private final JComboBox<String> subjectCombo = new JComboBox<>();
+    private final JLabel subjectLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
 
     public GradeStudentForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
@@ -31,40 +31,26 @@ public class GradeStudentForm extends JFrame {
 
     private void initComponents() {
 
-        titleLabel = new JLabel();
-        studentCombo = new JComboBox<>();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        subjectLabel = new JLabel();
-        subjectCombo = new JComboBox<>();
-        studentLabel = new JLabel();
-        gradeField = new JTextField();
-        gradeLabel = new JLabel();
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-        titleLabel.setText("Grade a student");
+        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18));
 
-        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        titleLabel.setText("Grade a student");
+        studentLabel.setText("Student:");
+        subjectLabel.setText("Subject:");
+        gradeField.setText("Grade...");
+        submitButton.setText("Submit");
+        gradeLabel.setText("Grade:");
+        cancelButton.setText("Cancel");
 
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
+
+        submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        subjectLabel.setText("Subject:");
-
+        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
         subjectCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        studentLabel.setText("Student:");
-
-        gradeField.setText("Grade...");
-
-        gradeLabel.setText("Grade:");
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,8 +84,8 @@ public class GradeStudentForm extends JFrame {
                         .addGroup(layout.createSequentialGroup()
                                 .addGap(129, 129, 129)
                                 .addComponent(titleLabel)
-                                .addGap(0, 0, Short.MAX_VALUE))
-        );
+                                .addGap(0, 0, Short.MAX_VALUE)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -120,9 +106,7 @@ public class GradeStudentForm extends JFrame {
                                         .addComponent(gradeField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addContainerGap(30, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(30, Short.MAX_VALUE)));
         pack();
     }
 

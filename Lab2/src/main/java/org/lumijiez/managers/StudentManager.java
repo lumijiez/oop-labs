@@ -15,30 +15,10 @@ import static org.lumijiez.enums.StudyField.DEFAULT_UNASSIGNED;
 public class StudentManager implements Serializable {
     private final List<Student> students = new ArrayList<>();
 
-    public void addStudent(FullStudentData data, Supervisor sv) {
-        Faculty faculty;
-        Group group;
-
-        if (Objects.isNull(sv.getFm().getFaculty(data.faculty()))) {
-            Faculty newFaculty = new Faculty(data.faculty(), DEFAULT_UNASSIGNED.getAbbreviation(), DEFAULT_UNASSIGNED);
-            sv.getFm().addFaculty(newFaculty);
-            faculty = newFaculty;
-        } else {
-            faculty = sv.getFm().getFaculty(data.faculty());
-        }
-
-        if (Objects.isNull(sv.getFm().getGm().getGroup(data.group()))) {
-            Group newGroup = new Group("Unassigned");
-            sv.getFm().getGm().addGroup(newGroup);
-            group = newGroup;
-        } else {
-            group = sv.getFm().getGm().getGroup(data.group());
-        }
-
-        Student newStudent = new Student(data.name(), data.surname(), group, faculty);
-        students.add(newStudent);
+    public void addStudent(Student student) {
+        student.getGroup().addStudent(student);
+        students.add(student);
     }
-
     public List<Student> getStudents() {
         return students;
     }
@@ -50,13 +30,8 @@ public class StudentManager implements Serializable {
         return null;
     }
 
-    public void deleteStudent(FullStudentData data) {
-        students.removeIf(student ->
-                student.getName().equals(data.name()) &&
-                        student.getSurname().equals(data.surname()) &&
-                        student.getGroup().getName().equals(data.group()) &&
-                        student.getFaculty().getName().equals(data.faculty())
-        );
+    public void deleteStudent(Student student) {
+        students.remove(student);
     }
 
 }

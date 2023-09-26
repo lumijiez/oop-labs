@@ -4,66 +4,73 @@
  */
 package org.lumijiez.gui.forms.group;
 
+import org.lumijiez.base.Faculty;
+import org.lumijiez.base.Group;
+import org.lumijiez.enums.StudyField;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 public class EditGroupForm extends JFrame {
 
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JButton cancelButton;
-    private JComboBox<String> facultyCombo;
-    private JLabel facultyLabel;
-    private JComboBox<String> groupCombo;
-    private JLabel groupLabel;
-    private JTextField nameField;
-    private JLabel nameLabel;
-    private JButton submitButton;
-    private JLabel titleLabel;
+    private final JButton cancelButton = new JButton();
+    private final JComboBox<Faculty> facultyCombo;
+    private final JLabel facultyLabel = new JLabel();
+    private final JComboBox<Group> groupCombo;
+    private final JLabel groupLabel = new JLabel();
+    private final JTextField nameField = new JTextField();
+    private final JLabel nameLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
     public EditGroupForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
+        this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
         initComponents();
     }
 
     private void initComponents() {
 
-        titleLabel = new JLabel();
-        groupCombo = new JComboBox<>();
-        nameField = new JTextField();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        nameLabel = new JLabel();
-        facultyCombo = new JComboBox<>();
-        groupLabel = new JLabel();
-        facultyLabel = new JLabel();
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         titleLabel.setText("Edit a group");
-
-        groupCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
         nameField.setText("Name...");
+        submitButton.setText("Submit");
+        cancelButton.setText("Cancel");
+        nameLabel.setText("New name:");
+        groupLabel.setText("Group:");
+        facultyLabel.setText("Faculty:");
 
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
+
+        submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        nameLabel.setText("New name:");
+        facultyCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Faculty)
+                    setText(((Faculty) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
-        facultyCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        groupLabel.setText("Group:");
-
-        facultyLabel.setText("Faculty:");
+        groupCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Group)
+                    setText(((Group) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -91,8 +98,8 @@ public class EditGroupForm extends JFrame {
                                                         .addComponent(facultyLabel)
                                                         .addComponent(facultyCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(submitButton))))
-                                .addContainerGap(34, Short.MAX_VALUE))
-        );
+                                .addContainerGap(34, Short.MAX_VALUE)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -116,13 +123,14 @@ public class EditGroupForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addContainerGap(36, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(36, Short.MAX_VALUE)));
         pack();
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
+        Faculty fac = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
+        Group gr = (Group) Objects.requireNonNull(groupCombo.getSelectedItem());
+        sv.editGroup(gr, nameField.getText(), fac);
         this.dispose();
     }
 

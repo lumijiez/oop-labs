@@ -4,49 +4,55 @@
  */
 package org.lumijiez.gui.forms.student;
 
+import org.lumijiez.base.Student;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 public class DeleteStudentForm extends JFrame {
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JButton cancelButton;
-    private JComboBox<String> studentCombo;
-    private JLabel studentLabel;
-    private JButton submitButton;
-    private JLabel titleLabel;
+    private final JButton cancelButton = new JButton();
+    private final JComboBox<Student> studentCombo;
+    private final JLabel studentLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
+
     public DeleteStudentForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
 
     private void initComponents() {
-
-        titleLabel = new JLabel();
-        studentCombo = new JComboBox<>();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        studentLabel = new JLabel();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         titleLabel.setText("Delete Student");
 
-        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
-        cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        studentCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Student)
+                    setText(((Student) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         studentLabel.setText("Student:");
+        submitButton.setText("Submit");
+        cancelButton.setText("Cancel");
+
+        submitButton.setBackground(new java.awt.Color(204, 255, 204));
+        cancelButton.setBackground(new java.awt.Color(255, 204, 204));
+
+        submitButton.addActionListener(this::submitButtonActionPerformed);
+        cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,8 +73,8 @@ public class DeleteStudentForm extends JFrame {
                         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(titleLabel)
-                                .addGap(51, 51, 51))
-        );
+                                .addGap(51, 51, 51)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -82,13 +88,13 @@ public class DeleteStudentForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(submitButton)
                                         .addComponent(cancelButton))
-                                .addContainerGap(26, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(26, Short.MAX_VALUE)));
         pack();
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
+        Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
+        sv.deleteStudent(student);
         this.dispose();
     }
 

@@ -13,16 +13,16 @@ import javax.swing.text.Style;
 public class AddFacultyForm extends JFrame {
     private final Supervisor sv;
     private final JLabel mainTextLabel;
+    private final JLabel titleLabel = new JLabel();
+    private final JComboBox<String> specialtyCombo = new JComboBox<>();
+    private final JTextField nameField = new JTextField();
+    private final JButton submitButton = new JButton();
+    private final JButton cancelButton = new JButton();
+    private final JLabel nameLabel = new JLabel();
+    private final JTextField abbreviationField = new JTextField();
+    private final JLabel abbreviationLabel = new JLabel();
+    private final JLabel specialtyLabel = new JLabel();
 
-    private JLabel titleLabel = new JLabel();
-    private JComboBox<String> specialtyCombo = new JComboBox<>();
-    private JTextField nameField = new JTextField();
-    private JButton submitButton = new JButton();
-    private JButton cancelButton = new JButton();
-    private JLabel nameLabel = new JLabel();
-    private JTextField abbreviationField = new JTextField();
-    private JLabel abbreviationLabel = new JLabel();
-    private JLabel specialtyLabel = new JLabel();
     public AddFacultyForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
@@ -33,8 +33,16 @@ public class AddFacultyForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18));
+
         titleLabel.setText("Add a new faculty");
+        nameField.setText("Name...");
+        submitButton.setText("Submit");
+        cancelButton.setText("Cancel");
+        nameLabel.setText("Name:");
+        abbreviationField.setText("Abbreviation...");
+        abbreviationLabel.setText("Abbreviation:");
+        specialtyLabel.setText("Specialty Field:");
 
         String[] enumList = new String[StudyField.getAllEnums().size()];
         List<StudyField> sfl = StudyField.getAllEnums();
@@ -42,25 +50,12 @@ public class AddFacultyForm extends JFrame {
             enumList[i] = sfl.get(i).getName();
 
         specialtyCombo.setModel(new DefaultComboBoxModel<>(enumList));
-        specialtyCombo.addActionListener(this::specialtyComboActionPerformed);
-
-        nameField.setText("Name...");
-
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
+
+        specialtyCombo.addActionListener(this::specialtyComboActionPerformed);
+        submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
-
-        nameLabel.setText("Name:");
-
-        abbreviationField.setText("Abbreviation...");
-
-        abbreviationLabel.setText("Abbreviation:");
-
-        specialtyLabel.setText("Specialty Field:");
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -91,6 +86,7 @@ public class AddFacultyForm extends JFrame {
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(titleLabel)
                         .addGap(149, 149, 149)));
+
         layout.setVerticalGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                 .addGroup(layout.createSequentialGroup()
                         .addGap(7, 7, 7)
@@ -110,7 +106,6 @@ public class AddFacultyForm extends JFrame {
                                 .addComponent(cancelButton)
                                 .addComponent(submitButton))
                         .addContainerGap(24, Short.MAX_VALUE)));
-
         pack();
     }
 
@@ -119,12 +114,12 @@ public class AddFacultyForm extends JFrame {
         String abbreviation = abbreviationField.getText();
         StudyField specialty = StudyField.getEnum(Objects.requireNonNull(specialtyCombo.getSelectedItem()).toString());
         Faculty newFaculty = new Faculty(name, abbreviation, specialty);
-        sv.getFm().addFaculty(newFaculty);
+        sv.addFaculty(newFaculty);
+        this.dispose();
     }
 
     private void specialtyComboActionPerformed(ActionEvent evt) {
         abbreviationField.setText(StudyField.getAbbrevFromString(Objects.requireNonNull(specialtyCombo.getSelectedItem()).toString()));
-        this.dispose();
     }
 
     private void cancelButtonActionPerformed(ActionEvent evt) {

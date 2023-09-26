@@ -46,4 +46,9 @@ public enum StudyField implements Serializable {
     public static List<StudyField> getAllEnums() {
         return Arrays.asList(values());
     }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
 }

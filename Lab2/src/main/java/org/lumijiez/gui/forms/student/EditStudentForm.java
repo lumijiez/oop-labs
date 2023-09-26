@@ -4,90 +4,97 @@
  */
 package org.lumijiez.gui.forms.student;
 
+import org.lumijiez.base.Faculty;
+import org.lumijiez.base.Group;
+import org.lumijiez.base.Student;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Date;
+import java.util.Objects;
 
 public class EditStudentForm extends JFrame {
 
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JButton cancelButton;
-    private JTextField emailField;
-    private JLabel emailLabel;
-    private JComboBox<String> facultyCombo;
-    private JLabel facultyLabel;
-    private JComboBox<String> groupCombo;
-    private JLabel groupLabel;
-    private JTextField nameField;
-    private JLabel nameLabel;
-    private JComboBox<String> studentCombo;
-    private JLabel studentLabel;
-    private JButton submitButton;
-    private JTextField surnameField;
-    private JLabel surnameLabel;
-    private JLabel titleLabel;
+    private final JButton cancelButton = new JButton();
+    private final JTextField emailField = new JTextField();
+    private final JLabel emailLabel = new JLabel();
+    private final JComboBox<Faculty> facultyCombo;
+    private final JLabel facultyLabel = new JLabel();
+    private final JComboBox<Group> groupCombo;
+    private final JLabel groupLabel = new JLabel();
+    private final JTextField nameField = new JTextField();
+    private final JLabel nameLabel = new JLabel();
+    private final JComboBox<Student> studentCombo;
+    private final JLabel studentLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JTextField surnameField = new JTextField();
+    private final JLabel surnameLabel = new JLabel();
+    private final JLabel titleLabel = new JLabel();
+
     public EditStudentForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
+        this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
+        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
 
     private void initComponents() {
 
-        titleLabel = new JLabel();
-        studentCombo = new JComboBox<>();
-        nameField = new JTextField();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        studentLabel = new JLabel();
-        surnameField = new JTextField();
-        emailField = new JTextField();
-        nameLabel = new JLabel();
-        emailLabel = new JLabel();
-        groupCombo = new JComboBox<>();
-        groupLabel = new JLabel();
-        facultyLabel = new JLabel();
-        surnameLabel = new JLabel();
-        facultyCombo = new JComboBox<>();
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+
         titleLabel.setText("Edit a student");
-
-        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
         nameField.setText("Name...");
+        submitButton.setText("Submit");
+        cancelButton.setText("Cancel");
+        studentLabel.setText("Student:");
+        surnameField.setText("Surname...");
+        emailField.setText("Email...");
+        nameLabel.setText("New name:");
+        emailLabel.setText("New email:");
+        groupLabel.setText("New group:");
+        facultyLabel.setText("New faculty:");
+        surnameLabel.setText("New surname:");
 
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
         submitButton.addActionListener(this::submitButtonActionPerformed);
 
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        studentLabel.setText("Student:");
+        facultyCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Faculty)
+                    setText(((Faculty) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
-        surnameField.setText("Surname...");
+        groupCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Group)
+                    setText(((Group) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
-        emailField.setText("Email...");
-
-        nameLabel.setText("New name:");
-
-        emailLabel.setText("New email:");
-
-        groupCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        groupLabel.setText("New group:");
-
-        facultyLabel.setText("New faculty:");
-
-        surnameLabel.setText("New surname:");
-
-        facultyCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        studentCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Student)
+                    setText(((Student) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,8 +135,8 @@ public class EditStudentForm extends JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(162, 162, 162)
                                                 .addComponent(titleLabel)))
-                                .addContainerGap(24, Short.MAX_VALUE))
-        );
+                                .addContainerGap(24, Short.MAX_VALUE)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -160,13 +167,24 @@ public class EditStudentForm extends JFrame {
                                         .addComponent(surnameField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addContainerGap(24, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(24, Short.MAX_VALUE)));
         pack();
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
+        String name = nameField.getText();
+        String surname = surnameField.getText();
+        Group group = (Group) Objects.requireNonNull(groupCombo.getSelectedItem());
+        Faculty faculty = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
+//        int birthYear = Integer.parseInt(birthYearField.getText());
+//        int birthMonth = Integer.parseInt(birthMonthField.getText());
+//        int birthDay = Integer.parseInt(birthDayField.getText());
+//        int enrolYear = Integer.parseInt(enrolYearField.getText());
+//        int enrolMonth = Integer.parseInt(enrolMonthField.getText());
+//        int enrolDay = Integer.parseInt(enrolDayField.getText());
+//        Date birthDate = new Date(birthYear, birthMonth, birthDay);
+//        Date enrolDate = new Date(enrolYear, enrolMonth, enrolDay);
+//        sv.addStudent(name, surname, group, faculty, birthDate, enrolDate);
         this.dispose();
     }
 

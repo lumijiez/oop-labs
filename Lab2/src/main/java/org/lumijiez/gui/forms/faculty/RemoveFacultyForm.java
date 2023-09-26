@@ -4,50 +4,55 @@
  */
 package org.lumijiez.gui.forms.faculty;
 
+import org.lumijiez.base.Faculty;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class RemoveFacultyForm extends JFrame {
 
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JButton cancelButton;
-    private JComboBox<String> facultyCombo;
-    private JLabel facultyLabel;
-    private JButton submitButton;
-    private JLabel titleLabel;
+    private final JButton cancelButton = new JButton();
+    private final JComboBox<Faculty> facultyCombo;
+    private final JLabel facultyLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
+
     public RemoveFacultyForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         initComponents();
     }
 
     private void initComponents() {
 
-        titleLabel = new JLabel();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        facultyCombo = new JComboBox<>();
-        facultyLabel = new JLabel();
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+
         titleLabel.setText("Remove a faculty");
+        submitButton.setText("Submit");
+        cancelButton.setText("Cancel");
+        facultyLabel.setText("Faculty:");
 
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
+
+        submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        facultyCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        facultyLabel.setText("Faculty:");
+        facultyCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Faculty)
+                    setText(((Faculty) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,8 +72,8 @@ public class RemoveFacultyForm extends JFrame {
                         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(titleLabel)
-                                .addGap(48, 48, 48))
-        );
+                                .addGap(48, 48, 48)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -82,13 +87,12 @@ public class RemoveFacultyForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addContainerGap(21, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(21, Short.MAX_VALUE)));
         pack();
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
+        sv.deleteFaculty(((Faculty)facultyCombo.getSelectedItem()));
         this.dispose();
     }
 

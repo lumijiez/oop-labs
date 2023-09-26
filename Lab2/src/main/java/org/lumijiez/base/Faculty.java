@@ -3,6 +3,7 @@ package org.lumijiez.base;
 import org.lumijiez.enums.StudyField;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Faculty implements Serializable {
@@ -15,7 +16,7 @@ public class Faculty implements Serializable {
 
     private String name;
     private String abbreviation;
-    private List<Group> groups;
+    private List<Group> groups = new ArrayList<>();
     private StudyField field;
 
     public void addGroup(Group group) {
@@ -52,6 +53,11 @@ public class Faculty implements Serializable {
 
     public void setField(StudyField field) {
         this.field = field;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
     }
 
 }

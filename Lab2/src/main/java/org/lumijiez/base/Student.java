@@ -9,11 +9,14 @@ import java.util.List;
 
 public class Student implements Serializable {
 
-    public Student(String name, String surname, Group group, Faculty faculty) {
+    public Student(String name, String surname, Group group, Faculty faculty, Date birth, Date enrol) {
         this.name = name;
         this.surname = surname;
         this.fullname = name + " " + surname;
         this.group = group;
+        this.faculty = faculty;
+        this.dateOfBirth = birth;
+        this.enrollmentDate = enrol;
         this.FSD = new FullStudentData(name, surname, group.getName(), faculty.getName());
     }
 
@@ -114,6 +117,11 @@ public class Student implements Serializable {
 
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    @Override
+    public String toString() {
+        return fullname;
     }
 
 }

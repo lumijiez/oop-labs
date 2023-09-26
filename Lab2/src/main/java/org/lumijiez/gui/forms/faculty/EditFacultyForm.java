@@ -4,74 +4,81 @@
  */
 package org.lumijiez.gui.forms.faculty;
 
+import org.lumijiez.base.Faculty;
+import org.lumijiez.enums.StudyField;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class EditFacultyForm extends JFrame {
-
     private final Supervisor sv;
     private final JLabel mainTextLabel;
-    private JTextField abbreviationField;
-    private JLabel abbreviationLabel;
-    private JButton cancelButton;
-    private JComboBox<String> facultyCombo;
-    private JLabel facultyLabel;
-    private JTextField nameField;
-    private JLabel nameLabel;
-    private JComboBox<String> specialtyCombo;
-    private JLabel specialtyLabel;
-    private JButton submitButton;
-    private JLabel titleLabel;
+    private final JTextField abbreviationField = new JTextField();
+    private final JLabel abbreviationLabel = new JLabel();
+    private final JButton cancelButton = new JButton();
+    private final JLabel facultyLabel = new JLabel();
+    private final JTextField nameField = new JTextField();
+    private final JLabel nameLabel = new JLabel();
+    private final JLabel specialtyLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
+    private final JComboBox<Faculty> facultyCombo;
+    private final JComboBox<StudyField> specialtyCombo;
+
     public EditFacultyForm(Supervisor sv, JLabel mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
+        specialtyCombo = new JComboBox<>(StudyField.getAllEnums().toArray(new StudyField[0]));
         initComponents();
     }
 
     private void initComponents() {
 
-        titleLabel = new JLabel();
-        submitButton = new JButton();
-        cancelButton = new JButton();
-        nameLabel = new JLabel();
-        nameField = new JTextField();
-        facultyCombo = new JComboBox<>();
-        facultyLabel = new JLabel();
-        abbreviationLabel = new JLabel();
-        abbreviationField = new JTextField();
-        specialtyCombo = new JComboBox<>();
-        specialtyLabel = new JLabel();
-
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         titleLabel.setText("Edit a faculty");
+        submitButton.setText("Submit");
+        cancelButton.setText("Cancel");
+        nameLabel.setText("New name:");
+        nameField.setText("Name...");
+        facultyLabel.setText("Faculty:");
+        abbreviationLabel.setText("New abbreviation:");
+        abbreviationField.setText("Abbreviation...");
+        specialtyLabel.setText("New specialty:");
 
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        submitButton.setText("Submit");
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
-        cancelButton.setText("Cancel");
+
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        submitButton.addActionListener(this::submitButtonActionPerformed);
+        specialtyCombo.addActionListener(this::specialtyComboActionPerformed);
+        facultyCombo.addActionListener(this::facultyComboActionPerformed);
 
-        nameLabel.setText("New name:");
+        specialtyCombo.setSelectedItem(((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).getField());
 
-        nameField.setText("Name...");
+        facultyCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Faculty)
+                    setText(((Faculty) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
-        facultyCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        facultyLabel.setText("Faculty:");
-
-        abbreviationLabel.setText("New abbreviation:");
-
-        abbreviationField.setText("Abbreviation...");
-
-        specialtyCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-
-        specialtyLabel.setText("New specialty:");
+        specialtyCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof StudyField)
+                    setText(((StudyField) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -102,8 +109,8 @@ public class EditFacultyForm extends JFrame {
                                                                                         .addGap(18, 18, 18)
                                                                                         .addComponent(submitButton)))
                                                                         .addComponent(nameLabel))))))
-                                .addContainerGap(24, Short.MAX_VALUE))
-        );
+                                .addContainerGap(24, Short.MAX_VALUE)));
+
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -129,13 +136,22 @@ public class EditFacultyForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addGap(14, 14, 14))
-        );
-
+                                .addGap(14, 14, 14)));
         pack();
     }
 
+    private void facultyComboActionPerformed(ActionEvent actionEvent) {
+        specialtyCombo.setSelectedItem(((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).getField());
+    }
+
+    private void specialtyComboActionPerformed(ActionEvent actionEvent) {
+        abbreviationField.setText(((StudyField) Objects.requireNonNull(specialtyCombo.getSelectedItem())).getAbbreviation());
+    }
+
     private void submitButtonActionPerformed(ActionEvent evt) {
+        ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setName(nameField.getText());
+        ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setAbbreviation(abbreviationField.getText());
+        ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setField(((StudyField) Objects.requireNonNull(specialtyCombo.getSelectedItem())));
         this.dispose();
     }
 

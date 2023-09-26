@@ -11,7 +11,7 @@ public class DataSerializer {
     public static void serialize(Supervisor manager) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("manager.ser"))) {
             oos.writeObject(manager);
-            System.out.println("Manager object serialized successfully.");
+            System.out.println("Supervisor object serialized successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }

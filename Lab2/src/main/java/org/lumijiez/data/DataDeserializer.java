@@ -14,7 +14,7 @@ public class DataDeserializer {
         if (serializedFile.exists()) {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(serializedFile))) {
                 manager = (Supervisor) ois.readObject();
-                System.out.println("Manager object deserialized successfully.");
+                System.out.println("Supervisor object deserialized successfully.");
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
