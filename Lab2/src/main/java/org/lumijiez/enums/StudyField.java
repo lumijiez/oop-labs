@@ -1,6 +1,8 @@
 package org.lumijiez.enums;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 public enum StudyField implements Serializable {
     DEFAULT_UNASSIGNED("Unassigned", "None"),
@@ -19,11 +21,29 @@ public enum StudyField implements Serializable {
         this.abbreviation = abbreviation;
     }
 
+    public static String getAbbrevFromString(String str) {
+        for (StudyField st : values()) {
+            if (st.name.equals(str)) return st.abbreviation;
+        }
+        return str;
+    }
+
+    public static StudyField getEnum(String str) {
+        for (StudyField st : values()) {
+            if (st.name.equals(str)) return st;
+        }
+        return null;
+    }
+
     public String getName() {
         return name;
     }
 
     public String getAbbreviation() {
         return abbreviation;
+    }
+
+    public static List<StudyField> getAllEnums() {
+        return Arrays.asList(values());
     }
 }
