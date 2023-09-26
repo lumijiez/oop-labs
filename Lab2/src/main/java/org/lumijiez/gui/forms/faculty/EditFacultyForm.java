@@ -136,7 +136,7 @@ public class EditFacultyForm extends JFrame {
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
-
+        this.dispose();
     }
 
     private void cancelButtonActionPerformed(ActionEvent evt) {

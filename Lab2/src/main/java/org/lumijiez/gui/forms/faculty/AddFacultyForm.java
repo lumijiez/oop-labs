@@ -124,6 +124,7 @@ public class AddFacultyForm extends JFrame {
 
     private void specialtyComboActionPerformed(ActionEvent evt) {
         abbreviationField.setText(StudyField.getAbbrevFromString(Objects.requireNonNull(specialtyCombo.getSelectedItem()).toString()));
+        this.dispose();
     }
 
     private void cancelButtonActionPerformed(ActionEvent evt) {
