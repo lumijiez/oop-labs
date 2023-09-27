@@ -8,13 +8,12 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.StudentManagementGUI;
+import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 public class EditStudentForm extends JFrame {
@@ -96,40 +95,16 @@ public class EditStudentForm extends JFrame {
 //
 //        enrolYearLabel.setText("Year of Enrollment:");
 
-        submitButton.setBackground(new java.awt.Color(204, 255, 204));
+        ComponentDecorator.submitButton(submitButton);
+        ComponentDecorator.cancelButton(cancelButton);
+
         submitButton.addActionListener(this::submitButtonActionPerformed);
-
-        cancelButton.setBackground(new java.awt.Color(255, 204, 204));
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
-
         studentCombo.addActionListener(this::studentComboActionPerformed);
 
-        facultyCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Faculty)
-                    setText(((Faculty) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
-
-        groupCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Group)
-                    setText(((Group) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
-
-        studentCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Student)
-                    setText(((Student) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
+        ComboBoxRenderers.setFacultyRenderer(facultyCombo);;
+        ComboBoxRenderers.setGroupRenderer(groupCombo);
+        ComboBoxRenderers.setStudentRenderer(studentCombo);
 
         groupCombo.setSelectedItem(((Student)studentCombo.getSelectedItem()).getGroup());
 

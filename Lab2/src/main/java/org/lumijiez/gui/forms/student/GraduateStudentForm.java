@@ -6,7 +6,9 @@ package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.StudentManagementGUI;
+import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,14 +38,7 @@ public class GraduateStudentForm extends JFrame {
         titleLabel.setFont(new Font("sansserif", 0, 18)); // NOI18N
         titleLabel.setText("Graduate a Student");
 
-        studentCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Student)
-                    setText(((Student) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
+        ComboBoxRenderers.setStudentRenderer(studentCombo);
 
         studentLabel.setText("Student:");
         submitButton.setText("Submit");
@@ -52,8 +47,8 @@ public class GraduateStudentForm extends JFrame {
         submitButton.setBackground(new Color(204, 255, 204));
         cancelButton.setBackground(new Color(255, 204, 204));
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        ComponentDecorator.submitButton(submitButton);
+        ComponentDecorator.cancelButton(cancelButton);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

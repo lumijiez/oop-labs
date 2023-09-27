@@ -6,10 +6,11 @@ package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.StudentManagementGUI;
+import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
@@ -36,21 +37,14 @@ public class DeleteStudentForm extends JFrame {
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
         titleLabel.setText("Delete Student");
 
-        studentCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Student)
-                    setText(((Student) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
+        ComboBoxRenderers.setStudentRenderer(studentCombo);
 
         studentLabel.setText("Student:");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
 
-        submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        cancelButton.setBackground(new java.awt.Color(255, 204, 204));
+        ComponentDecorator.submitButton(submitButton);
+        ComponentDecorator.cancelButton(cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);

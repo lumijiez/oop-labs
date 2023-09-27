@@ -7,10 +7,11 @@ package org.lumijiez.gui.forms.group;
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.gui.StudentManagementGUI;
+import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
@@ -40,6 +41,7 @@ public class EditGroupForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+
         titleLabel.setText("Edit a group");
         nameField.setText("Name...");
         submitButton.setText("Submit");
@@ -48,29 +50,14 @@ public class EditGroupForm extends JFrame {
         groupLabel.setText("Group:");
         facultyLabel.setText("Faculty:");
 
-        submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        cancelButton.setBackground(new java.awt.Color(255, 204, 204));
+        ComponentDecorator.submitButton(submitButton);
+        ComponentDecorator.cancelButton(cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        facultyCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Faculty)
-                    setText(((Faculty) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
-
-        groupCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Group)
-                    setText(((Group) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
+        ComboBoxRenderers.setFacultyRenderer(facultyCombo);;
+        ComboBoxRenderers.setGroupRenderer(groupCombo);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

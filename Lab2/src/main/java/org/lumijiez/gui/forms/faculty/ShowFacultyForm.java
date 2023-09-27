@@ -6,10 +6,11 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
+import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class ShowFacultyForm extends JFrame {
@@ -40,21 +41,14 @@ public class ShowFacultyForm extends JFrame {
         cancelButton.setText("Cancel");
         facultyLabel.setText("Faculty:");
 
-        submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        cancelButton.setBackground(new java.awt.Color(255, 204, 204));
+        ComponentDecorator.submitButton(submitButton);
+        ComponentDecorator.cancelButton(cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
         facultyCombo.addActionListener(this::facultyComboActionPerformed);
 
-        facultyCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Faculty)
-                    setText(((Faculty) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
+        ComboBoxRenderers.setFacultyRenderer(facultyCombo);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

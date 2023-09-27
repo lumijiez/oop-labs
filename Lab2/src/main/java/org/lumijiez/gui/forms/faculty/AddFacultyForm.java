@@ -3,6 +3,7 @@ package org.lumijiez.gui.forms.faculty;
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
 import org.lumijiez.gui.StudentManagementGUI;
+import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
 
 import java.awt.event.ActionEvent;
@@ -48,8 +49,9 @@ public class AddFacultyForm extends JFrame {
             enumList[i] = sfl.get(i).getName();
 
         specialtyCombo.setModel(new DefaultComboBoxModel<>(enumList));
-        submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        cancelButton.setBackground(new java.awt.Color(255, 204, 204));
+
+        ComponentDecorator.submitButton(submitButton);
+        ComponentDecorator.cancelButton(cancelButton);
 
         specialtyCombo.addActionListener(this::specialtyComboActionPerformed);
         submitButton.addActionListener(this::submitButtonActionPerformed);

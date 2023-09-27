@@ -7,7 +7,9 @@ package org.lumijiez.gui.forms.faculty;
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
 import org.lumijiez.gui.StudentManagementGUI;
+import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,8 +54,8 @@ public class EditFacultyForm extends JFrame {
         abbreviationField.setText("Abbreviation...");
         specialtyLabel.setText("New specialty:");
 
-        submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        cancelButton.setBackground(new java.awt.Color(255, 204, 204));
+        ComponentDecorator.submitButton(submitButton);
+        ComponentDecorator.cancelButton(cancelButton);
 
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
         submitButton.addActionListener(this::submitButtonActionPerformed);
@@ -62,14 +64,7 @@ public class EditFacultyForm extends JFrame {
 
         specialtyCombo.setSelectedItem(((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).getField());
 
-        facultyCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof Faculty)
-                    setText(((Faculty) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
+        ComboBoxRenderers.setFacultyRenderer(facultyCombo);
 
         specialtyCombo.setRenderer(new DefaultListCellRenderer() {
             @Override
