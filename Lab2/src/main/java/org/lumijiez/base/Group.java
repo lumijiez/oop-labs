@@ -9,7 +9,7 @@ public class Group implements Serializable {
 
     private Faculty faculty;
 
-    private List<Student> students = new ArrayList<>();
+    private final List<Student> students = new ArrayList<>();
 
     public void setName(String name) {
         this.name = name;
@@ -21,10 +21,6 @@ public class Group implements Serializable {
 
     public void setFaculty(Faculty faculty) {
         this.faculty = faculty;
-    }
-
-    public void setStudents(List<Student> students) {
-        this.students = students;
     }
 
     public Group(String name) {
@@ -45,14 +41,6 @@ public class Group implements Serializable {
 
     public List<Student> getStudents() {
         return students;
-    }
-
-    public Student getStudent(String name, String surname) {
-        for (Student student : students)
-            if (student.getName().equals(name) && student.getSurname().equals(surname)) {
-                return student;
-            }
-        return null;
     }
 
     @Override

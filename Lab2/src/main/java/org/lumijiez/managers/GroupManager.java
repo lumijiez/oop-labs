@@ -13,13 +13,8 @@ public class GroupManager implements Serializable {
     }
 
     private final StudentManager sm;
-    private final List<Group> groups = new ArrayList<>();
 
-    public Group getGroup(String groupName) {
-        for (Group group : groups)
-            if (group.getName().equals(groupName)) return group;
-        return null;
-    }
+    private final List<Group> groups = new ArrayList<>();
 
     public void addGroup(Group group) {
         groups.add(group);

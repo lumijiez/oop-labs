@@ -13,7 +13,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
-public class DeleteStudentForm extends JFrame {
+public class GraduateStudentForm extends JFrame {
     private final Supervisor sv;
     private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
@@ -22,7 +22,7 @@ public class DeleteStudentForm extends JFrame {
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public DeleteStudentForm(Supervisor sv, JTextArea mainTextLabel) {
+    public GraduateStudentForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
@@ -33,8 +33,8 @@ public class DeleteStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
-        titleLabel.setText("Delete Student");
+        titleLabel.setFont(new Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setText("Graduate a Student");
 
         studentCombo.setRenderer(new DefaultListCellRenderer() {
             @Override
@@ -49,8 +49,8 @@ public class DeleteStudentForm extends JFrame {
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
 
-        submitButton.setBackground(new java.awt.Color(204, 255, 204));
-        cancelButton.setBackground(new java.awt.Color(255, 204, 204));
+        submitButton.setBackground(new Color(204, 255, 204));
+        cancelButton.setBackground(new Color(255, 204, 204));
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
@@ -95,10 +95,8 @@ public class DeleteStudentForm extends JFrame {
 
     private void submitButtonActionPerformed(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
-        sv.deleteStudent(student);
-
+        student.setGraduated(true);
         StudentManagementGUI.displayStudents();
-
         this.dispose();
     }
 

@@ -6,6 +6,7 @@ package org.lumijiez.gui.forms.group;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
+import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.managers.Supervisor;
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +16,7 @@ import java.util.Objects;
 public class AddGroupForm extends JFrame {
 
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JLabel titleLabel = new JLabel();
     private final JTextField nameField = new JTextField();
     private final JButton submitButton = new JButton();
@@ -24,7 +25,7 @@ public class AddGroupForm extends JFrame {
     private final JComboBox<Faculty> facultyCombo;
     private final JLabel facultyLabel = new JLabel();
 
-    public AddGroupForm(Supervisor sv, JLabel mainTextLabel) {
+    public AddGroupForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
@@ -107,6 +108,7 @@ public class AddGroupForm extends JFrame {
         Group gr = new Group(nameField.getText());
         Faculty fac = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
         sv.addGroup(gr, fac);
+        StudentManagementGUI.displayGroups();
         this.dispose();
     }
 

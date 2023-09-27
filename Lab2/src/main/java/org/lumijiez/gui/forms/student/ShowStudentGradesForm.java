@@ -4,24 +4,29 @@
  */
 package org.lumijiez.gui.forms.student;
 
+import org.lumijiez.base.Grade;
+import org.lumijiez.base.Student;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 public class ShowStudentGradesForm extends JFrame {
 
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
-    private final JComboBox<String> studentCombo = new JComboBox<>();
+    private final JComboBox<Student> studentCombo;
     private final JLabel studentLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public ShowStudentGradesForm(Supervisor sv, JLabel mainTextLabel) {
+    public ShowStudentGradesForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
 
@@ -42,7 +47,14 @@ public class ShowStudentGradesForm extends JFrame {
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        studentCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Student)
+                    setText(((Student) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,6 +97,15 @@ public class ShowStudentGradesForm extends JFrame {
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
+        Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
+        StringBuilder builder = new StringBuilder();
+        builder.append("====================================\n");
+        builder.append("Grades for ").append(student.getFullname()).append(" from ").append(student.getGroup().getName()).append(":\n");
+        for (Grade grade : student.getGrades()) {
+            builder.append(grade.getSubject()).append(": ").append(grade.getGrade()).append("\n");
+        }
+        builder.append("====================================\n");
+        mainTextLabel.setText(builder.toString());
         this.dispose();
     }
 

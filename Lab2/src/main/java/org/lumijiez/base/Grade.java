@@ -1,25 +1,19 @@
 package org.lumijiez.base;
 
+import org.lumijiez.enums.Subjects;
+
 import java.io.Serializable;
 
 public class Grade implements Serializable {
-    private String subject;
-    private int grade;
+    private final Subjects subject;
+    private final int grade;
 
-    public void setSubject(String subject) {
-        this.subject = subject;
-    }
-
-    public void setGrade(int grade) {
-        this.grade = grade;
-    }
-
-    public Grade(String subject, int grade) {
+    public Grade(Subjects subject, int grade) {
         this.subject = subject;
         this.grade = grade;
     }
 
-    public String getSubject() {
+    public Subjects getSubject() {
         return subject;
     }
 

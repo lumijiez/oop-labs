@@ -2,17 +2,17 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
+import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.managers.Supervisor;
 
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Objects;
 import javax.swing.*;
-import javax.swing.text.Style;
 
 public class AddFacultyForm extends JFrame {
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JLabel titleLabel = new JLabel();
     private final JComboBox<String> specialtyCombo = new JComboBox<>();
     private final JTextField nameField = new JTextField();
@@ -23,7 +23,7 @@ public class AddFacultyForm extends JFrame {
     private final JLabel abbreviationLabel = new JLabel();
     private final JLabel specialtyLabel = new JLabel();
 
-    public AddFacultyForm(Supervisor sv, JLabel mainTextLabel) {
+    public AddFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         initComponents();
@@ -36,11 +36,9 @@ public class AddFacultyForm extends JFrame {
         titleLabel.setFont(new java.awt.Font("sansserif", 0, 18));
 
         titleLabel.setText("Add a new faculty");
-        nameField.setText("Name...");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
         nameLabel.setText("Name:");
-        abbreviationField.setText("Abbreviation...");
         abbreviationLabel.setText("Abbreviation:");
         specialtyLabel.setText("Specialty Field:");
 
@@ -56,6 +54,8 @@ public class AddFacultyForm extends JFrame {
         specialtyCombo.addActionListener(this::specialtyComboActionPerformed);
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
+
+        abbreviationField.setText(StudyField.getAbbrevFromString(Objects.requireNonNull(specialtyCombo.getSelectedItem()).toString()));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -113,9 +113,12 @@ public class AddFacultyForm extends JFrame {
         String name = nameField.getText();
         String abbreviation = abbreviationField.getText();
         StudyField specialty = StudyField.getEnum(Objects.requireNonNull(specialtyCombo.getSelectedItem()).toString());
-        Faculty newFaculty = new Faculty(name, abbreviation, specialty);
-        sv.addFaculty(newFaculty);
-        this.dispose();
+        if (!name.isEmpty()) {
+            Faculty newFaculty = new Faculty(name, abbreviation, specialty);
+            sv.addFaculty(newFaculty);
+            StudentManagementGUI.displayFaculties();
+            this.dispose();
+        }
     }
 
     private void specialtyComboActionPerformed(ActionEvent evt) {

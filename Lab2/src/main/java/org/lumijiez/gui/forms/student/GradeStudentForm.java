@@ -4,28 +4,36 @@
  */
 package org.lumijiez.gui.forms.student;
 
+import org.lumijiez.base.Grade;
+import org.lumijiez.base.Student;
+import org.lumijiez.enums.Subjects;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 public class GradeStudentForm extends JFrame {
-
+    Integer[] grades = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
-    private final JTextField gradeField = new JTextField();
+    private final JComboBox<Subjects> subjectCombo;
     private final JLabel gradeLabel = new JLabel();
-    private final JComboBox<String> studentCombo = new JComboBox<>();
+    private final JComboBox<Student> studentCombo;
+    private final JComboBox<Integer> gradeCombo;
     private final JLabel studentLabel = new JLabel();
-    private final JComboBox<String> subjectCombo = new JComboBox<>();
     private final JLabel subjectLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public GradeStudentForm(Supervisor sv, JLabel mainTextLabel) {
+    public GradeStudentForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        this.subjectCombo = new JComboBox<>(Subjects.values());
+        this.gradeCombo = new JComboBox<>(grades);
+        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
 
@@ -38,7 +46,6 @@ public class GradeStudentForm extends JFrame {
         titleLabel.setText("Grade a student");
         studentLabel.setText("Student:");
         subjectLabel.setText("Subject:");
-        gradeField.setText("Grade...");
         submitButton.setText("Submit");
         gradeLabel.setText("Grade:");
         cancelButton.setText("Cancel");
@@ -49,8 +56,23 @@ public class GradeStudentForm extends JFrame {
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
-        subjectCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        studentCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Student)
+                    setText(((Student) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
+
+        subjectCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Subjects)
+                    setText(((Subjects) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,7 +88,7 @@ public class GradeStudentForm extends JFrame {
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addComponent(studentCombo, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(studentLabel)
-                                                        .addComponent(gradeField, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(gradeCombo, GroupLayout.PREFERRED_SIZE, 147, GroupLayout.PREFERRED_SIZE))
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
@@ -103,7 +125,7 @@ public class GradeStudentForm extends JFrame {
                                 .addComponent(gradeLabel)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
-                                        .addComponent(gradeField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(gradeCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
                                 .addContainerGap(30, Short.MAX_VALUE)));
@@ -111,6 +133,21 @@ public class GradeStudentForm extends JFrame {
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
+        Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
+        Subjects subject = Subjects.getEnum(Objects.requireNonNull(subjectCombo.getSelectedItem()).toString());
+        int intGrade = (Integer) Objects.requireNonNull(gradeCombo.getSelectedItem());
+        Grade grade = new Grade(subject, intGrade);
+        sv.addGrade(student, grade);
+
+        StringBuilder builder = new StringBuilder();
+        builder.append("====================================\n");
+        builder.append("Grades for ").append(student.getFullname()).append(" from ").append(student.getGroup().getName()).append(":\n");
+        for (Grade gr : student.getGrades()) {
+            builder.append(gr.getSubject()).append(": ").append(gr.getGrade()).append("\n");
+        }
+        builder.append("====================================\n");
+        mainTextLabel.setText(builder.toString());
+
         this.dispose();
     }
 

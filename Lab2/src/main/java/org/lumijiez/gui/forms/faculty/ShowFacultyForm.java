@@ -15,14 +15,14 @@ import java.awt.event.ActionEvent;
 public class ShowFacultyForm extends JFrame {
 
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Faculty> facultyCombo;
     private final JLabel facultyLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public ShowFacultyForm(Supervisor sv, JLabel mainTextLabel) {
+    public ShowFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
@@ -101,11 +101,15 @@ public class ShowFacultyForm extends JFrame {
         StringBuilder builder = new StringBuilder();
         Faculty fac = (Faculty) facultyCombo.getSelectedItem();
         assert fac != null;
+        builder.append("================= Faculty Info ====================\n");
         builder.append("Name: ").append(fac.getName()).append("\n");
         builder.append("Specialty: ").append(fac.getField()).append("\n");
+        builder.append("==========\n");
         builder.append("Groups: ").append("\n");
         for (Group gr : fac.getGroups())
             builder.append(gr.getName()).append("\n");
+            builder.append("==========\n");
+        builder.append("===================================================");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }

@@ -17,13 +17,13 @@ import java.util.Objects;
 public class ShowGroupForm extends JFrame {
 
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Group> groupCombo;
     private final JLabel groupLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
-    public ShowGroupForm(Supervisor sv, JLabel mainTextLabel) {
+    public ShowGroupForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
@@ -94,13 +94,18 @@ public class ShowGroupForm extends JFrame {
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder text = new StringBuilder();
         Group gr = (Group) Objects.requireNonNull(groupCombo.getSelectedItem());
-        builder.append(gr.getName()).append(" ").append(gr.getFaculty().getName()).append(" \n");
-        for (Student st : gr.getStudents()) {
-            builder.append(st.getFullname()).append("\n");
+
+        text.append("==================== Group Info ======================\n");
+        text.append("=================== Group: ").append(gr.getName()).append("=====================\n");
+
+        for (Student student : gr.getStudents()) {
+            text.append("Name: ").append(student.getName()).append("\nEmail: ").append(student.getEmail())
+                    .append("\nEnrol date: ").append(student.getEnrollmentDate());
+            text.append("\n===============================================\n");
         }
-        mainTextLabel.setText(builder.toString());
+        mainTextLabel.setText(text.toString());
         this.dispose();
     }
 

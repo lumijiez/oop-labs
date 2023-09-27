@@ -6,16 +6,20 @@ package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
+import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
 
 public class AddStudentForm extends JFrame {
-
+    Integer[] days = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31};
+    Integer[] months = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+    Integer[] years = new Integer[100];
     private final Supervisor sv;
     private final JLabel titleLabel = new JLabel();
     private final JComboBox<Group> groupCombo;
@@ -30,28 +34,33 @@ public class AddStudentForm extends JFrame {
     private final JComboBox<Faculty> facultyCombo;
     private final JLabel groupLabel = new javax.swing.JLabel();
     private final JLabel facultyLabel = new javax.swing.JLabel();
-    private final JTextField birthYearField = new javax.swing.JTextField();
-    private final JTextField birthDayField = new javax.swing.JTextField();
-    private final JTextField birthMonthField = new javax.swing.JTextField();
-    private final JLabel surnameLabel1 = new javax.swing.JLabel();
+    private final JComboBox<Integer> birthYearField;
+    private final JComboBox<Integer> birthDayField;
+    private final JComboBox<Integer> birthMonthField;
+    private final JLabel birthYearLabel = new javax.swing.JLabel();
     private final JLabel birthDayLabel = new javax.swing.JLabel();
     private final JLabel birthMonthLabel = new javax.swing.JLabel();
     private final JLabel enrolDayLabel = new javax.swing.JLabel();
-    private final JTextField enrolDayField = new javax.swing.JTextField();
-    private final JTextField enrolMonthField = new javax.swing.JTextField();
+    private final JComboBox<Integer> enrolDayField;
+    private final JComboBox<Integer> enrolMonthField;
+    private final JComboBox<Integer> enrolYearField;
     private final JLabel enrolMonthLabel = new javax.swing.JLabel();
-    private final JTextField enrolYearField = new javax.swing.JTextField();
     private final JLabel enrolYearLabel = new javax.swing.JLabel();
     public AddStudentForm(Supervisor sv) {
+        for (int i = 0; i < 100; i++) years[i] = 1970 + i;
         this.sv = sv;
+        birthDayField = new JComboBox<>(days);
+        birthMonthField = new JComboBox<>(months);
+        birthYearField = new JComboBox<>(years);
+        enrolDayField = new JComboBox<>(days);
+        enrolMonthField = new JComboBox<>(months);
+        enrolYearField = new JComboBox<>(years);
         facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
         initComponents();
     }
 
     private void initComponents() {
-
-
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -76,20 +85,15 @@ public class AddStudentForm extends JFrame {
             }
         });
 
-        nameField.setText("Name...");
-
         submitButton.setBackground(new java.awt.Color(204, 255, 204));
         submitButton.setText("Submit");
         submitButton.addActionListener(this::submitButtonActionPerformed);
 
         cancelButton.setBackground(new java.awt.Color(255, 204, 204));
         cancelButton.setText("Cancel");
+        cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
         nameLabel.setText("Name:");
-
-        surnameField.setText("Surname...");
-
-        emailField.setText("Email...");
 
         surnameLabel.setText("Surname:");
 
@@ -99,13 +103,7 @@ public class AddStudentForm extends JFrame {
 
         facultyLabel.setText("Faculty:");
 
-        birthYearField.setText("Surname...");
-
-        birthDayField.setText("Surname...");
-
-        birthMonthField.setText("Surname...");
-
-        surnameLabel1.setText("Year of Birth:");
+        birthYearLabel.setText("Year of Birth:");
 
         birthDayLabel.setText("Day of Birth:");
 
@@ -113,13 +111,7 @@ public class AddStudentForm extends JFrame {
 
         enrolDayLabel.setText("Day of Enrollment:");
 
-        enrolDayField.setText("Surname...");
-
-        enrolMonthField.setText("Surname...");
-
         enrolMonthLabel.setText("Month of Enrollment:");
-
-        enrolYearField.setText("Surname...");
 
         enrolYearLabel.setText("Year of Enrollment:");
 
@@ -180,7 +172,7 @@ public class AddStudentForm extends JFrame {
                                                                         .addGroup(layout.createSequentialGroup()
                                                                                 .addGap(32, 32, 32)
                                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                        .addComponent(surnameLabel1)
+                                                                                        .addComponent(birthYearLabel)
                                                                                         .addComponent(birthYearField, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                                         .addGroup(layout.createSequentialGroup()
@@ -201,8 +193,7 @@ public class AddStudentForm extends JFrame {
                                                                 .addGap(43, 43, 43))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(enrolYearLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                                .addContainerGap())))))
-        );
+                                                                .addContainerGap()))))));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -234,7 +225,7 @@ public class AddStudentForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(birthDayLabel)
                                         .addComponent(birthMonthLabel)
-                                        .addComponent(surnameLabel1))
+                                        .addComponent(birthYearLabel))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(birthDayField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -254,27 +245,48 @@ public class AddStudentForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addGap(21, 21, 21))
-        );
-
+                                .addGap(21, 21, 21)));
         pack();
+    }
+
+    private void cancelButtonActionPerformed(ActionEvent actionEvent) {
+        this.dispose();
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
         String name = nameField.getText();
         String surname = surnameField.getText();
+        String email = emailField.getText();
         Group group = (Group) Objects.requireNonNull(groupCombo.getSelectedItem());
         Faculty faculty = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
-        int birthYear = Integer.parseInt(birthYearField.getText());
-        int birthMonth = Integer.parseInt(birthMonthField.getText());
-        int birthDay = Integer.parseInt(birthDayField.getText());
-        int enrolYear = Integer.parseInt(enrolYearField.getText());
-        int enrolMonth = Integer.parseInt(enrolMonthField.getText());
-        int enrolDay = Integer.parseInt(enrolDayField.getText());
-        Date birthDate = new Date(birthYear, birthMonth, birthDay);
-        Date enrolDate = new Date(enrolYear, enrolMonth, enrolDay);
-        sv.addStudent(name, surname, group, faculty, birthDate, enrolDate);
-        this.dispose();
+
+        int birthYear = (Integer) Objects.requireNonNull(birthYearField.getSelectedItem());
+        int birthMonth = (Integer) Objects.requireNonNull(birthMonthField.getSelectedItem());
+        int birthDay = (Integer) Objects.requireNonNull(birthDayField.getSelectedItem());
+        int enrolYear = (Integer) Objects.requireNonNull(enrolYearField.getSelectedItem());
+        int enrolMonth = (Integer) Objects.requireNonNull(enrolMonthField.getSelectedItem());
+        int enrolDay = (Integer) Objects.requireNonNull(enrolDayField.getSelectedItem());
+
+        if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty()) {
+            Calendar birthCalendar = Calendar.getInstance();
+            Calendar enrolCalendar = Calendar.getInstance();
+
+            birthCalendar.set(Calendar.YEAR, birthYear);
+            birthCalendar.set(Calendar.MONTH, birthMonth - 1);
+            birthCalendar.set(Calendar.DAY_OF_MONTH, birthDay);
+
+            enrolCalendar.set(Calendar.YEAR, enrolYear);
+            enrolCalendar.set(Calendar.MONTH, enrolMonth - 1);
+            enrolCalendar.set(Calendar.DAY_OF_MONTH, enrolDay);
+
+            Date birthDate = birthCalendar.getTime();
+            Date enrolDate = enrolCalendar.getTime();
+            sv.addStudent(name, surname, email, group, faculty, birthDate, enrolDate);
+
+            StudentManagementGUI.displayStudents();
+
+            this.dispose();
+        }
     }
 
 }

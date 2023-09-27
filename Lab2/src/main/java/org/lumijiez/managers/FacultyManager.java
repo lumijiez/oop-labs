@@ -9,15 +9,10 @@ import java.util.List;
 public class FacultyManager implements Serializable {
 
     private final StudentManager sm = new StudentManager();
+
     private final GroupManager gm = new GroupManager(sm);
 
     private final List<Faculty> faculties = new ArrayList<>();
-
-    public Faculty getFaculty(String facultyName) {
-        for (Faculty fc : faculties)
-            if (fc.getName().equals(facultyName)) return fc;
-        return null;
-    }
 
     public GroupManager getGm() {
         return gm;

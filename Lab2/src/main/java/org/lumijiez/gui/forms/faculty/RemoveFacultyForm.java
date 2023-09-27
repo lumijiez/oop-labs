@@ -5,6 +5,7 @@
 package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
+import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -14,14 +15,14 @@ import java.awt.event.ActionEvent;
 public class RemoveFacultyForm extends JFrame {
 
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Faculty> facultyCombo;
     private final JLabel facultyLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public RemoveFacultyForm(Supervisor sv, JLabel mainTextLabel) {
+    public RemoveFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
@@ -93,6 +94,7 @@ public class RemoveFacultyForm extends JFrame {
 
     private void submitButtonActionPerformed(ActionEvent evt) {
         sv.deleteFaculty(((Faculty)facultyCombo.getSelectedItem()));
+        StudentManagementGUI.displayFaculties();
         this.dispose();
     }
 

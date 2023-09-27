@@ -6,17 +6,17 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
+import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.util.Arrays;
 import java.util.Objects;
 
 public class EditFacultyForm extends JFrame {
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JTextField abbreviationField = new JTextField();
     private final JLabel abbreviationLabel = new JLabel();
     private final JButton cancelButton = new JButton();
@@ -29,7 +29,7 @@ public class EditFacultyForm extends JFrame {
     private final JComboBox<Faculty> facultyCombo;
     private final JComboBox<StudyField> specialtyCombo;
 
-    public EditFacultyForm(Supervisor sv, JLabel mainTextLabel) {
+    public EditFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
@@ -152,6 +152,7 @@ public class EditFacultyForm extends JFrame {
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setName(nameField.getText());
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setAbbreviation(abbreviationField.getText());
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setField(((StudyField) Objects.requireNonNull(specialtyCombo.getSelectedItem())));
+        StudentManagementGUI.displayFaculties();
         this.dispose();
     }
 

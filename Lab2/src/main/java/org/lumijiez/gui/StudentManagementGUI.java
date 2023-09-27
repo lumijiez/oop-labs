@@ -21,13 +21,13 @@ import org.lumijiez.gui.forms.student.*;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class StudentManagementGUI extends JFrame {
-    private Supervisor sv;
-    private final JLabel mainTextLabel = new JLabel();
+    private static Supervisor sv;
     private final JMenuBar menuBar = new JMenuBar();
     private final JMenu fileMenu = new JMenu();
     private final JMenuItem loadBatchOption = new JMenuItem();
@@ -38,6 +38,9 @@ public class StudentManagementGUI extends JFrame {
     private final JMenuItem showAllStudentsOption = new JMenuItem();
     private final JMenuItem showParticularStudentOption = new JMenuItem();
     private final JMenuItem showStudentGrade = new JMenuItem();
+    private final JMenuItem graduateStudent = new JMenuItem();
+    private final JMenuItem showGraduates = new JMenuItem();
+    private final JMenuItem showEnrolled = new JMenuItem();
     private final JPopupMenu.Separator studentSeparator = new JPopupMenu.Separator();
     private final JMenuItem gradeStudentOption = new JMenuItem();
     private final JMenuItem addStudentOption = new JMenuItem();
@@ -57,9 +60,12 @@ public class StudentManagementGUI extends JFrame {
     private final JMenuItem addFacultyOption = new JMenuItem();
     private final JMenuItem editFacultyOption = new JMenuItem();
     private final JMenuItem removeFacultyOption = new JMenuItem();
+    private final JScrollPane mainScrollPane = new javax.swing.JScrollPane();
+    private static final JTextArea mainTextLabel = new javax.swing.JTextArea();
 
     public StudentManagementGUI() {
         this.sv = DataDeserializer.deserialize();
+        this.setSize(new Dimension(1280, 720));
         initComponents();
     }
     private void initComponents() {
@@ -89,6 +95,13 @@ public class StudentManagementGUI extends JFrame {
         addFacultyOption.setText("Add Faculty");
         removeFacultyOption.setText("Remove Faculty");
         editFacultyOption.setText("Edit Faculty");
+        graduateStudent.setText("Graduate student");
+        showGraduates.setText("Show Graduates");
+        showEnrolled.setText("Show Enrolled");
+
+        mainTextLabel.setEditable(false);
+        mainTextLabel.setFont(new java.awt.Font("Segoe UI", 0, 14));
+        mainScrollPane.setViewportView(mainTextLabel);
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
@@ -99,8 +112,7 @@ public class StudentManagementGUI extends JFrame {
                         StudentManagementGUI.this,
                         "Are you sure you want to exit?",
                         "Confirmation",
-                        JOptionPane.YES_NO_OPTION
-                );
+                        JOptionPane.YES_NO_OPTION);
 
                 if (result == JOptionPane.YES_OPTION) {
                     DataSerializer.serialize(sv);
@@ -127,11 +139,17 @@ public class StudentManagementGUI extends JFrame {
         addStudentOption.addActionListener(this::addStudentOptionActionPerformed);
         editStudentOption.addActionListener(this::editStudentOptionActionPerformed);
         deleteStudentOption.addActionListener(this::deleteStudentOptionActionPerformed);
+        graduateStudent.addActionListener(this::graduateStudentOptionActionPerformed);
+        showEnrolled.addActionListener(this::showEnrolledOptionActionPerformed);
+        showGraduates.addActionListener(this::showGraduatesOptionActionPerformed);
 
         studentMenu.add(showAllStudentsOption);
         studentMenu.add(showParticularStudentOption);
         studentMenu.add(showStudentGrade);
+        studentMenu.add(showEnrolled);
+        studentMenu.add(showGraduates);
         studentMenu.add(studentSeparator);
+        studentMenu.add(graduateStudent);
         studentMenu.add(gradeStudentOption);
         studentMenu.add(addStudentOption);
         studentMenu.add(editStudentOption);
@@ -173,33 +191,73 @@ public class StudentManagementGUI extends JFrame {
 
         setJMenuBar(menuBar);
 
-        GroupLayout layout = new GroupLayout(getContentPane());
+        StudentManagementGUI.displayStudents();
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(mainTextLabel, GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE));
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
+        );
         layout.setVerticalGroup(
-            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-            .addComponent(mainTextLabel, GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
+                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
+        );
         pack();
+    }
+
+    private void showGraduatesOptionActionPerformed(ActionEvent actionEvent) {
+        if (checkStudent() && checkGroup() && checkFaculty()) {
+            StringBuilder text = new StringBuilder();
+            text.append("=================== Students =====================\n");
+            for (Student st : sv.getFm().getGm().getSm().getStudents()) {
+                if (st.isGraduated()) {
+                    text.append("Name: ").append(st.getFullname()).append("\nGroup: ").append(st.getGroup().getName())
+                            .append("\nGraduated: ").append("Yes");
+                    text.append("\n===============================================\n");
+                }
+            }
+            mainTextLabel.setText(text.toString());
+        }
+    }
+
+    private void showEnrolledOptionActionPerformed(ActionEvent actionEvent) {
+        if (checkStudent() && checkGroup() && checkFaculty()) {
+            StringBuilder text = new StringBuilder();
+            text.append("=================== Students =====================\n");
+            for (Student st : sv.getFm().getGm().getSm().getStudents()) {
+                if (!st.isGraduated()) {
+                    text.append("Name: ").append(st.getFullname()).append("\nGroup: ").append(st.getGroup().getName())
+                            .append("\nGraduated: ").append("No");
+                    text.append("\n===============================================\n");
+                }
+            }
+            mainTextLabel.setText(text.toString());
+        }
+    }
+
+    private void graduateStudentOptionActionPerformed(ActionEvent actionEvent) {
+        if (checkStudent() && checkGroup() && checkFaculty()) {
+            GraduateStudentForm form = new GraduateStudentForm(sv, mainTextLabel);
+            form.setVisible(true);
+        }
     }
 
     private void showAllStudentsOptionActionPerformed(ActionEvent actionEvent) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
-            StringBuilder builder = new StringBuilder();
+            StringBuilder text = new StringBuilder();
+            text.append("=================== Students =====================\n");
             for (Student st : sv.getFm().getGm().getSm().getStudents()) {
-                builder.append(st.getFullname()).append("\n");
+                text.append("Name: ").append(st.getFullname()).append("\nGroup: ").append(st.getGroup().getName());
+                text.append("\n===============================================\n");
             }
-            mainTextLabel.setText(builder.toString());
+            mainTextLabel.setText(text.toString());
         }
     }
 
     private void showAllGroupsOptionActionPerformed(ActionEvent actionEvent) {
         if (checkGroup() && checkFaculty()) {
-            StringBuilder builder = new StringBuilder();
-            for (Group gr : sv.getFm().getGm().getGroups())
-                builder.append(gr.getName()).append("\n");
-            mainTextLabel.setText(builder.toString());
+            displayGroups();
         }
     }
 
@@ -229,11 +287,15 @@ public class StudentManagementGUI extends JFrame {
 
     private void showAllFacultiesOptionActionPerformed(ActionEvent evt) {
         if (checkFaculty()) {
-            StringBuilder builder = new StringBuilder();
-            for (Faculty fc : sv.getFm().getFaculties()) {
-                builder.append(fc.getName()).append(" ").append(fc.getAbbreviation()).append(" ").append(fc.getField().getName());
+            StringBuilder text = new StringBuilder();
+            text.append("==================== Faculties ======================\n");
+            for (Faculty fac : sv.getFm().getFaculties()) {
+                text.append("Name: ").append(fac.getName()).append("\nSpecialty: ").append(fac.getField().getName())
+                        .append("\nAbbreviation: ").append(fac.getAbbreviation())
+                        .append("\nNumber of groups: ").append(fac.getGroups().size());
+                text.append("\n===============================================\n");
             }
-            mainTextLabel.setText(builder.toString());
+            mainTextLabel.setText(text.toString());
         }
     }
 
@@ -352,5 +414,39 @@ public class StudentManagementGUI extends JFrame {
             return false;
         }
         return true;
+    }
+
+    public static void displayStudents() {
+        StringBuilder text = new StringBuilder();
+        text.append("==================== Students ======================\n");
+        for (Student student : sv.getFm().getGm().getSm().getStudents()) {
+            text.append("Name: ").append(student.getFullname()).append("\nGroup: ").append(student.getGroup().getName())
+                    .append("\nEmail:: ").append(student.getEmail()).append("\nGraduated: ").append((student.isGraduated() ? "Yes" : "No"));
+            text.append("\n===============================================\n");
+        }
+        mainTextLabel.setText(text.toString());
+    }
+
+    public static void displayGroups() {
+        StringBuilder text = new StringBuilder();
+        text.append("==================== Groups ======================\n");
+        for (Group group : sv.getFm().getGm().getGroups()) {
+            text.append("Name: ").append(group.getName()).append("\nFaculty: ").append(group.getFaculty().getName())
+                    .append("\nNumber of students: ").append(group.getStudents().size());
+            text.append("\n===============================================\n");
+        }
+        mainTextLabel.setText(text.toString());
+    }
+
+    public static void displayFaculties() {
+        StringBuilder text = new StringBuilder();
+        text.append("==================== Faculties ======================\n");
+        for (Faculty fac : sv.getFm().getFaculties()) {
+            text.append("Name: ").append(fac.getName()).append("\nSpecialty: ").append(fac.getField().getName())
+                    .append("\nAbbreviation: ").append(fac.getAbbreviation())
+                    .append("\nNumber of groups: ").append(fac.getGroups().size());
+            text.append("\n===============================================\n");
+        }
+        mainTextLabel.setText(text.toString());
     }
 }

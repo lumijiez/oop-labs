@@ -15,8 +15,11 @@ public class Faculty implements Serializable {
     }
 
     private String name;
+
     private String abbreviation;
+
     private List<Group> groups = new ArrayList<>();
+
     private StudyField field;
 
     public void addGroup(Group group) {
@@ -41,10 +44,6 @@ public class Faculty implements Serializable {
 
     public List<Group> getGroups() {
         return groups;
-    }
-
-    public void setGroups(List<Group> groups) {
-        this.groups = groups;
     }
 
     public StudyField getField() {

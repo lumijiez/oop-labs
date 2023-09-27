@@ -4,8 +4,8 @@
  */
 package org.lumijiez.gui.forms.group;
 
-import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
+import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -14,14 +14,14 @@ import java.awt.event.ActionEvent;
 
 public class DeleteGroupForm extends JFrame {
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Group> groupCombo;
     private final JLabel groupLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public DeleteGroupForm(Supervisor sv, JLabel mainTextLabel) {
+    public DeleteGroupForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
@@ -94,6 +94,7 @@ public class DeleteGroupForm extends JFrame {
 
     private void submitButtonActionPerformed(ActionEvent evt) {
         sv.deleteGroup(((Group)groupCombo.getSelectedItem()));
+        StudentManagementGUI.displayGroups();
         this.dispose();
     }
 

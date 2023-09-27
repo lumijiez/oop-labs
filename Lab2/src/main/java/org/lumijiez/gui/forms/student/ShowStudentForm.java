@@ -4,24 +4,28 @@
  */
 package org.lumijiez.gui.forms.student;
 
+import org.lumijiez.base.Student;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 
 public class ShowStudentForm extends JFrame {
 
     private final Supervisor sv;
-    private final JLabel mainTextLabel;
+    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
-    private final JComboBox<String> studentCombo = new JComboBox<>();
+    private final JComboBox<Student> studentCombo;
     private final JLabel studentLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public ShowStudentForm(Supervisor sv, JLabel mainTextLabel) {
+    public ShowStudentForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
+        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
 
@@ -42,7 +46,14 @@ public class ShowStudentForm extends JFrame {
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        studentCombo.setModel(new DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        studentCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof Student)
+                    setText(((Student) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -85,6 +96,20 @@ public class ShowStudentForm extends JFrame {
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
+        Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
+        StringBuilder text = new StringBuilder();
+
+        text.append("==================== Student Info ======================\n");
+        mainTextLabel.setText(text.toString());
+        text.append("Name: ").append(student.getFullname()).append(" \n")
+                .append("Group: ").append(student.getGroup().getName())
+                .append(" \nFaculty: ").append(student.getFaculty().getName())
+                .append(" \nEmail: ").append(student.getEmail()).append(" \n")
+                .append("Bday: ").append(student.getDateOfBirth())
+                .append("\nEnrol date: ").append(student.getEnrollmentDate())
+                .append("\nGraduated: ").append(student.isGraduated());
+        text.append("\n==================================================");
+        mainTextLabel.setText(text.toString());
         this.dispose();
     }
 
