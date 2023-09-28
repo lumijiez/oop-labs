@@ -8,6 +8,7 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
@@ -17,8 +18,6 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class EditFacultyForm extends JFrame {
-    private final Supervisor sv;
-    private final JTextArea mainTextLabel;
     private final JTextField abbreviationField = new JTextField();
     private final JLabel abbreviationLabel = new JLabel();
     private final JButton cancelButton = new JButton();
@@ -31,9 +30,7 @@ public class EditFacultyForm extends JFrame {
     private final JComboBox<Faculty> facultyCombo;
     private final JComboBox<StudyField> specialtyCombo;
 
-    public EditFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
-        this.sv = sv;
-        this.mainTextLabel = mainTextLabel;
+    public EditFacultyForm(Supervisor sv) {
         facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         specialtyCombo = new JComboBox<>(StudyField.getAllEnums().toArray(new StudyField[0]));
         initComponents();
@@ -43,7 +40,7 @@ public class EditFacultyForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
         titleLabel.setText("Edit a faculty");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
@@ -147,7 +144,7 @@ public class EditFacultyForm extends JFrame {
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setName(nameField.getText());
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setAbbreviation(abbreviationField.getText());
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setField(((StudyField) Objects.requireNonNull(specialtyCombo.getSelectedItem())));
-        StudentManagementGUI.displayFaculties();
+        DisplayerManager.displayFaculties();
         this.dispose();
     }
 

@@ -10,12 +10,11 @@ import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class ShowStudentForm extends JFrame {
-
-    private final Supervisor sv;
     private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Student> studentCombo;
@@ -24,7 +23,6 @@ public class ShowStudentForm extends JFrame {
     private final JLabel titleLabel = new JLabel();
 
     public ShowStudentForm(Supervisor sv, JTextArea mainTextLabel) {
-        this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
@@ -34,7 +32,7 @@ public class ShowStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
 
         titleLabel.setText("Show Student");
         submitButton.setText("Submit");

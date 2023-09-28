@@ -7,6 +7,7 @@ package org.lumijiez.gui.forms.student;
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
@@ -16,16 +17,14 @@ import java.util.Objects;
 
 public class DeleteStudentForm extends JFrame {
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Student> studentCombo;
     private final JLabel studentLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public DeleteStudentForm(Supervisor sv, JTextArea mainTextLabel) {
+    public DeleteStudentForm(Supervisor sv) {
         this.sv = sv;
-        this.mainTextLabel = mainTextLabel;
         this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
@@ -90,9 +89,7 @@ public class DeleteStudentForm extends JFrame {
     private void submitButtonActionPerformed(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         sv.deleteStudent(student);
-
-        StudentManagementGUI.displayStudents();
-
+        DisplayerManager.displayStudents();
         this.dispose();
     }
 

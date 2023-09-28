@@ -4,6 +4,7 @@
  */
 package org.lumijiez.gui.forms.group;
 
+import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.util.ComponentDecorator;
@@ -11,13 +12,13 @@ import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 
 public class ShowGroupForm extends JFrame {
 
-    private final Supervisor sv;
     private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Group> groupCombo;
@@ -25,7 +26,6 @@ public class ShowGroupForm extends JFrame {
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
     public ShowGroupForm(Supervisor sv, JTextArea mainTextLabel) {
-        this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
         initComponents();
@@ -35,7 +35,7 @@ public class ShowGroupForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
         titleLabel.setText("Show a group");
         groupLabel.setText("Group:");
         cancelButton.setText("Cancel");

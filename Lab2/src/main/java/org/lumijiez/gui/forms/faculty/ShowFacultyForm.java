@@ -11,11 +11,11 @@ import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class ShowFacultyForm extends JFrame {
 
-    private final Supervisor sv;
     private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Faculty> facultyCombo;
@@ -24,7 +24,6 @@ public class ShowFacultyForm extends JFrame {
     private final JLabel titleLabel = new JLabel();
 
     public ShowFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
-        this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         initComponents();
@@ -34,7 +33,7 @@ public class ShowFacultyForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
 
         titleLabel.setText("Show a faculty");
         submitButton.setText("Submit");
@@ -101,8 +100,7 @@ public class ShowFacultyForm extends JFrame {
         builder.append("==========\n");
         builder.append("Groups: ").append("\n");
         for (Group gr : fac.getGroups())
-            builder.append(gr.getName()).append("\n");
-            builder.append("==========\n");
+            builder.append(gr.getName()).append("\n").append("==========\n");
         builder.append("===================================================");
         mainTextLabel.setText(builder.toString());
         this.dispose();

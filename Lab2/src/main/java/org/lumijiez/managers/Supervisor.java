@@ -4,6 +4,7 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Grade;
 import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
+import org.lumijiez.enums.StudyField;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -77,7 +78,24 @@ public class Supervisor implements Serializable {
         getFm().getGm().getSm().deleteStudent(st);
     }
 
+    public Faculty getFacultyByName(String facultyName) {
+        for (Faculty faculty : getFm().getFaculties()) {
+            if (faculty.getName().equals(facultyName))
+                return faculty;
+        }
+        return null;
+    }
+
+    public Group getGroupByName(String groupName) {
+        for (Group group : getFm().getGm().getGroups()) {
+            if (group.getName().equals(groupName))
+                return group;
+        }
+        return null;
+    }
+
     public FacultyManager getFm() {
         return fm;
     }
+
 }

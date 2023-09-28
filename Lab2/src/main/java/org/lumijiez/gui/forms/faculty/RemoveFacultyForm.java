@@ -7,25 +7,25 @@ package org.lumijiez.gui.forms.faculty;
 import org.lumijiez.base.Faculty;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class RemoveFacultyForm extends JFrame {
 
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Faculty> facultyCombo;
     private final JLabel facultyLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public RemoveFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
+    public RemoveFacultyForm(Supervisor sv) {
         this.sv = sv;
-        this.mainTextLabel = mainTextLabel;
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         initComponents();
     }
@@ -34,7 +34,7 @@ public class RemoveFacultyForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
 
         titleLabel.setText("Remove a faculty");
         submitButton.setText("Submit");
@@ -88,7 +88,7 @@ public class RemoveFacultyForm extends JFrame {
 
     private void submitButtonActionPerformed(ActionEvent evt) {
         sv.deleteFaculty(((Faculty)facultyCombo.getSelectedItem()));
-        StudentManagementGUI.displayFaculties();
+        DisplayerManager.displayFaculties();
         this.dispose();
     }
 

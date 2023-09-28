@@ -9,10 +9,12 @@ import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
@@ -21,7 +23,6 @@ public class EditStudentForm extends JFrame {
     Integer[] months = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
     Integer[] years = new Integer[100];
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JTextField emailField = new JTextField();
     private final JLabel emailLabel = new JLabel();
@@ -50,9 +51,8 @@ public class EditStudentForm extends JFrame {
     private final JLabel enrolMonthLabel = new javax.swing.JLabel();
     private final JLabel enrolYearLabel = new javax.swing.JLabel();
 
-    public EditStudentForm(Supervisor sv, JTextArea mainTextLabel) {
+    public EditStudentForm(Supervisor sv) {
         this.sv = sv;
-        this.mainTextLabel = mainTextLabel;
         birthDayField = new JComboBox<>(days);
         birthMonthField = new JComboBox<>(months);
         birthYearField = new JComboBox<>(years);
@@ -69,10 +69,10 @@ public class EditStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
 
         titleLabel.setText("Edit a student");
-        nameField.setText(((Student)studentCombo.getSelectedItem()).getName());
+        nameField.setText(((Student) Objects.requireNonNull(studentCombo.getSelectedItem())).getName());
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
         studentLabel.setText("Student:");
@@ -102,7 +102,7 @@ public class EditStudentForm extends JFrame {
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
         studentCombo.addActionListener(this::studentComboActionPerformed);
 
-        ComboBoxRenderers.setFacultyRenderer(facultyCombo);;
+        ComboBoxRenderers.setFacultyRenderer(facultyCombo);
         ComboBoxRenderers.setGroupRenderer(groupCombo);
         ComboBoxRenderers.setStudentRenderer(studentCombo);
 
@@ -288,7 +288,7 @@ public class EditStudentForm extends JFrame {
             sv.editStudent(student, name, surname, email, group, faculty /*, birthDate, enrolDate*/);
         }
 
-        StudentManagementGUI.displayStudents();
+        DisplayerManager.displayStudents();
         this.dispose();
     }
 }

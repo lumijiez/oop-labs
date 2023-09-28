@@ -12,6 +12,7 @@ import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
@@ -42,7 +43,7 @@ public class GradeStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18));
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
 
         titleLabel.setText("Grade a student");
         studentLabel.setText("Student:");

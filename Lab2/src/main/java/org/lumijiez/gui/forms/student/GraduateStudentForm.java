@@ -7,6 +7,7 @@ package org.lumijiez.gui.forms.student;
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
@@ -16,17 +17,13 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class GraduateStudentForm extends JFrame {
-    private final Supervisor sv;
-    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Student> studentCombo;
     private final JLabel studentLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public GraduateStudentForm(Supervisor sv, JTextArea mainTextLabel) {
-        this.sv = sv;
-        this.mainTextLabel = mainTextLabel;
+    public GraduateStudentForm(Supervisor sv) {
         this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
@@ -35,14 +32,17 @@ public class GraduateStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new Font("sansserif", 0, 18)); // NOI18N
-        titleLabel.setText("Graduate a Student");
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18)); // NOI18N
 
         ComboBoxRenderers.setStudentRenderer(studentCombo);
 
         studentLabel.setText("Student:");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
+        titleLabel.setText("Graduate a Student");
+
+        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        submitButton.addActionListener(this::submitButtonActionPerformed);
 
         submitButton.setBackground(new Color(204, 255, 204));
         cancelButton.setBackground(new Color(255, 204, 204));
@@ -91,7 +91,7 @@ public class GraduateStudentForm extends JFrame {
     private void submitButtonActionPerformed(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         student.setGraduated(true);
-        StudentManagementGUI.displayStudents();
+        DisplayerManager.displayStudents();
         this.dispose();
     }
 

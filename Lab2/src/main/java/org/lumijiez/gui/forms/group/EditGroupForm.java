@@ -8,17 +8,18 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class EditGroupForm extends JFrame {
 
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Faculty> facultyCombo;
     private final JLabel facultyLabel = new JLabel();
@@ -28,9 +29,8 @@ public class EditGroupForm extends JFrame {
     private final JLabel nameLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
-    public EditGroupForm(Supervisor sv, JTextArea mainTextLabel) {
+    public EditGroupForm(Supervisor sv) {
         this.sv = sv;
-        this.mainTextLabel = mainTextLabel;
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
         initComponents();
@@ -40,7 +40,7 @@ public class EditGroupForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
 
         titleLabel.setText("Edit a group");
         nameField.setText("Name...");
@@ -56,7 +56,7 @@ public class EditGroupForm extends JFrame {
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        ComboBoxRenderers.setFacultyRenderer(facultyCombo);;
+        ComboBoxRenderers.setFacultyRenderer(facultyCombo);
         ComboBoxRenderers.setGroupRenderer(groupCombo);
 
         GroupLayout layout = new GroupLayout(getContentPane());
@@ -118,7 +118,7 @@ public class EditGroupForm extends JFrame {
         Faculty fac = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
         Group gr = (Group) Objects.requireNonNull(groupCombo.getSelectedItem());
         sv.editGroup(gr, nameField.getText(), fac);
-        StudentManagementGUI.displayGroups();
+        DisplayerManager.displayGroups();
         this.dispose();
     }
 

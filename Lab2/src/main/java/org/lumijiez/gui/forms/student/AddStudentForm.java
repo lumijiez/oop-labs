@@ -8,10 +8,12 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Calendar;
 import java.util.Date;
@@ -82,7 +84,7 @@ public class AddStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
 
         titleLabel.setText("Add a new student");
         submitButton.setText("Submit");
@@ -257,7 +259,7 @@ public class AddStudentForm extends JFrame {
 
         if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty()) {
             sv.addStudent(name, surname, email, group, faculty, birthDate, enrolDate);
-            StudentManagementGUI.displayStudents();
+            DisplayerManager.displayStudents();
             this.dispose();
         }
     }

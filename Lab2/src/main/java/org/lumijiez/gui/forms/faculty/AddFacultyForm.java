@@ -4,8 +4,10 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +15,6 @@ import javax.swing.*;
 
 public class AddFacultyForm extends JFrame {
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
     private final JLabel titleLabel = new JLabel();
     private final JComboBox<String> specialtyCombo = new JComboBox<>();
     private final JTextField nameField = new JTextField();
@@ -24,9 +25,8 @@ public class AddFacultyForm extends JFrame {
     private final JLabel abbreviationLabel = new JLabel();
     private final JLabel specialtyLabel = new JLabel();
 
-    public AddFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
+    public AddFacultyForm(Supervisor sv) {
         this.sv = sv;
-        this.mainTextLabel = mainTextLabel;
         initComponents();
     }
 
@@ -34,7 +34,7 @@ public class AddFacultyForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18));
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
 
         titleLabel.setText("Add a new faculty");
         submitButton.setText("Submit");
@@ -118,7 +118,7 @@ public class AddFacultyForm extends JFrame {
         if (!name.isEmpty()) {
             Faculty newFaculty = new Faculty(name, abbreviation, specialty);
             sv.addFaculty(newFaculty);
-            StudentManagementGUI.displayFaculties();
+            DisplayerManager.displayFaculties();
             this.dispose();
         }
     }

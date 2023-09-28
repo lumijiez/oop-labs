@@ -7,24 +7,24 @@ package org.lumijiez.gui.forms.group;
 import org.lumijiez.base.Group;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class DeleteGroupForm extends JFrame {
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
     private final JComboBox<Group> groupCombo;
     private final JLabel groupLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public DeleteGroupForm(Supervisor sv, JTextArea mainTextLabel) {
+    public DeleteGroupForm(Supervisor sv) {
         this.sv = sv;
-        this.mainTextLabel = mainTextLabel;
         this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
         initComponents();
     }
@@ -33,7 +33,7 @@ public class DeleteGroupForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
 
         titleLabel.setText("Delete a group");
         submitButton.setText("Submit");
@@ -88,7 +88,7 @@ public class DeleteGroupForm extends JFrame {
 
     private void submitButtonActionPerformed(ActionEvent evt) {
         sv.deleteGroup(((Group)groupCombo.getSelectedItem()));
-        StudentManagementGUI.displayGroups();
+        DisplayerManager.displayGroups();
         this.dispose();
     }
 

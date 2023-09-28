@@ -8,17 +8,18 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class AddGroupForm extends JFrame {
 
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
     private final JLabel titleLabel = new JLabel();
     private final JTextField nameField = new JTextField();
     private final JButton submitButton = new JButton();
@@ -27,9 +28,8 @@ public class AddGroupForm extends JFrame {
     private final JComboBox<Faculty> facultyCombo;
     private final JLabel facultyLabel = new JLabel();
 
-    public AddGroupForm(Supervisor sv, JTextArea mainTextLabel) {
+    public AddGroupForm(Supervisor sv) {
         this.sv = sv;
-        this.mainTextLabel = mainTextLabel;
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         initComponents();
     }
@@ -37,7 +37,7 @@ public class AddGroupForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
 
         titleLabel.setText("Add a new group");
         nameField.setText("Name...");
@@ -103,7 +103,7 @@ public class AddGroupForm extends JFrame {
         Group gr = new Group(nameField.getText());
         Faculty fac = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
         sv.addGroup(gr, fac);
-        StudentManagementGUI.displayGroups();
+        DisplayerManager.displayGroups();
         this.dispose();
     }
 
