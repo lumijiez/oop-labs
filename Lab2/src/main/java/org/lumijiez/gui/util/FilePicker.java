@@ -127,67 +127,67 @@ public class FilePicker extends JFrame {
             String facultyName;
             StudyField specialty;
 
-
             while (true) {
                 line = reader.readLine();
+                // Sorry for this
                 if (line == null) break;
                 if (line.isEmpty()) line = reader.readLine();
                 name = line.substring("name: ".length());
 
                 line = reader.readLine();
+                // Sorry for this
                 if (line == null) break;
                 surname = line.substring("surname: ".length());
 
                 line = reader.readLine();
+                // Sorry for this
                 if (line == null) break;
                 email = line.substring("email: ".length());
 
                 line = reader.readLine();
+                // Sorry for this again lol
                 if (line == null) break;
                 groupName = line.substring("group: ".length());
 
                 line = reader.readLine();
+                // Sorry for this again :((
                 if (line == null) break;
                 facultyName = line.substring("faculty: ".length());
 
                 line = reader.readLine();
+                // Please forgive me
                 if (line == null) break;
                 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 birth = dateFormat.parse(line.substring("birthdate: ".length()));
 
                 line = reader.readLine();
+                // I'm really sorry
                 if (line == null) break;
                 enrol = dateFormat.parse(line.substring("enroldate: ".length()));
 
                 line = reader.readLine();
+                // This is the last one please don't hate me
                 if (line == null) break;
                 String spec = line.substring("specialty: ".length());
 
-
                 if (StudyField.getEnum(spec) == null) {
                     specialty = StudyField.DEFAULT_UNASSIGNED;
-                } else {
-                    specialty = StudyField.getEnum(spec);
-                }
+                } else specialty = StudyField.getEnum(spec);
 
                 Faculty faculty;
                 Group group;
+
                 if (sv.getFacultyByName(facultyName) == null) {
                     assert specialty != null;
                     faculty = new Faculty(facultyName, specialty.getAbbreviation(), specialty);
                     sv.addFaculty(faculty);
-                } else {
-                    faculty = sv.getFacultyByName(facultyName);
-                }
+                } else faculty = sv.getFacultyByName(facultyName);
+
 
                 if (sv.getGroupByName(groupName, faculty) == null) {
                     group = new Group(groupName);
                     sv.addGroup(group, sv.getFacultyByName(facultyName));
-                } else {
-                    group = sv.getGroupByName(groupName, faculty);
-                }
-
-                System.out.println(name + "\n" +  surname+ "\n" + email+ "\n" + group.getName()+ "\n" + faculty.getName()+ "\n" + birth+ "\n" + enrol);
+                } else group = sv.getGroupByName(groupName, faculty);
 
                 sv.addStudent(name, surname, email, group, faculty, birth, enrol);
             }

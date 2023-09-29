@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package org.lumijiez.gui.forms.group;
 
 import org.lumijiez.base.Faculty;
@@ -36,7 +32,7 @@ public class AddGroupForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
 
         titleLabel.setText("Add a new group");
         nameField.setText("Name...");

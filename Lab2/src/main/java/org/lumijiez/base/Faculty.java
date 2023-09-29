@@ -15,11 +15,8 @@ public class Faculty implements Serializable {
     }
 
     private String name;
-
     private String abbreviation;
-
-    private List<Group> groups = new ArrayList<>();
-
+    private final List<Group> groups = new ArrayList<>();
     private StudyField field;
 
     public void addGroup(Group group) {

@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 public class Grade implements Serializable {
     private final Subjects subject;
+
     private final int grade;
 
     public Grade(Subjects subject, int grade) {

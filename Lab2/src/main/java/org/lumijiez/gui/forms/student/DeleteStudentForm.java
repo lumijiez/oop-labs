@@ -1,17 +1,13 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Objects;
 
@@ -33,7 +29,7 @@ public class DeleteStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", 0, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
         titleLabel.setText("Delete Student");
 
         ComboBoxRenderers.setStudentRenderer(studentCombo);
