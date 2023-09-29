@@ -4,7 +4,6 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Grade;
 import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
-import org.lumijiez.enums.StudyField;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -54,7 +53,7 @@ public class Supervisor implements Serializable {
         getFm().getGm().getSm().addStudent(newStudent);
     }
 
-    public void editStudent(Student student, String name, String surname, String email, Group group, Faculty faculty) {
+    public void editStudent(Student student, String name, String surname, String email, Group group, Faculty faculty, Date birth, Date enrol) {
         student.getGroup().deleteStudent(student);
         student.setName(name);
         student.setSurname(surname);
@@ -63,8 +62,8 @@ public class Supervisor implements Serializable {
         student.setGroup(group);
         group.addStudent(student);
         student.setFaculty(faculty);
-        student.setDateOfBirth(student.getDateOfBirth());
-        student.setEnrollmentDate(student.getEnrollmentDate());
+        student.setDateOfBirth(birth);
+        student.setEnrollmentDate(enrol);
     }
 
     public void addGroup(Group group, Faculty faculty) {
@@ -86,9 +85,9 @@ public class Supervisor implements Serializable {
         return null;
     }
 
-    public Group getGroupByName(String groupName) {
+    public Group getGroupByName(String groupName, Faculty faculty) {
         for (Group group : getFm().getGm().getGroups()) {
-            if (group.getName().equals(groupName))
+            if (group.getName().equals(groupName) && group.getFaculty().equals(faculty))
                 return group;
         }
         return null;

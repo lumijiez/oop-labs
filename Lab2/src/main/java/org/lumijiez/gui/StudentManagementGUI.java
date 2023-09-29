@@ -4,9 +4,6 @@
  */
 package org.lumijiez.gui;
 
-import org.lumijiez.base.Faculty;
-import org.lumijiez.base.Group;
-import org.lumijiez.base.Student;
 import org.lumijiez.data.DataDeserializer;
 import org.lumijiez.data.DataSerializer;
 import org.lumijiez.gui.forms.faculty.AddFacultyForm;
@@ -40,15 +37,15 @@ public class StudentManagementGUI extends JFrame {
 
     public StudentManagementGUI() {
         sv = DataDeserializer.deserialize();
-        this.setSize(new Dimension(1280, 720));
+        this.setSize(650, 720);
         initComponents();
     }
     private void initComponents() {
 
         JMenuItem loadBatchOption = new JMenuItem("Load as Batch", UIManager.getIcon("FileView.directoryIcon"));
-        JMenuItem saveAsOption = new JMenuItem("Save As", UIManager.getIcon("FileView.directoryIcon"));
+        JMenuItem saveAsOption = new JMenuItem("Save As (WIP)", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem saveAndExitOption = new JMenuItem("Save and Exit", UIManager.getIcon("FileView.directoryIcon"));
-        JMenuItem settingsOption = new JMenuItem("Settings", UIManager.getIcon("FileView.directoryIcon"));
+        JMenuItem settingsOption = new JMenuItem("Settings (WIP)", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem showAllStudentsOption = new JMenuItem("Show All Students", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem showParticularStudentOption = new JMenuItem("Show a Student", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem showStudentGrade = new JMenuItem("Show Student Grades", UIManager.getIcon("FileView.directoryIcon"));
@@ -80,7 +77,7 @@ public class StudentManagementGUI extends JFrame {
         facultyMenu.setText("Faculty Options");
 
         mainTextLabel.setEditable(false);
-        mainTextLabel.setFont(new java.awt.Font("Segoe UI", 0, 14));
+        mainTextLabel.setFont(new java.awt.Font("Segoe UI", Font.PLAIN, 14));
         mainScrollPane.setViewportView(mainTextLabel);
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);

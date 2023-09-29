@@ -6,7 +6,6 @@ package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
-import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
@@ -261,6 +260,8 @@ public class AddStudentForm extends JFrame {
             sv.addStudent(name, surname, email, group, faculty, birthDate, enrolDate);
             DisplayerManager.displayStudents();
             this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Fill in all the fields!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
         }
     }
 

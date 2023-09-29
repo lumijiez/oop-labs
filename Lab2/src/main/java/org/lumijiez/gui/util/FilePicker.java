@@ -6,6 +6,7 @@ import org.lumijiez.enums.StudyField;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -15,37 +16,26 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class FilePicker extends JFrame {
-    private JButton browseButton;
-    private JButton cancelButton;
-    private JScrollPane exampleLabel;
-    private JLabel formatLabel;
-    private JLabel jLabel1;
-    private JTextArea jTextArea2;
     private JTextPane filePane;
-    private JButton submitButton;
-    private JButton submitButton1;
-    private JLabel titleLabel;
     private final Supervisor sv;
 
     public FilePicker(Supervisor sv) {
         this.sv = sv;
         initComponents();
-    };
+    }
 
     private void initComponents() {
 
-        submitButton = new JButton();
-        jLabel1 = new JLabel();
-        titleLabel = new JLabel();
-        browseButton = new JButton();
-        formatLabel = new JLabel();
-        exampleLabel = new JScrollPane();
-        jTextArea2 = new JTextArea();
-        cancelButton = new JButton();
-        submitButton1 = new JButton();
+        JButton submitButton = new JButton();
+        JLabel titleLabel = new JLabel();
+        JButton browseButton = new JButton();
+        JLabel formatLabel = new JLabel();
+        JScrollPane exampleLabel = new JScrollPane();
+        JTextArea jTextArea2 = new JTextArea();
+        JButton cancelButton = new JButton();
         filePane = new JTextPane();
 
-        titleLabel.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("Segoe UI", Font.PLAIN, 24));
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
@@ -54,7 +44,7 @@ public class FilePicker extends JFrame {
         ComponentDecorator.submitButton(submitButton);
         ComponentDecorator.cancelButton(cancelButton);
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setText("Pick a file to load a batch");
         submitButton.setText("Submit");
@@ -127,15 +117,15 @@ public class FilePicker extends JFrame {
 
     private void submitButtonActionPerformed(ActionEvent evt) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePane.getText()))) {
-            String line = "1";
-            String name = null;
-            String surname = null;
-            String email = null;
-            Date birth = null;
-            Date enrol = null;
-            String groupName = null;
-            String facultyName = null;
-            StudyField specialty = null;
+            String line;
+            String name;
+            String surname;
+            String email;
+            Date birth;
+            Date enrol;
+            String groupName;
+            String facultyName;
+            StudyField specialty;
 
 
             while (true) {
@@ -190,18 +180,21 @@ public class FilePicker extends JFrame {
                     faculty = sv.getFacultyByName(facultyName);
                 }
 
-                if (sv.getGroupByName(groupName) == null) {
+                if (sv.getGroupByName(groupName, faculty) == null) {
                     group = new Group(groupName);
                     sv.addGroup(group, sv.getFacultyByName(facultyName));
                 } else {
-                    group = sv.getGroupByName(groupName);
+                    group = sv.getGroupByName(groupName, faculty);
                 }
+
+                System.out.println(name + "\n" +  surname+ "\n" + email+ "\n" + group.getName()+ "\n" + faculty.getName()+ "\n" + birth+ "\n" + enrol);
 
                 sv.addStudent(name, surname, email, group, faculty, birth, enrol);
             }
         } catch (IOException | ParseException ex) {
             throw new RuntimeException(ex);
         }
+        DisplayerManager.displayStudents();
         this.dispose();
     }
 }

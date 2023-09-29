@@ -122,7 +122,7 @@ public class Student implements Serializable {
 
     @Override
     public String toString() {
-        return fullname;
+        return fullname + " | " + group.getName() + " | " + faculty.getName();
     }
 
 }

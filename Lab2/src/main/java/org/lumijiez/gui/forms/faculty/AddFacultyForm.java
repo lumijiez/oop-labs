@@ -2,7 +2,6 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
-import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
@@ -120,6 +119,8 @@ public class AddFacultyForm extends JFrame {
             sv.addFaculty(newFaculty);
             DisplayerManager.displayFaculties();
             this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Fill in all the fields!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
         }
     }
 

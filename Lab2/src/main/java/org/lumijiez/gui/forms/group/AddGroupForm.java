@@ -6,7 +6,6 @@ package org.lumijiez.gui.forms.group;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
-import org.lumijiez.gui.StudentManagementGUI;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
@@ -100,11 +99,15 @@ public class AddGroupForm extends JFrame {
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
-        Group gr = new Group(nameField.getText());
-        Faculty fac = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
-        sv.addGroup(gr, fac);
-        DisplayerManager.displayGroups();
-        this.dispose();
+        if (!nameField.getText().isEmpty()) {
+            Group gr = new Group(nameField.getText());
+            Faculty fac = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
+            sv.addGroup(gr, fac);
+            DisplayerManager.displayGroups();
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "Fill in all the fields!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
+        }
     }
 
     private void cancelButtonActionPerformed(ActionEvent evt) {
