@@ -44,10 +44,7 @@ public class EditFacultyForm extends JFrame {
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
         nameLabel.setText("New name:");
-        nameField.setText("Name...");
         facultyLabel.setText("Faculty:");
-        abbreviationLabel.setText("New abbreviation:");
-        abbreviationField.setText("Abbreviation...");
         specialtyLabel.setText("New specialty:");
 
         ComponentDecorator.submitButton(submitButton);
@@ -129,6 +126,10 @@ public class EditFacultyForm extends JFrame {
                                         .addComponent(submitButton))
                                 .addGap(14, 14, 14)));
         pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
     }
 
     private void facultyComboActionPerformed(ActionEvent actionEvent) {

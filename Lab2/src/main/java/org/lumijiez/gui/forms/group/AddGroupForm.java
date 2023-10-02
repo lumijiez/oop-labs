@@ -37,7 +37,6 @@ public class AddGroupForm extends JFrame {
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
 
         titleLabel.setText("Add a new group");
-        nameField.setText("Name...");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
         nameLabel.setText("Name:");
@@ -94,6 +93,10 @@ public class AddGroupForm extends JFrame {
                                         .addComponent(submitButton))
                                 .addGap(15, 15, 15)));
         pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {

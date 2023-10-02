@@ -1,8 +1,10 @@
-package org.lumijiez.gui.util;
+package org.lumijiez.gui.loader;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.enums.StudyField;
+import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -22,6 +24,10 @@ public class BatchLoader extends JFrame {
     public BatchLoader(Supervisor sv) {
         this.sv = sv;
         this.setTitle("Load a Batch of Students");
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
         initComponents();
     }
 
@@ -102,6 +108,10 @@ public class BatchLoader extends JFrame {
                                         .addComponent(submitButton))
                                 .addGap(23, 23, 23)));
         pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
     }
 
     private void cancelButtonActionPerformed(ActionEvent evt) {

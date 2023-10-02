@@ -11,7 +11,7 @@ public class DisplayerManager {
         text.append("==================== Students ======================\n");
         for (Student student : StudentManagementGUI.getSv().getFm().getGm().getSm().getStudents()) {
             text.append("Name: ").append(student.getFullname()).append("\nGroup: ").append(student.getGroup().getName())
-                    .append("\nEmail:: ").append(student.getEmail()).append("\nGraduated: ").append((student.isGraduated() ? "Yes" : "No"));
+                    .append("\nEmail: ").append(student.getEmail()).append("\nGraduated: ").append((student.isGraduated() ? "Yes" : "No"));
             text.append("\n===============================================\n");
         }
         StudentManagementGUI.getMainLabel().setText(text.toString());

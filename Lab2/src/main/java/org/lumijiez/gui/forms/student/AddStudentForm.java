@@ -238,6 +238,10 @@ public class AddStudentForm extends JFrame {
                                         .addComponent(submitButton))
                                 .addGap(21, 21, 21)));
         pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
     }
 
     private void cancelButtonActionPerformed(ActionEvent actionEvent) {

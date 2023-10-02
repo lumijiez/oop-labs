@@ -40,7 +40,6 @@ public class EditGroupForm extends JFrame {
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
 
         titleLabel.setText("Edit a group");
-        nameField.setText("Name...");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
         nameLabel.setText("New name:");
@@ -109,6 +108,10 @@ public class EditGroupForm extends JFrame {
                                         .addComponent(submitButton))
                                 .addContainerGap(36, Short.MAX_VALUE)));
         pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {

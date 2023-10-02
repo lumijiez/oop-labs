@@ -182,8 +182,7 @@ public class EditStudentForm extends JFrame {
                                                 .addComponent(cancelButton)
                                                 .addGap(34, 34, 34)
                                                 .addComponent(submitButton)))
-                                .addContainerGap(27, Short.MAX_VALUE))
-        );
+                                .addContainerGap(27, Short.MAX_VALUE)));
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -246,10 +245,12 @@ public class EditStudentForm extends JFrame {
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(submitButton)
                                         .addComponent(cancelButton))
-                                .addContainerGap(25, Short.MAX_VALUE))
-        );
-
+                                .addContainerGap(25, Short.MAX_VALUE)));
         pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
     }
 
     private void cancelButtonActionPerformed(ActionEvent actionEvent) {

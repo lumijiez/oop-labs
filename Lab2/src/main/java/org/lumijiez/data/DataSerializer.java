@@ -12,7 +12,7 @@ public class DataSerializer {
             oos.writeObject(manager);
             System.out.println("Supervisor object serialized successfully.");
         } catch (IOException e) {
-            System.err.println("Error!");
+            e.printStackTrace();
         }
     }
 

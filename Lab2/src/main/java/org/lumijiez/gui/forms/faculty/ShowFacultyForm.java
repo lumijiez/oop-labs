@@ -42,7 +42,6 @@ public class ShowFacultyForm extends JFrame {
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
-        facultyCombo.addActionListener(this::facultyComboActionPerformed);
 
         ComboBoxRenderers.setFacultyRenderer(facultyCombo);
 
@@ -82,9 +81,10 @@ public class ShowFacultyForm extends JFrame {
                                         .addComponent(submitButton))
                                 .addContainerGap(24, Short.MAX_VALUE)));
         pack();
-    }
-
-    private void facultyComboActionPerformed(ActionEvent actionEvent) {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {

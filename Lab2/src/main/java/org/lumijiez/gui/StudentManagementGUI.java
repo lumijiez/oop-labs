@@ -11,8 +11,8 @@ import org.lumijiez.gui.forms.group.DeleteGroupForm;
 import org.lumijiez.gui.forms.group.EditGroupForm;
 import org.lumijiez.gui.forms.group.ShowGroupForm;
 import org.lumijiez.gui.forms.student.*;
-import org.lumijiez.gui.util.BatchGraduater;
-import org.lumijiez.gui.util.BatchLoader;
+import org.lumijiez.gui.loader.BatchGraduater;
+import org.lumijiez.gui.loader.BatchLoader;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 
@@ -36,6 +36,10 @@ public class StudentManagementGUI extends JFrame {
         sv = DataDeserializer.deserialize();
         this.setSize(650, 720);
         this.setTitle("Student Management System");
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
         initComponents();
     }
 

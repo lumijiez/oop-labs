@@ -1,13 +1,13 @@
 package org.lumijiez.managers;
 
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class LogManager {
+public class LogManager implements Serializable {
 
     private transient BufferedWriter writer;
 
@@ -20,7 +20,7 @@ public class LogManager {
             FileWriter fwriter = new FileWriter(fileHandle);
             writerTemp = new BufferedWriter(fwriter);
         } catch (IOException e) {
-            System.err.println("Error!");
+            e.printStackTrace();
             writerTemp = null;
         }
         this.writer = writerTemp;
@@ -29,14 +29,13 @@ public class LogManager {
     public void logOperation(String msg) {
         if (writer == null) init();
         LocalDateTime currentDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss |");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss | ");
         try {
             writer.write(currentDateTime.format(formatter) + msg);
             writer.flush();
-            System.out.println(msg);
             writer.newLine();
         } catch (IOException e) {
-            System.err.println("Error!");
+            e.printStackTrace();
         }
     }
 
@@ -46,6 +45,5 @@ public class LogManager {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 }

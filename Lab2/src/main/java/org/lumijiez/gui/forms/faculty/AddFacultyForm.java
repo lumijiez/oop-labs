@@ -109,6 +109,10 @@ public class AddFacultyForm extends JFrame {
                                 .addComponent(submitButton))
                         .addContainerGap(24, Short.MAX_VALUE)));
         pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
