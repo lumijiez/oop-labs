@@ -16,17 +16,7 @@ public class Faculty implements Serializable {
         this.name = name;
         this.abbreviation = abbreviation;
         this.field = field;
-//        this.uuid = UUID.randomUUID().toString();
     }
-//    private String uuid;
-
-//    public String getUuid() {
-//        return uuid;
-//    }
-//
-//    public void setUuid(String uuid) {
-//        this.uuid = uuid;
-//    }
 
     public void addGroup(Group group) {
         groups.add(group);

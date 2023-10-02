@@ -26,8 +26,6 @@ public class Student implements Serializable {
 
     private Group group;
 
-//    private String uuid;
-
     public Student(String name, String surname, String email, Group group, Faculty faculty, Date birth, Date enrol) {
         this.name = name;
         this.surname = surname;
@@ -37,7 +35,6 @@ public class Student implements Serializable {
         this.faculty = faculty;
         this.dateOfBirth = birth;
         this.enrollmentDate = enrol;
-//        this.uuid = UUID.randomUUID().toString();
     }
 
     public Faculty getFaculty() {

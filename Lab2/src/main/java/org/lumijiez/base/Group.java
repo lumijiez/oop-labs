@@ -8,12 +8,10 @@ public class Group implements Serializable {
 
     private final List<Student> students = new ArrayList<>();
     private String name;
-    //    private String uuid;
     private Faculty faculty;
 
     public Group(String name) {
         this.name = name;
-//        this.uuid = UUID.randomUUID().toString();
     }
 
     public Faculty getFaculty() {
@@ -49,11 +47,4 @@ public class Group implements Serializable {
         return name;
     }
 
-//    public String getUuid() {
-//        return uuid;
-//    }
-//
-//    public void setUuid(String uuid) {
-//        this.uuid = uuid;
-//    }
 }
