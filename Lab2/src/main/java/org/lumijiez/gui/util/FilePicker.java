@@ -195,6 +195,7 @@ public class FilePicker extends JFrame {
             throw new RuntimeException(ex);
         }
         DisplayerManager.displayStudents();
+
         this.dispose();
     }
 }

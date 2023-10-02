@@ -15,8 +15,8 @@ public class DataDeserializer {
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(serializedFile))) {
                 manager = (Supervisor) ois.readObject();
                 System.out.println("Supervisor object deserialized successfully.");
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+            } catch (ClassNotFoundException | IOException e) {
+                System.err.println("Error!");
             }
         } else {
             System.out.println("Serialized file 'manager.ser' does not exist.");

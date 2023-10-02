@@ -231,6 +231,8 @@ public class StudentManagementGUI extends JFrame {
 
         if (result == JOptionPane.YES_OPTION) {
             DataSerializer.serialize(sv);
+            sv.getLogger().logOperation("Died!");
+            sv.getLogger().close();
             dispose();
         }
     }
