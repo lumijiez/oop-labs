@@ -5,6 +5,7 @@ import org.lumijiez.managers.Supervisor;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.Arrays;
 
 public class DataSerializer {
     public static void serialize(Supervisor manager) {
@@ -12,7 +13,7 @@ public class DataSerializer {
             oos.writeObject(manager);
             System.out.println("Supervisor object serialized successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(Arrays.toString(e.getStackTrace()));
         }
     }
 

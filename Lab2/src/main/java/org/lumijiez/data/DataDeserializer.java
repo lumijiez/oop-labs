@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.util.Arrays;
 
 public class DataDeserializer {
     public static Supervisor deserialize() {
@@ -16,7 +17,7 @@ public class DataDeserializer {
                 manager = (Supervisor) ois.readObject();
                 System.out.println("Supervisor object deserialized successfully.");
             } catch (ClassNotFoundException | IOException e) {
-                e.printStackTrace();
+                System.out.println(Arrays.toString(e.getStackTrace()));
             }
         } else {
             System.out.println("Serialized file 'manager.ser' does not exist.");
