@@ -5,14 +5,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Group implements Serializable {
-    private String name;
-
-    private Faculty faculty;
 
     private final List<Student> students = new ArrayList<>();
+    private String name;
+    //    private String uuid;
+    private Faculty faculty;
 
-    public void setName(String name) {
+    public Group(String name) {
         this.name = name;
+//        this.uuid = UUID.randomUUID().toString();
     }
 
     public Faculty getFaculty() {
@@ -23,12 +24,12 @@ public class Group implements Serializable {
         this.faculty = faculty;
     }
 
-    public Group(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void addStudent(Student st) {
@@ -47,4 +48,12 @@ public class Group implements Serializable {
     public String toString() {
         return name;
     }
+
+//    public String getUuid() {
+//        return uuid;
+//    }
+//
+//    public void setUuid(String uuid) {
+//        this.uuid = uuid;
+//    }
 }

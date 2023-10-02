@@ -2,10 +2,10 @@ package org.lumijiez.gui.forms.group;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,9 +25,11 @@ public class AddGroupForm extends JFrame {
 
     public AddGroupForm(Supervisor sv) {
         this.sv = sv;
+        this.setTitle("Add a Group");
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         initComponents();
     }
+
     private void initComponents() {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);

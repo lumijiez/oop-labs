@@ -3,9 +3,9 @@ package org.lumijiez.gui.forms.student;
 import org.lumijiez.base.Grade;
 import org.lumijiez.base.Student;
 import org.lumijiez.enums.Subjects;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,6 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class GradeStudentForm extends JFrame {
-    Integer[] grades = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     private final Supervisor sv;
     private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
@@ -25,9 +24,11 @@ public class GradeStudentForm extends JFrame {
     private final JLabel subjectLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
+    Integer[] grades = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
     public GradeStudentForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
+        this.setTitle("Grade A Student");
         this.mainTextLabel = mainTextLabel;
         this.subjectCombo = new JComboBox<>(Subjects.values());
         this.gradeCombo = new JComboBox<>(grades);
@@ -120,17 +121,17 @@ public class GradeStudentForm extends JFrame {
         Subjects subject = Subjects.getEnum(Objects.requireNonNull(subjectCombo.getSelectedItem()).toString());
         int intGrade = (Integer) Objects.requireNonNull(gradeCombo.getSelectedItem());
         Grade grade = new Grade(subject, intGrade);
+        StringBuilder builder = new StringBuilder();
+
         sv.addGrade(student, grade);
 
-        StringBuilder builder = new StringBuilder();
         builder.append("====================================\n");
         builder.append("Grades for ").append(student.getFullname()).append(" from ").append(student.getGroup().getName()).append(":\n");
-        for (Grade gr : student.getGrades()) {
+        for (Grade gr : student.getGrades())
             builder.append(gr.getSubject()).append(": ").append(gr.getGrade()).append("\n");
-        }
         builder.append("====================================\n");
-        mainTextLabel.setText(builder.toString());
 
+        mainTextLabel.setText(builder.toString());
         this.dispose();
     }
 

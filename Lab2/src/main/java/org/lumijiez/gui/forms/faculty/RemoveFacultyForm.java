@@ -1,10 +1,10 @@
 package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +21,7 @@ public class RemoveFacultyForm extends JFrame {
 
     public RemoveFacultyForm(Supervisor sv) {
         this.sv = sv;
+        this.setTitle("Remove a Faculty");
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         initComponents();
     }
@@ -63,7 +64,6 @@ public class RemoveFacultyForm extends JFrame {
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(titleLabel)
                                 .addGap(48, 48, 48)));
-
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -82,7 +82,7 @@ public class RemoveFacultyForm extends JFrame {
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
-        sv.deleteFaculty(((Faculty)facultyCombo.getSelectedItem()));
+        sv.deleteFaculty(((Faculty) facultyCombo.getSelectedItem()));
         DisplayerManager.displayFaculties();
         this.dispose();
     }

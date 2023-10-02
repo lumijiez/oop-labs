@@ -13,7 +13,6 @@ public enum StudyField implements Serializable {
     VETERINARY_MEDICINE("Veterinary Medicine", "VE");
 
     private final String name;
-
     private final String abbreviation;
 
     StudyField(String name, String abbreviation) {
@@ -35,16 +34,16 @@ public enum StudyField implements Serializable {
         return null;
     }
 
+    public static List<StudyField> getAllEnums() {
+        return Arrays.asList(values());
+    }
+
     public String getName() {
         return name;
     }
 
     public String getAbbreviation() {
         return abbreviation;
-    }
-
-    public static List<StudyField> getAllEnums() {
-        return Arrays.asList(values());
     }
 
     @Override

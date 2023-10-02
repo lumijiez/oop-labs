@@ -1,10 +1,10 @@
 package org.lumijiez.gui.forms.group;
 
 import org.lumijiez.base.Group;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +20,7 @@ public class DeleteGroupForm extends JFrame {
 
     public DeleteGroupForm(Supervisor sv) {
         this.sv = sv;
+        this.setTitle("Delete a Group");
         this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
         initComponents();
     }
@@ -82,7 +83,7 @@ public class DeleteGroupForm extends JFrame {
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
-        sv.deleteGroup(((Group)groupCombo.getSelectedItem()));
+        sv.deleteGroup(((Group) groupCombo.getSelectedItem()));
         DisplayerManager.displayGroups();
         this.dispose();
     }

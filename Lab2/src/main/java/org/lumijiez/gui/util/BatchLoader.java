@@ -15,12 +15,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class FilePicker extends JFrame {
-    private JTextPane filePane;
+public class BatchLoader extends JFrame {
     private final Supervisor sv;
+    private JTextPane filePane;
 
-    public FilePicker(Supervisor sv) {
+    public BatchLoader(Supervisor sv) {
         this.sv = sv;
+        this.setTitle("Load a Batch of Students");
         initComponents();
     }
 
@@ -31,7 +32,7 @@ public class FilePicker extends JFrame {
         JButton browseButton = new JButton();
         JLabel formatLabel = new JLabel();
         JScrollPane exampleLabel = new JScrollPane();
-        JTextArea jTextArea2 = new JTextArea();
+        JTextArea exampleText = new JTextArea();
         JButton cancelButton = new JButton();
         filePane = new JTextPane();
 
@@ -53,10 +54,11 @@ public class FilePicker extends JFrame {
         cancelButton.setText("Cancel");
 
 
-        jTextArea2.setColumns(15);
-        jTextArea2.setRows(5);
-        jTextArea2.setText("name: John\nsurname: Doe\nemail: john.doe@example.com\ngroup: FAF-223\nfaculty: FCIM\nbirthdate: 1998-05-15\nenroldate: 2017-09-01\nspecialty: Mechanical Engineering");
-        exampleLabel.setViewportView(jTextArea2);
+        exampleText.setColumns(15);
+        exampleText.setRows(5);
+        exampleText.setEditable(false);
+        exampleText.setText("name: John\nsurname: Doe\nemail: john.doe@example.com\ngroup: FAF-223\nfaculty: FCIM\nbirthdate: 1998-05-15\nenroldate: 2017-09-01\nspecialty: Mechanical Engineering");
+        exampleLabel.setViewportView(exampleText);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

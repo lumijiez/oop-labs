@@ -7,17 +7,7 @@ import java.util.List;
 
 public class Student implements Serializable {
 
-    public Student(String name, String surname, String email, Group group, Faculty faculty, Date birth, Date enrol) {
-        this.name = name;
-        this.surname = surname;
-        this.fullname = name + " " + surname;
-        this.email = email;
-        this.group = group;
-        this.faculty = faculty;
-        this.dateOfBirth = birth;
-        this.enrollmentDate = enrol;
-    }
-
+    private final List<Grade> grades = new ArrayList<>();
     private boolean graduated = false;
 
     private String name;
@@ -36,7 +26,19 @@ public class Student implements Serializable {
 
     private Group group;
 
-    private final List<Grade> grades = new ArrayList<>();
+//    private String uuid;
+
+    public Student(String name, String surname, String email, Group group, Faculty faculty, Date birth, Date enrol) {
+        this.name = name;
+        this.surname = surname;
+        this.fullname = name + " " + surname;
+        this.email = email;
+        this.group = group;
+        this.faculty = faculty;
+        this.dateOfBirth = birth;
+        this.enrollmentDate = enrol;
+//        this.uuid = UUID.randomUUID().toString();
+    }
 
     public Faculty getFaculty() {
         return faculty;
@@ -44,12 +46,6 @@ public class Student implements Serializable {
 
     public void setFaculty(Faculty faculty) {
         this.faculty = faculty;
-    }
-
-    public void setGroup(Group gr) {
-        this.group.deleteStudent(this);
-        this.group = gr;
-        gr.addStudent(this);
     }
 
     public List<Grade> getGrades() {
@@ -64,56 +60,62 @@ public class Student implements Serializable {
         return name;
     }
 
-    public String getSurname() {
-        return surname;
-    }
-
-    public String getFullname() {
-        return fullname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public Date getEnrollmentDate() {
-        return enrollmentDate;
-    }
-
-    public Date getDateOfBirth() {
-        return dateOfBirth;
-    }
-
-    public Group getGroup() {
-        return group;
-    }
-
-    public boolean isGraduated() {
-        return this.graduated;
-    }
-
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
     }
 
     public void setSurname(String surname) {
         this.surname = surname;
     }
 
+    public String getFullname() {
+        return fullname;
+    }
+
     public void setFullname(String fullname) {
         this.fullname = fullname;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
     }
 
+    public Date getEnrollmentDate() {
+        return enrollmentDate;
+    }
+
     public void setEnrollmentDate(Date enrollmentDate) {
         this.enrollmentDate = enrollmentDate;
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group gr) {
+        this.group.deleteStudent(this);
+        this.group = gr;
+        gr.addStudent(this);
+    }
+
+    public boolean isGraduated() {
+        return this.graduated;
     }
 
     public void setGraduated(boolean graduated) {

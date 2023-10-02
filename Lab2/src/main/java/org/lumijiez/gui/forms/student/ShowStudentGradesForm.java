@@ -2,9 +2,9 @@ package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Grade;
 import org.lumijiez.base.Student;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,6 +22,7 @@ public class ShowStudentGradesForm extends JFrame {
 
     public ShowStudentGradesForm(Supervisor sv, JTextArea mainTextLabel) {
         this.mainTextLabel = mainTextLabel;
+        this.setTitle("Show Student Grades");
         this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }

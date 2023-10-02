@@ -6,11 +6,11 @@ import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.Objects;
-import javax.swing.*;
 
 public class AddFacultyForm extends JFrame {
     private final Supervisor sv;
@@ -26,6 +26,7 @@ public class AddFacultyForm extends JFrame {
 
     public AddFacultyForm(Supervisor sv) {
         this.sv = sv;
+        this.setTitle("Add a Faculty");
         initComponents();
     }
 

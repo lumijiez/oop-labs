@@ -7,13 +7,12 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 
 public class DataSerializer {
-
     public static void serialize(Supervisor manager) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("manager.ser"))) {
             oos.writeObject(manager);
             System.out.println("Supervisor object serialized successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error!");
         }
     }
 

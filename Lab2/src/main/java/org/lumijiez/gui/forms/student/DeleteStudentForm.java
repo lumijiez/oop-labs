@@ -1,10 +1,10 @@
 package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +21,7 @@ public class DeleteStudentForm extends JFrame {
 
     public DeleteStudentForm(Supervisor sv) {
         this.sv = sv;
+        this.setTitle("Delete a Student");
         this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }

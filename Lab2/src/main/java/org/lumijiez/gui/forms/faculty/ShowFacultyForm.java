@@ -2,9 +2,9 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,6 +21,7 @@ public class ShowFacultyForm extends JFrame {
 
     public ShowFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
         this.mainTextLabel = mainTextLabel;
+        this.setTitle("Show a Faculty");
         this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         initComponents();
     }

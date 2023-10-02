@@ -2,10 +2,10 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,10 +24,13 @@ public class EditFacultyForm extends JFrame {
     private final JLabel titleLabel = new JLabel();
     private final JComboBox<Faculty> facultyCombo;
     private final JComboBox<StudyField> specialtyCombo;
+    private final Supervisor sv;
 
     public EditFacultyForm(Supervisor sv) {
         facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         specialtyCombo = new JComboBox<>(StudyField.getAllEnums().toArray(new StudyField[0]));
+        this.sv = sv;
+        this.setTitle("Edit a Faculty");
         initComponents();
     }
 
@@ -141,6 +144,7 @@ public class EditFacultyForm extends JFrame {
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setAbbreviation(abbreviationField.getText());
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setField(((StudyField) Objects.requireNonNull(specialtyCombo.getSelectedItem())));
         DisplayerManager.displayFaculties();
+        sv.getLogger().logOperation("Faculty edited : " + ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).getName());
         this.dispose();
     }
 

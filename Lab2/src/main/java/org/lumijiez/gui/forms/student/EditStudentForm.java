@@ -46,8 +46,8 @@ public class EditStudentForm extends JFrame {
     private final Supervisor sv;
 
     public EditStudentForm(Supervisor sv) {
-
         this.sv = sv;
+        this.setTitle("Edit a Student");
 
         Integer[] days = new Integer[31];
         for (int i = 0; i < 31; i++) {

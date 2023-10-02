@@ -2,9 +2,9 @@ package org.lumijiez.gui.forms.group;
 
 import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,8 +20,10 @@ public class ShowGroupForm extends JFrame {
     private final JLabel groupLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
+
     public ShowGroupForm(Supervisor sv, JTextArea mainTextLabel) {
         this.mainTextLabel = mainTextLabel;
+        this.setTitle("Show a Group");
         this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
         initComponents();
     }

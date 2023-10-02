@@ -2,10 +2,10 @@ package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -44,6 +44,7 @@ public class AddStudentForm extends JFrame {
 
     public AddStudentForm(Supervisor sv) {
         this.sv = sv;
+        this.setTitle("Add a Student");
 
         Integer[] days = new Integer[31];
         for (int i = 0; i < 31; i++) {

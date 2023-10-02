@@ -8,16 +8,25 @@ import java.util.List;
 
 public class Faculty implements Serializable {
 
+    private final List<Group> groups = new ArrayList<>();
+    private String name;
+    private String abbreviation;
+    private StudyField field;
     public Faculty(String name, String abbreviation, StudyField field) {
         this.name = name;
         this.abbreviation = abbreviation;
         this.field = field;
+//        this.uuid = UUID.randomUUID().toString();
     }
+//    private String uuid;
 
-    private String name;
-    private String abbreviation;
-    private final List<Group> groups = new ArrayList<>();
-    private StudyField field;
+//    public String getUuid() {
+//        return uuid;
+//    }
+//
+//    public void setUuid(String uuid) {
+//        this.uuid = uuid;
+//    }
 
     public void addGroup(Group group) {
         groups.add(group);

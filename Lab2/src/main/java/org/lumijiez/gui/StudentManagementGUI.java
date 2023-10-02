@@ -11,8 +11,9 @@ import org.lumijiez.gui.forms.group.DeleteGroupForm;
 import org.lumijiez.gui.forms.group.EditGroupForm;
 import org.lumijiez.gui.forms.group.ShowGroupForm;
 import org.lumijiez.gui.forms.student.*;
+import org.lumijiez.gui.util.BatchGraduater;
+import org.lumijiez.gui.util.BatchLoader;
 import org.lumijiez.gui.util.DisplayerManager;
-import org.lumijiez.gui.util.FilePicker;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -22,6 +23,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class StudentManagementGUI extends JFrame {
+    private static final JTextArea mainTextLabel = new javax.swing.JTextArea();
     private static Supervisor sv;
     private final JMenuBar menuBar = new JMenuBar();
     private final JMenu fileMenu = new JMenu();
@@ -29,25 +31,35 @@ public class StudentManagementGUI extends JFrame {
     private final JMenu groupMenu = new JMenu();
     private final JMenu facultyMenu = new JMenu();
     private final JScrollPane mainScrollPane = new javax.swing.JScrollPane();
-    private static final JTextArea mainTextLabel = new javax.swing.JTextArea();
 
     public StudentManagementGUI() {
         sv = DataDeserializer.deserialize();
         this.setSize(650, 720);
+        this.setTitle("Student Management System");
         initComponents();
     }
+
+    public static JTextArea getMainLabel() {
+        return mainTextLabel;
+    }
+
+    public static Supervisor getSv() {
+        return sv;
+    }
+
     private void initComponents() {
 
         JMenuItem loadBatchOption = new JMenuItem("Load as Batch", UIManager.getIcon("FileView.directoryIcon"));
+        JMenuItem graduateBatchOption = new JMenuItem("Graduate as Batch", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem saveAsOption = new JMenuItem("Save As (WIP)", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem saveAndExitOption = new JMenuItem("Save and Exit", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem settingsOption = new JMenuItem("Settings (WIP)", UIManager.getIcon("FileView.directoryIcon"));
-        JMenuItem showAllStudentsOption = new JMenuItem("Show All Students", UIManager.getIcon("FileView.directoryIcon"));
+        JMenuItem showAllStudentsOption = new JMenuItem("Show all Students", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem showParticularStudentOption = new JMenuItem("Show a Student", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem showStudentGrade = new JMenuItem("Show Student Grades", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem graduateStudent = new JMenuItem("Graduate Student", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem showGraduates = new JMenuItem("Show Graduates", UIManager.getIcon("FileView.directoryIcon"));
-        JMenuItem showEnrolled = new JMenuItem("Show enrolled", UIManager.getIcon("FileView.directoryIcon"));
+        JMenuItem showEnrolled = new JMenuItem("Show Enrolled", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem gradeStudentOption = new JMenuItem("Grade a Student", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem addStudentOption = new JMenuItem("Add a Student", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem editStudentOption = new JMenuItem("Edit a Student", UIManager.getIcon("FileView.directoryIcon"));
@@ -96,10 +108,12 @@ public class StudentManagementGUI extends JFrame {
 
 
         loadBatchOption.addActionListener(this::loadBatchOptionActionPerformed);
+        graduateBatchOption.addActionListener(this::graduateBatchOptionActionPerformed);
         saveAsOption.addActionListener(this::saveAsOptionActionPerformed);
         saveAndExitOption.addActionListener(this::saveAndExitOptionActionPerformed);
 
         fileMenu.add(loadBatchOption);
+        fileMenu.add(graduateBatchOption);
         fileMenu.add(saveAsOption);
         fileMenu.add(saveAndExitOption);
         fileMenu.add(settingsOption);
@@ -159,7 +173,6 @@ public class StudentManagementGUI extends JFrame {
         facultyMenu.add(editFacultyOption);
         facultyMenu.add(removeFacultyOption);
 
-
         menuBar.add(facultyMenu);
 
         setJMenuBar(menuBar);
@@ -170,13 +183,16 @@ public class StudentManagementGUI extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1280, Short.MAX_VALUE)
-        );
+                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE)
-        );
+                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
         pack();
+    }
+
+    private void graduateBatchOptionActionPerformed(ActionEvent actionEvent) {
+        BatchGraduater picker = new BatchGraduater(sv);
+        picker.setVisible(true);
     }
 
     private void showGraduatesOptionActionPerformed(ActionEvent actionEvent) {
@@ -218,7 +234,7 @@ public class StudentManagementGUI extends JFrame {
     }
 
     private void loadBatchOptionActionPerformed(ActionEvent evt) {
-        FilePicker picker = new FilePicker(sv);
+        BatchLoader picker = new BatchLoader(sv);
         picker.setVisible(true);
     }
 
@@ -244,7 +260,7 @@ public class StudentManagementGUI extends JFrame {
     }
 
     private void saveAsOptionActionPerformed(ActionEvent evt) {
-     
+
     }
 
     private void showParticularGroupOptionActionPerformed(ActionEvent evt) {
@@ -358,13 +374,5 @@ public class StudentManagementGUI extends JFrame {
             return false;
         }
         return true;
-    }
-
-    public static JTextArea getMainLabel() {
-        return mainTextLabel;
-    }
-
-    public static Supervisor getSv() {
-        return sv;
     }
 }

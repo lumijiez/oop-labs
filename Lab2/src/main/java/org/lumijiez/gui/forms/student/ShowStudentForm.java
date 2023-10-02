@@ -1,9 +1,9 @@
 package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
+import org.lumijiez.gui.util.ComboBoxRenderers;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
-import org.lumijiez.gui.util.ComboBoxRenderers;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,6 +20,7 @@ public class ShowStudentForm extends JFrame {
 
     public ShowStudentForm(Supervisor sv, JTextArea mainTextLabel) {
         this.mainTextLabel = mainTextLabel;
+        this.setTitle("Show A Student");
         this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
