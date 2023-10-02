@@ -61,7 +61,7 @@ public class ShowStudentForm extends JFrame {
                                                                         .addComponent(cancelButton)
                                                                         .addGap(34, 34, 34)
                                                                         .addComponent(submitButton))
-                                                                .addComponent(studentCombo, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE))))
+                                                                .addComponent(studentCombo, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(52, 52, 52)
                                                 .addComponent(titleLabel)))
@@ -92,7 +92,7 @@ public class ShowStudentForm extends JFrame {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         StringBuilder text = new StringBuilder();
 
-        text.append("==================== Student Info ======================\n");
+        text.append("====================== Student Info ======================\n");
         mainTextLabel.setText(text.toString());
         text.append("Name: ").append(student.getFullname()).append(" \n")
                 .append("Group: ").append(student.getGroup().getName())
@@ -101,7 +101,7 @@ public class ShowStudentForm extends JFrame {
                 .append("Bday: ").append(student.getDateOfBirth())
                 .append("\nEnrol date: ").append(student.getEnrollmentDate())
                 .append("\nGraduated: ").append(student.isGraduated());
-        text.append("\n==================================================");
+        text.append("\n=======================================================");
         mainTextLabel.setText(text.toString());
         this.dispose();
     }

@@ -59,7 +59,7 @@ public class DeleteStudentForm extends JFrame {
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(5, 5, 5)
                                                 .addComponent(studentLabel))
-                                        .addComponent(studentCombo, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(studentCombo, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap(26, Short.MAX_VALUE))
                         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

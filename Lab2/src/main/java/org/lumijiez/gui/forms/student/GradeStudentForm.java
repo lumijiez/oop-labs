@@ -125,16 +125,15 @@ public class GradeStudentForm extends JFrame {
         Subjects subject = Subjects.getEnum(Objects.requireNonNull(subjectCombo.getSelectedItem()).toString());
         int intGrade = (Integer) Objects.requireNonNull(gradeCombo.getSelectedItem());
         Grade grade = new Grade(subject, intGrade);
-        StringBuilder builder = new StringBuilder();
-
         sv.addGrade(student, grade);
 
-        builder.append("====================================\n");
+        StringBuilder builder = new StringBuilder();
+        builder.append("============================================================\n");
         builder.append("Grades for ").append(student.getFullname()).append(" from ").append(student.getGroup().getName()).append(":\n");
-        for (Grade gr : student.getGrades())
+        for (Grade gr : student.getGrades()) {
             builder.append(gr.getSubject()).append(": ").append(gr.getGrade()).append("\n");
-        builder.append("====================================\n");
-
+        }
+        builder.append("============================================================\n");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }

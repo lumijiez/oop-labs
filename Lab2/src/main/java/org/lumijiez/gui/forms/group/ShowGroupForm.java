@@ -61,7 +61,7 @@ public class ShowGroupForm extends JFrame {
                                                                         .addComponent(cancelButton)
                                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(submitButton))
-                                                                .addComponent(groupCombo, GroupLayout.PREFERRED_SIZE, 169, GroupLayout.PREFERRED_SIZE))))
+                                                                .addComponent(groupCombo, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(47, 47, 47)
                                                 .addComponent(titleLabel)))
@@ -92,7 +92,7 @@ public class ShowGroupForm extends JFrame {
         StringBuilder text = new StringBuilder();
         Group gr = (Group) Objects.requireNonNull(groupCombo.getSelectedItem());
 
-        text.append("==================== Group Info ======================\n");
+        text.append("======================= Group Info =========================\n");
         text.append("=================== Group: ").append(gr.getName()).append("=====================\n");
 
         for (Student student : gr.getStudents()) {

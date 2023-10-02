@@ -58,7 +58,7 @@ public class RemoveFacultyForm extends JFrame {
                                                 .addComponent(submitButton))
                                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                 .addComponent(facultyLabel)
-                                                .addComponent(facultyCombo, GroupLayout.PREFERRED_SIZE, 181, GroupLayout.PREFERRED_SIZE)))
+                                                .addComponent(facultyCombo, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)))
                                 .addContainerGap(32, Short.MAX_VALUE))
                         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)

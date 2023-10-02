@@ -21,4 +21,24 @@ public class StudentManager implements Serializable {
         students.remove(student);
     }
 
+//    public List<Student> getGraduates() {
+//        List<Student> stList = new ArrayList<>();
+//        for (Student st : students) {
+//            if (st.isGraduated()) {
+//                stList.add(st);
+//            }
+//        }
+//        return stList;
+//    }
+
+    public List<Student> getEnrolled() {
+        List<Student> stList = new ArrayList<>();
+        for (Student st : students) {
+            if (!st.isGraduated()) {
+                stList.add(st);
+            }
+        }
+        return stList;
+    }
+
 }

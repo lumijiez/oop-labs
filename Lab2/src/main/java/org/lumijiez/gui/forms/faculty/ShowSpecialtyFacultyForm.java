@@ -1,27 +1,30 @@
-package org.lumijiez.gui.forms.group;
+package org.lumijiez.gui.forms.faculty;
 
-import org.lumijiez.base.Group;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.base.Faculty;
+import org.lumijiez.enums.StudyField;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class DeleteGroupForm extends JFrame {
-    private final Supervisor sv;
+public class ShowSpecialtyFacultyForm extends JFrame {
+
+    private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
-    private final JComboBox<Group> groupCombo;
-    private final JLabel groupLabel = new JLabel();
+    private final JComboBox<StudyField> specialtyCombo;
+    private final JLabel facultyLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
-    public DeleteGroupForm(Supervisor sv) {
+    private final Supervisor sv;
+
+    public ShowSpecialtyFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
-        this.setTitle("Delete a Group");
-        this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
+        this.mainTextLabel = mainTextLabel;
+        this.setTitle("Show a Faculty by Specialty");
+        this.specialtyCombo = new JComboBox<>(StudyField.getAllEnums().toArray(new StudyField[0]));
         initComponents();
     }
 
@@ -29,12 +32,12 @@ public class DeleteGroupForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
 
-        titleLabel.setText("Delete a group");
+        titleLabel.setText("Show a faculty");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
-        groupLabel.setText("Group:");
+        facultyLabel.setText("Faculty:");
 
         ComponentDecorator.submitButton(submitButton);
         ComponentDecorator.cancelButton(cancelButton);
@@ -42,7 +45,14 @@ public class DeleteGroupForm extends JFrame {
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        ComboBoxRenderers.setGroupRenderer(groupCombo);
+        specialtyCombo.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                if (value instanceof StudyField)
+                    setText(((StudyField) value).getName());
+                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            }
+        });
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -51,34 +61,34 @@ public class DeleteGroupForm extends JFrame {
                         .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(23, 23, 23)
+                                                .addGap(46, 46, 46)
+                                                .addComponent(titleLabel))
+                                        .addGroup(layout.createSequentialGroup()
+                                                .addGap(26, 26, 26)
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
-                                                        .addComponent(groupLabel)
+                                                        .addComponent(facultyLabel)
                                                         .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING, false)
                                                                 .addGroup(GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                                                         .addComponent(cancelButton)
                                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(submitButton))
-                                                                .addComponent(groupCombo, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))))
-                                        .addGroup(layout.createSequentialGroup()
-                                                .addGap(54, 54, 54)
-                                                .addComponent(titleLabel)))
-                                .addContainerGap(29, Short.MAX_VALUE)));
+                                                                .addComponent(specialtyCombo, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)))))
+                                .addContainerGap(27, Short.MAX_VALUE)));
 
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
+                                .addGap(13, 13, 13)
                                 .addComponent(titleLabel)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(groupLabel)
+                                .addComponent(facultyLabel)
                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(groupCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+                                .addComponent(specialtyCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                                         .addComponent(cancelButton)
                                         .addComponent(submitButton))
-                                .addContainerGap(18, Short.MAX_VALUE)));
+                                .addContainerGap(24, Short.MAX_VALUE)));
         pack();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int x = (screenSize.width - this.getWidth()) / 2;
@@ -87,12 +97,25 @@ public class DeleteGroupForm extends JFrame {
     }
 
     private void submitButtonActionPerformed(ActionEvent evt) {
-        sv.deleteGroup(((Group) groupCombo.getSelectedItem()));
-        DisplayerManager.displayGroups();
+        StringBuilder builder = new StringBuilder();
+        StudyField fac = (StudyField) specialtyCombo.getSelectedItem();
+        assert fac != null;
+        builder.append("==================== Specialty Info =======================\n");
+        builder.append("Specialty: ").append(fac.getName()).append("\n");
+        builder.append("==========\n");
+        builder.append("Faculties: ").append("\n");
+        for (Faculty fc : sv.getFm().getFaculties()) {
+            if (fc.getField().equals(fac)) {
+                builder.append(fc.getName()).append("\n").append("==========\n");
+            }
+        }
+        builder.append("============================================================");
+        mainTextLabel.setText(builder.toString());
         this.dispose();
     }
 
     private void cancelButtonActionPerformed(ActionEvent evt) {
         this.dispose();
     }
+
 }

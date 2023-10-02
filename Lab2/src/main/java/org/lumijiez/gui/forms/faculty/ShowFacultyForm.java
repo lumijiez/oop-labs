@@ -63,7 +63,7 @@ public class ShowFacultyForm extends JFrame {
                                                                         .addComponent(cancelButton)
                                                                         .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                                         .addComponent(submitButton))
-                                                                .addComponent(facultyCombo, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 171, GroupLayout.PREFERRED_SIZE)))))
+                                                                .addComponent(facultyCombo, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)))))
                                 .addContainerGap(27, Short.MAX_VALUE)));
 
         layout.setVerticalGroup(
@@ -91,14 +91,14 @@ public class ShowFacultyForm extends JFrame {
         StringBuilder builder = new StringBuilder();
         Faculty fac = (Faculty) facultyCombo.getSelectedItem();
         assert fac != null;
-        builder.append("================= Faculty Info ====================\n");
+        builder.append("===================== Faculty Info ========================\n");
         builder.append("Name: ").append(fac.getName()).append("\n");
         builder.append("Specialty: ").append(fac.getField()).append("\n");
         builder.append("==========\n");
         builder.append("Groups: ").append("\n");
         for (Group gr : fac.getGroups())
             builder.append(gr.getName()).append("\n").append("==========\n");
-        builder.append("===================================================");
+        builder.append("============================================================");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }

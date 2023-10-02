@@ -2,10 +2,7 @@ package org.lumijiez.gui;
 
 import org.lumijiez.data.DataDeserializer;
 import org.lumijiez.data.DataSerializer;
-import org.lumijiez.gui.forms.faculty.AddFacultyForm;
-import org.lumijiez.gui.forms.faculty.EditFacultyForm;
-import org.lumijiez.gui.forms.faculty.RemoveFacultyForm;
-import org.lumijiez.gui.forms.faculty.ShowFacultyForm;
+import org.lumijiez.gui.forms.faculty.*;
 import org.lumijiez.gui.forms.group.AddGroupForm;
 import org.lumijiez.gui.forms.group.DeleteGroupForm;
 import org.lumijiez.gui.forms.group.EditGroupForm;
@@ -74,6 +71,7 @@ public class StudentManagementGUI extends JFrame {
         JMenuItem editGroupOption = new JMenuItem("Edit a Group", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem deleteGroupOption = new JMenuItem("Delete a Group", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem showAllFacultiesOption = new JMenuItem("Show all Faculties", UIManager.getIcon("FileView.directoryIcon"));
+        JMenuItem showFacultyBySpecialtyOption = new JMenuItem("Show Faculty by Specialty", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem showParticularFacultyOption = new JMenuItem("Show a Faculty", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem addFacultyOption = new JMenuItem("Add a Faculty", UIManager.getIcon("FileView.directoryIcon"));
         JMenuItem editFacultyOption = new JMenuItem("Edit a Faculty", UIManager.getIcon("FileView.directoryIcon"));
@@ -165,6 +163,7 @@ public class StudentManagementGUI extends JFrame {
         showAllStudentsOption.addActionListener(this::showAllStudentsOptionActionPerformed);
         showAllFacultiesOption.addActionListener(this::showAllFacultiesOptionActionPerformed);
         showParticularFacultyOption.addActionListener(this::showParticularFacultyOptionActionPerformed);
+        showFacultyBySpecialtyOption.addActionListener(this::showFacultySpecialtyActionPerformed);
         addFacultyOption.addActionListener(this::addFacultyOptionActionPerformed);
         editFacultyOption.addActionListener(this::editFacultyOptionActionPerformed);
         deleteGroupOption.addActionListener(this::deleteGroupOptionActionPerformed);
@@ -172,6 +171,7 @@ public class StudentManagementGUI extends JFrame {
 
         facultyMenu.add(showAllFacultiesOption);
         facultyMenu.add(showParticularFacultyOption);
+        facultyMenu.add(showFacultyBySpecialtyOption);
         facultyMenu.add(facultySeparator);
         facultyMenu.add(addFacultyOption);
         facultyMenu.add(editFacultyOption);
@@ -187,11 +187,16 @@ public class StudentManagementGUI extends JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE));
+                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE));
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
         pack();
+    }
+
+    private void showFacultySpecialtyActionPerformed(ActionEvent actionEvent) {
+        ShowSpecialtyFacultyForm form = new ShowSpecialtyFacultyForm(sv, mainTextLabel);
+        form.setVisible(true);
     }
 
     private void graduateBatchOptionActionPerformed(ActionEvent actionEvent) {

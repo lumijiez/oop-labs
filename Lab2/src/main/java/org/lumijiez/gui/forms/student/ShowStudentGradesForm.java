@@ -63,7 +63,7 @@ public class ShowStudentGradesForm extends JFrame {
                                                                         .addComponent(cancelButton)
                                                                         .addGap(34, 34, 34)
                                                                         .addComponent(submitButton))
-                                                                .addComponent(studentCombo, GroupLayout.PREFERRED_SIZE, 178, GroupLayout.PREFERRED_SIZE))))
+                                                                .addComponent(studentCombo, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE))))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(50, 50, 50)
                                                 .addComponent(titleLabel)))
@@ -93,12 +93,12 @@ public class ShowStudentGradesForm extends JFrame {
     private void submitButtonActionPerformed(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         StringBuilder builder = new StringBuilder();
-        builder.append("====================================\n");
+        builder.append("============================================================\n");
         builder.append("Grades for ").append(student.getFullname()).append(" from ").append(student.getGroup().getName()).append(":\n");
         for (Grade grade : student.getGrades()) {
             builder.append(grade.getSubject()).append(": ").append(grade.getGrade()).append("\n");
         }
-        builder.append("====================================\n");
+        builder.append("============================================================\n");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }
