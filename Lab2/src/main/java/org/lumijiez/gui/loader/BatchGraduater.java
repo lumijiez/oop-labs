@@ -17,33 +17,30 @@ import java.io.IOException;
 
 public class BatchGraduater extends JFrame {
     private final Supervisor sv;
-    private JTextPane filePane;
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
+    private final JButton browseButton = new JButton();
+    private final JLabel formatLabel = new JLabel();
+    private final JScrollPane exampleLabel = new JScrollPane();
+    private final JTextArea exampleText = new JTextArea();
+    private final JButton cancelButton = new JButton();
+    private final JTextPane filePane = new JTextPane();
 
     public BatchGraduater(Supervisor sv) {
         this.sv = sv;
-        this.setTitle("Graduate a Batch of Students");
         initComponents();
     }
 
     private void initComponents() {
 
-        JButton submitButton = new JButton();
-        JLabel titleLabel = new JLabel();
-        JButton browseButton = new JButton();
-        JLabel formatLabel = new JLabel();
-        JScrollPane exampleLabel = new JScrollPane();
-        JTextArea exampleText = new JTextArea();
-        JButton cancelButton = new JButton();
-        filePane = new JTextPane();
-
         titleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 24));
+        setTitle("Graduate a Batch of Students");
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
         browseButton.addActionListener(this::browseButtonActionPerformed);
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 

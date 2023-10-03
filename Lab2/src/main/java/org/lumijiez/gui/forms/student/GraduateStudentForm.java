@@ -1,7 +1,7 @@
 package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
@@ -13,14 +13,15 @@ import java.util.Objects;
 
 public class GraduateStudentForm extends JFrame {
     private final JButton cancelButton = new JButton();
-    private final JComboBox<Student> studentCombo;
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JLabel studentLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
+    private final Supervisor sv;
+
     public GraduateStudentForm(Supervisor sv) {
-        this.setTitle("Graduate a Student");
-        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getEnrolled().toArray(new Student[0]));
+        this.sv = sv;
         initComponents();
     }
 
@@ -28,9 +29,10 @@ public class GraduateStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18)); // NOI18N
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
+        setTitle("Graduate a Student");
 
-        ComboBoxRenderers.setStudentRenderer(studentCombo);
+        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
 
         studentLabel.setText("Student:");
         submitButton.setText("Submit");
@@ -43,8 +45,7 @@ public class GraduateStudentForm extends JFrame {
         submitButton.setBackground(new Color(204, 255, 204));
         cancelButton.setBackground(new Color(255, 204, 204));
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

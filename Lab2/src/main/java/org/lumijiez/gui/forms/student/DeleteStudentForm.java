@@ -1,7 +1,7 @@
 package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
@@ -14,15 +14,13 @@ import java.util.Objects;
 public class DeleteStudentForm extends JFrame {
     private final Supervisor sv;
     private final JButton cancelButton = new JButton();
-    private final JComboBox<Student> studentCombo;
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JLabel studentLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
     public DeleteStudentForm(Supervisor sv) {
         this.sv = sv;
-        this.setTitle("Delete a Student");
-        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
 
@@ -31,16 +29,16 @@ public class DeleteStudentForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
-        titleLabel.setText("Delete Student");
+        setTitle("Delete a Student");
 
-        ComboBoxRenderers.setStudentRenderer(studentCombo);
+        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
 
         studentLabel.setText("Student:");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
+        titleLabel.setText("Delete Student");
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);

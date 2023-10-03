@@ -19,37 +19,30 @@ import java.util.Date;
 
 public class BatchLoader extends JFrame {
     private final Supervisor sv;
-    private JTextPane filePane;
+    private final JButton submitButton = new JButton();
+    private final JLabel titleLabel = new JLabel();
+    private final JButton browseButton = new JButton();
+    private final JLabel formatLabel = new JLabel();
+    private final JScrollPane exampleLabel = new JScrollPane();
+    private final JTextArea exampleText = new JTextArea();
+    private final JButton cancelButton = new JButton();
+    private final  JTextPane filePane = new JTextPane();
 
     public BatchLoader(Supervisor sv) {
         this.sv = sv;
-        this.setTitle("Load a Batch of Students");
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screenSize.width - this.getWidth()) / 2;
-        int y = (screenSize.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
         initComponents();
     }
 
     private void initComponents() {
 
-        JButton submitButton = new JButton();
-        JLabel titleLabel = new JLabel();
-        JButton browseButton = new JButton();
-        JLabel formatLabel = new JLabel();
-        JScrollPane exampleLabel = new JScrollPane();
-        JTextArea exampleText = new JTextArea();
-        JButton cancelButton = new JButton();
-        filePane = new JTextPane();
-
         titleLabel.setFont(new java.awt.Font("Segoe UI", Font.PLAIN, 24));
+        setTitle("Load a Batch of Students");
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
         browseButton.addActionListener(this::browseButtonActionPerformed);
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 

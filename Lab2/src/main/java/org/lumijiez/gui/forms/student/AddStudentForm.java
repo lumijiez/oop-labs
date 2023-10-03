@@ -2,7 +2,7 @@ package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
@@ -44,7 +44,6 @@ public class AddStudentForm extends JFrame {
 
     public AddStudentForm(Supervisor sv) {
         this.sv = sv;
-        this.setTitle("Add a Student");
 
         Integer[] days = new Integer[31];
         for (int i = 0; i < 31; i++) {
@@ -69,9 +68,6 @@ public class AddStudentForm extends JFrame {
         enrolMonthField.setModel(new DefaultComboBoxModel<>(months));
         enrolYearField.setModel(new DefaultComboBoxModel<>(years));
 
-        facultyCombo.setModel(new DefaultComboBoxModel<>(sv.getFm().getFaculties().toArray(new Faculty[0])));
-        groupCombo.setModel(new DefaultComboBoxModel<>(sv.getFm().getGm().getGroups().toArray(new Group[0])));
-
         initComponents();
     }
 
@@ -81,6 +77,7 @@ public class AddStudentForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        setTitle("Add a Student");
 
         titleLabel.setText("Add a new student");
         submitButton.setText("Submit");
@@ -97,14 +94,13 @@ public class AddStudentForm extends JFrame {
         enrolMonthLabel.setText("Month of Enrollment:");
         enrolYearLabel.setText("Year of Enrollment:");
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        ComboBoxRenderers.setFacultyRenderer(facultyCombo);
-        ComboBoxRenderers.setGroupRenderer(groupCombo);
+        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
+        ComboBoxRenderer.setRenderer(groupCombo, sv.getFm().getGm().getGroups().toArray(new Group[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

@@ -2,7 +2,7 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
 
@@ -14,15 +14,16 @@ public class ShowFacultyForm extends JFrame {
 
     private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
-    private final JComboBox<Faculty> facultyCombo;
+    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
     private final JLabel facultyLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
 
+    private final Supervisor sv;
+
     public ShowFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
+        this.sv = sv;
         this.mainTextLabel = mainTextLabel;
-        this.setTitle("Show a Faculty");
-        this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
         initComponents();
     }
 
@@ -31,19 +32,19 @@ public class ShowFacultyForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        setTitle("Show a Faculty");
 
         titleLabel.setText("Show a faculty");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
         facultyLabel.setText("Faculty:");
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        ComboBoxRenderers.setFacultyRenderer(facultyCombo);
+        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

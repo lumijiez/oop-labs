@@ -3,7 +3,7 @@ package org.lumijiez.gui.forms.student;
 import org.lumijiez.base.Grade;
 import org.lumijiez.base.Student;
 import org.lumijiez.enums.Subjects;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
 
@@ -16,23 +16,20 @@ public class GradeStudentForm extends JFrame {
     private final Supervisor sv;
     private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
-    private final JComboBox<Subjects> subjectCombo;
+    private final JComboBox<Subjects> subjectCombo = new JComboBox<>();
     private final JLabel gradeLabel = new JLabel();
-    private final JComboBox<Student> studentCombo;
-    private final JComboBox<Integer> gradeCombo;
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JLabel studentLabel = new JLabel();
     private final JLabel subjectLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
     Integer[] grades = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    private final JComboBox<Integer> gradeCombo = new JComboBox<>(grades);
+
 
     public GradeStudentForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
-        this.setTitle("Grade A Student");
         this.mainTextLabel = mainTextLabel;
-        this.subjectCombo = new JComboBox<>(Subjects.values());
-        this.gradeCombo = new JComboBox<>(grades);
-        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
 
@@ -41,6 +38,7 @@ public class GradeStudentForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        setTitle("Grade A Student");
 
         titleLabel.setText("Grade a student");
         studentLabel.setText("Student:");
@@ -49,14 +47,13 @@ public class GradeStudentForm extends JFrame {
         gradeLabel.setText("Grade:");
         cancelButton.setText("Cancel");
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        ComboBoxRenderers.setStudentRenderer(studentCombo);
-        ComboBoxRenderers.setSubjectRenderer(subjectCombo);
+        ComboBoxRenderer.setRenderer(subjectCombo, Subjects.values());
+        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

@@ -24,5 +24,4 @@ public class DataDeserializer {
         }
         return manager;
     }
-
 }

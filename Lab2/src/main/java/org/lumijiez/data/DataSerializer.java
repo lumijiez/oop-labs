@@ -16,5 +16,4 @@ public class DataSerializer {
             System.out.println(Arrays.toString(e.getStackTrace()));
         }
     }
-
 }

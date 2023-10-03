@@ -3,7 +3,7 @@ package org.lumijiez.gui.forms.student;
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
@@ -31,13 +31,13 @@ public class EditStudentForm extends JFrame {
     private final JComboBox<Integer> enrolmonthCombo;
     private final JComboBox<Integer> enrolyearCombo;
     private final JLabel eyearLabel = new JLabel();
-    private final JComboBox<Faculty> facultyCombo;
+    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
     private final JLabel facultyLabel = new JLabel();
-    private final JComboBox<Group> groupCombo;
+    private final JComboBox<Group> groupCombo = new JComboBox<>();
     private final JLabel groupLabel = new JLabel();
     private final JTextField nameField = new JTextField();
     private final JLabel nameLabel = new JLabel();
-    private final JComboBox<Student> studentCombo;
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JLabel studentLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JTextField surnameField = new JTextField();
@@ -47,7 +47,6 @@ public class EditStudentForm extends JFrame {
 
     public EditStudentForm(Supervisor sv) {
         this.sv = sv;
-        this.setTitle("Edit a Student");
 
         Integer[] days = new Integer[31];
         for (int i = 0; i < 31; i++) {
@@ -70,9 +69,6 @@ public class EditStudentForm extends JFrame {
         enroldayCombo = new JComboBox<>(days);
         enrolmonthCombo = new JComboBox<>(months);
         enrolyearCombo = new JComboBox<>(years);
-        this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
-        this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
-        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
 
@@ -81,6 +77,7 @@ public class EditStudentForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        setTitle("Edit a Student");
 
         titleLabel.setText("Edit a student");
         submitButton.setText("Submit");
@@ -102,15 +99,15 @@ public class EditStudentForm extends JFrame {
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        ComboBoxRenderers.setFacultyRenderer(facultyCombo);
-        ComboBoxRenderers.setGroupRenderer(groupCombo);
-        ComboBoxRenderers.setStudentRenderer(studentCombo);
+        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
+        ComboBoxRenderer.setRenderer(groupCombo, sv.getFm().getGm().getGroups().toArray(new Group[0]));
+        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
 
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         facultyCombo.setSelectedItem(student.getFaculty());
+        System.out.println("lol:" + facultyCombo.getSelectedItem());
         groupCombo.setSelectedItem(student.getGroup());
         emailField.setText(student.getEmail());
         nameField.setText(student.getName());

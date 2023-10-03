@@ -2,6 +2,7 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
 
@@ -13,7 +14,7 @@ public class ShowSpecialtyFacultyForm extends JFrame {
 
     private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
-    private final JComboBox<StudyField> specialtyCombo;
+    private final JComboBox<StudyField> specialtyCombo = new JComboBox<>();
     private final JLabel facultyLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
@@ -23,8 +24,6 @@ public class ShowSpecialtyFacultyForm extends JFrame {
     public ShowSpecialtyFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
-        this.setTitle("Show a Faculty by Specialty");
-        this.specialtyCombo = new JComboBox<>(StudyField.getAllEnums().toArray(new StudyField[0]));
         initComponents();
     }
 
@@ -33,26 +32,19 @@ public class ShowSpecialtyFacultyForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        setTitle("Show a Faculty by Specialty");
 
         titleLabel.setText("Show a faculty");
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
         facultyLabel.setText("Faculty:");
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        specialtyCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof StudyField)
-                    setText(((StudyField) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
+        ComboBoxRenderer.setRenderer(specialtyCombo, StudyField.getAllEnums().toArray(new StudyField[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

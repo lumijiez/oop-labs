@@ -1,7 +1,7 @@
 package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
 
@@ -13,15 +13,15 @@ import java.util.Objects;
 public class ShowStudentForm extends JFrame {
     private final JTextArea mainTextLabel;
     private final JButton cancelButton = new JButton();
-    private final JComboBox<Student> studentCombo;
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JLabel studentLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
+    private final Supervisor sv;
 
     public ShowStudentForm(Supervisor sv, JTextArea mainTextLabel) {
+        this.sv = sv;
         this.mainTextLabel = mainTextLabel;
-        this.setTitle("Show A Student");
-        this.studentCombo = new JComboBox<>(sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
         initComponents();
     }
 
@@ -29,20 +29,20 @@ public class ShowStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18)); // NOI18N
+        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        setTitle("Show A Student");
 
         titleLabel.setText("Show Student");
         submitButton.setText("Submit");
         studentLabel.setText("Student:");
         cancelButton.setText("Cancel");
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        ComboBoxRenderers.setStudentRenderer(studentCombo);
+        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

@@ -2,7 +2,7 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
@@ -22,15 +22,12 @@ public class EditFacultyForm extends JFrame {
     private final JLabel specialtyLabel = new JLabel();
     private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
-    private final JComboBox<Faculty> facultyCombo;
-    private final JComboBox<StudyField> specialtyCombo;
+    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
+    private final JComboBox<StudyField> specialtyCombo = new JComboBox<>();
     private final Supervisor sv;
 
     public EditFacultyForm(Supervisor sv) {
-        facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
-        specialtyCombo = new JComboBox<>(StudyField.getAllEnums().toArray(new StudyField[0]));
         this.sv = sv;
-        this.setTitle("Edit a Faculty");
         initComponents();
     }
 
@@ -39,6 +36,7 @@ public class EditFacultyForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        setTitle("Edit a Faculty");
 
         titleLabel.setText("Edit a faculty");
         submitButton.setText("Submit");
@@ -47,8 +45,7 @@ public class EditFacultyForm extends JFrame {
         facultyLabel.setText("Faculty:");
         specialtyLabel.setText("New specialty:");
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
         submitButton.addActionListener(this::submitButtonActionPerformed);
@@ -57,16 +54,8 @@ public class EditFacultyForm extends JFrame {
 
         specialtyCombo.setSelectedItem(((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).getField());
 
-        ComboBoxRenderers.setFacultyRenderer(facultyCombo);
-
-        specialtyCombo.setRenderer(new DefaultListCellRenderer() {
-            @Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                if (value instanceof StudyField)
-                    setText(((StudyField) value).getName());
-                return super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            }
-        });
+        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
+        ComboBoxRenderer.setRenderer(specialtyCombo, StudyField.getAllEnums().toArray(new StudyField[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

@@ -2,7 +2,7 @@ package org.lumijiez.gui.forms.group;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
-import org.lumijiez.gui.util.ComboBoxRenderers;
+import org.lumijiez.gui.util.ComboBoxRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayerManager;
 import org.lumijiez.managers.Supervisor;
@@ -16,9 +16,9 @@ public class EditGroupForm extends JFrame {
 
     private final Supervisor sv;
     private final JButton cancelButton = new JButton();
-    private final JComboBox<Faculty> facultyCombo;
+    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
     private final JLabel facultyLabel = new JLabel();
-    private final JComboBox<Group> groupCombo;
+    private final JComboBox<Group> groupCombo = new JComboBox<>();
     private final JLabel groupLabel = new JLabel();
     private final JTextField nameField = new JTextField();
     private final JLabel nameLabel = new JLabel();
@@ -27,9 +27,6 @@ public class EditGroupForm extends JFrame {
 
     public EditGroupForm(Supervisor sv) {
         this.sv = sv;
-        this.setTitle("Edit a Group");
-        this.facultyCombo = new JComboBox<>(sv.getFm().getFaculties().toArray(new Faculty[0]));
-        this.groupCombo = new JComboBox<>(sv.getFm().getGm().getGroups().toArray(new Group[0]));
         initComponents();
     }
 
@@ -38,6 +35,7 @@ public class EditGroupForm extends JFrame {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        setTitle("Edit a Group");
 
         titleLabel.setText("Edit a group");
         submitButton.setText("Submit");
@@ -46,14 +44,13 @@ public class EditGroupForm extends JFrame {
         groupLabel.setText("Group:");
         facultyLabel.setText("Faculty:");
 
-        ComponentDecorator.submitButton(submitButton);
-        ComponentDecorator.cancelButton(cancelButton);
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
         submitButton.addActionListener(this::submitButtonActionPerformed);
         cancelButton.addActionListener(this::cancelButtonActionPerformed);
 
-        ComboBoxRenderers.setFacultyRenderer(facultyCombo);
-        ComboBoxRenderers.setGroupRenderer(groupCombo);
+        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
+        ComboBoxRenderer.setRenderer(groupCombo, sv.getFm().getGm().getGroups().toArray(new Group[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
