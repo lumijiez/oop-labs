@@ -5,7 +5,6 @@ import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.StudentManagementGUI;
 
-
 public class DisplayHandler {
     public static void displayStudents() {
         StringBuilder text = new StringBuilder();
