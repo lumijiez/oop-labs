@@ -3,6 +3,7 @@ package org.lumijiez.gui.forms.student;
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.Settings;
 import org.lumijiez.gui.util.WindowConfig;
 import org.lumijiez.managers.Supervisor;
 
@@ -18,9 +19,9 @@ public class ShowStudentForm extends JFrame {
     private final JButton submitButton = new JButton();
     private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
+    private final JTextPane mainTextLabel;
 
-    public ShowStudentForm(Supervisor sv, JTextArea mainTextLabel) {
+    public ShowStudentForm(Supervisor sv, JTextPane mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         initComponents();
@@ -89,16 +90,16 @@ public class ShowStudentForm extends JFrame {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         StringBuilder text = new StringBuilder();
 
-        text.append("====================== Student Info ======================\n");
+        text.append("<font size='").append(Settings.FontSize).append("'><strong>====================== Student Info ======================</strong><br>");
         mainTextLabel.setText(text.toString());
-        text.append("Name: ").append(student.getFullname()).append(" \n")
-                .append("Group: ").append(student.getGroup().getName())
-                .append(" \nFaculty: ").append(student.getFaculty().getName())
-                .append(" \nEmail: ").append(student.getEmail()).append(" \n")
-                .append("Bday: ").append(student.getDateOfBirth())
-                .append("\nEnrol date: ").append(student.getEnrollmentDate())
-                .append("\nGraduated: ").append(student.isGraduated());
-        text.append("\n=======================================================");
+        text.append("<b>Name: </b>").append(student.getFullname()).append(" <br>")
+                .append("<b>Group:</b> ").append(student.getGroup().getName())
+                .append(" <br><b>Faculty:</b> ").append(student.getFaculty().getName())
+                .append(" <br><b>Email:</b> ").append(student.getEmail())
+                .append(" <br><b>Bday:</b> ").append(student.getDateOfBirth())
+                .append(" <br><b>Enrol date:</b> ").append(student.getEnrollmentDate())
+                .append(" <br><b>Graduated:</b> ").append(student.isGraduated() ? "<b color='green'>Yes</b>" : "<b color='red'>No</b>");
+        text.append("<br>=======================================================");
         mainTextLabel.setText(text.toString());
         this.dispose();
     }

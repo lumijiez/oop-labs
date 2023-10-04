@@ -4,6 +4,7 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.Settings;
 import org.lumijiez.gui.util.WindowConfig;
 import org.lumijiez.managers.Supervisor;
 
@@ -18,9 +19,9 @@ public class ShowFacultyForm extends JFrame {
     private final JButton submitButton = new JButton();
     private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
+    private final JTextPane mainTextLabel;
 
-    public ShowFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
+    public ShowFacultyForm(Supervisor sv, JTextPane mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         initComponents();
@@ -87,14 +88,14 @@ public class ShowFacultyForm extends JFrame {
         StringBuilder builder = new StringBuilder();
         Faculty fac = (Faculty) facultyCombo.getSelectedItem();
         assert fac != null;
-        builder.append("===================== Faculty Info ========================\n");
-        builder.append("Name: ").append(fac.getName()).append("\n");
-        builder.append("Specialty: ").append(fac.getField()).append("\n");
-        builder.append("==========\n");
-        builder.append("Groups: ").append("\n");
+        builder.append("<font size='").append(Settings.FontSize).append("'><strong>===================== Faculty Info ========================</strong><br>");
+        builder.append("<b>Name: </b>").append(fac.getName()).append("<br>");
+        builder.append("<b>Specialty: </b>").append(fac.getField()).append("<br>");
+        builder.append("<b>Groups: </b>").append("<br>");
+        builder.append("<strong>==========</strong><br>");
         for (Group gr : fac.getGroups())
-            builder.append(gr.getName()).append("\n").append("==========\n");
-        builder.append("============================================================");
+            builder.append(gr.getName()).append("<br>").append("<strong>==========</strong><br>");
+        builder.append("<strong>============================================================</strong>");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }

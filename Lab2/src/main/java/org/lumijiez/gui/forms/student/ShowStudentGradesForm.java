@@ -4,6 +4,7 @@ import org.lumijiez.base.Grade;
 import org.lumijiez.base.Student;
 import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.Settings;
 import org.lumijiez.gui.util.WindowConfig;
 import org.lumijiez.managers.Supervisor;
 
@@ -19,9 +20,9 @@ public class ShowStudentGradesForm extends JFrame {
     private final JButton submitButton = new JButton();
     private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
+    private final JTextPane mainTextLabel;
 
-    public ShowStudentGradesForm(Supervisor sv, JTextArea mainTextLabel) {
+    public ShowStudentGradesForm(Supervisor sv, JTextPane mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         initComponents();
@@ -89,11 +90,11 @@ public class ShowStudentGradesForm extends JFrame {
     private void submitEvent(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         StringBuilder builder = new StringBuilder();
-        builder.append("============================================================\n");
-        builder.append("Grades for ").append(student.getFullname()).append(" from ").append(student.getGroup().getName()).append(":\n");
+        builder.append("<font size='").append(Settings.FontSize).append("'><strong>============================================================</strong><br>");
+        builder.append("<b>Grades for </b>").append(student.getFullname()).append(" <b>from</b> ").append(student.getGroup().getName()).append(":<br>");
         for (Grade grade : student.getGrades())
-            builder.append(grade.getSubject()).append(": ").append(grade.getGrade()).append("\n");
-        builder.append("============================================================\n");
+            builder.append(grade.getSubject()).append(": ").append(grade.getGrade()).append("<br>");
+        builder.append("<strong>============================================================<strong><br>");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }

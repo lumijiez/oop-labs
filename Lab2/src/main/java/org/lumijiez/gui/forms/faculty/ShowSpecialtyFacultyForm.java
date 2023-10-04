@@ -4,6 +4,7 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
 import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.Settings;
 import org.lumijiez.gui.util.WindowConfig;
 import org.lumijiez.managers.Supervisor;
 
@@ -18,9 +19,9 @@ public class ShowSpecialtyFacultyForm extends JFrame {
     private final JButton submitButton = new JButton();
     private final JComboBox<StudyField> specialtyCombo = new JComboBox<>();
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
+    private final JTextPane mainTextLabel;
 
-    public ShowSpecialtyFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
+    public ShowSpecialtyFacultyForm(Supervisor sv, JTextPane mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         initComponents();
@@ -87,14 +88,14 @@ public class ShowSpecialtyFacultyForm extends JFrame {
         StringBuilder builder = new StringBuilder();
         StudyField fac = (StudyField) specialtyCombo.getSelectedItem();
         assert fac != null;
-        builder.append("==================== Specialty Info =======================\n");
-        builder.append("Specialty: ").append(fac.getName()).append("\n");
-        builder.append("==========\n");
-        builder.append("Faculties: ").append("\n");
+        builder.append("<font size='").append(Settings.FontSize).append("'><strong>==================== Specialty Info =======================<strong><br>");
+        builder.append("<b>Specialty: </b>").append(fac.getName()).append("<br>");
+        builder.append("<strong>==========</strong><br>");
+        builder.append("<b>Faculties: </b>").append("<br>");
         for (Faculty fc : sv.facultyManager().getFaculties())
             if (fc.getField().equals(fac))
-                builder.append(fc.getName()).append("\n").append("==========\n");
-        builder.append("============================================================");
+                builder.append(fc.getName()).append("<br>").append("<strong>==========</strong><br>");
+        builder.append("<strong>============================================================</strong>");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }

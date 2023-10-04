@@ -5,6 +5,7 @@ import org.lumijiez.base.Student;
 import org.lumijiez.enums.Subjects;
 import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
+import org.lumijiez.gui.util.Settings;
 import org.lumijiez.gui.util.WindowConfig;
 import org.lumijiez.managers.Supervisor;
 
@@ -25,9 +26,9 @@ public class GradeStudentForm extends JFrame {
     private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JComboBox<Integer> gradeCombo = new JComboBox<>(grades);
     private final Supervisor sv;
-    private final JTextArea mainTextLabel;
+    private final JTextPane mainTextLabel;
 
-    public GradeStudentForm(Supervisor sv, JTextArea mainTextLabel) {
+    public GradeStudentForm(Supervisor sv, JTextPane mainTextLabel) {
         this.sv = sv;
         this.mainTextLabel = mainTextLabel;
         initComponents();
@@ -121,10 +122,10 @@ public class GradeStudentForm extends JFrame {
         sv.addGrade(student, grade);
 
         StringBuilder builder = new StringBuilder();
-        builder.append("============================================================\n");
-        builder.append("Grades for ").append(student.getFullname()).append(" from ").append(student.getGroup().getName()).append(":\n");
-        for (Grade gr : student.getGrades()) builder.append(gr.getSubject()).append(": ").append(gr.getGrade()).append("\n");
-        builder.append("============================================================\n");
+        builder.append("<font size='").append(Settings.FontSize).append("'><strong>============================================================</strong><br>");
+        builder.append("<b>Grades for </b>").append(student.getFullname()).append(" <b>from</b> ").append(student.getGroup().getName()).append(":<br>");
+        for (Grade gr : student.getGrades()) builder.append(gr.getSubject()).append(": ").append(gr.getGrade()).append("<br>");
+        builder.append("<strong>============================================================</strong><br>");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }

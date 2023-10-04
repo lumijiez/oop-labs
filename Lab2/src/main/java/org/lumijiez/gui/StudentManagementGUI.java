@@ -25,7 +25,7 @@ public class StudentManagementGUI extends JFrame {
     private final JMenu groupMenu = new JMenu();
     private final JMenu facultyMenu = new JMenu();
     private final JMenuBar menuBar = new JMenuBar();
-    private static final JTextArea mainTextLabel = new JTextArea();
+    private static final JTextPane mainTextPane = new JTextPane();
     private static Supervisor sv;
     private final JScrollPane mainScrollPane = new JScrollPane();
 
@@ -74,9 +74,10 @@ public class StudentManagementGUI extends JFrame {
         groupMenu.setText("Group Options");
         facultyMenu.setText("Faculty Options");
 
-        mainTextLabel.setEditable(false);
-        mainTextLabel.setFont(new java.awt.Font("Segoe UI", Font.PLAIN, 14));
-        mainScrollPane.setViewportView(mainTextLabel);
+        mainTextPane.setEditable(false);
+        mainTextPane.setContentType("text/html");
+        mainTextPane.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        mainScrollPane.setViewportView(mainTextPane);
 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
@@ -186,7 +187,7 @@ public class StudentManagementGUI extends JFrame {
     }
 
     private void showFacultySpecEvent(ActionEvent actionEvent) {
-        ShowSpecialtyFacultyForm form = new ShowSpecialtyFacultyForm(sv, mainTextLabel);
+        ShowSpecialtyFacultyForm form = new ShowSpecialtyFacultyForm(sv, mainTextPane);
         form.setVisible(true);
     }
 
@@ -265,7 +266,7 @@ public class StudentManagementGUI extends JFrame {
 
     private void showGroupEvent(ActionEvent evt) {
         if (checkGroup() && checkFaculty()) {
-            ShowGroupForm form = new ShowGroupForm(sv, mainTextLabel);
+            ShowGroupForm form = new ShowGroupForm(sv, mainTextPane);
             form.setVisible(true);
         }
     }
@@ -284,7 +285,7 @@ public class StudentManagementGUI extends JFrame {
 
     private void gradeStudentEvent(ActionEvent evt) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
-            GradeStudentForm form = new GradeStudentForm(sv, mainTextLabel);
+            GradeStudentForm form = new GradeStudentForm(sv, mainTextPane);
             form.setVisible(true);
         }
     }
@@ -305,14 +306,14 @@ public class StudentManagementGUI extends JFrame {
 
     private void showGradeEvent(ActionEvent evt) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
-            ShowStudentGradesForm form = new ShowStudentGradesForm(sv, mainTextLabel);
+            ShowStudentGradesForm form = new ShowStudentGradesForm(sv, mainTextPane);
             form.setVisible(true);
         }
     }
 
     private void showStudentEvent(ActionEvent evt) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
-            ShowStudentForm form = new ShowStudentForm(sv, mainTextLabel);
+            ShowStudentForm form = new ShowStudentForm(sv, mainTextPane);
             form.setVisible(true);
         }
     }
@@ -333,7 +334,7 @@ public class StudentManagementGUI extends JFrame {
 
     private void showFacultyEvent(ActionEvent evt) {
         if (checkFaculty()) {
-            ShowFacultyForm form = new ShowFacultyForm(sv, mainTextLabel);
+            ShowFacultyForm form = new ShowFacultyForm(sv, mainTextPane);
             form.setVisible(true);
         }
     }
@@ -376,8 +377,8 @@ public class StudentManagementGUI extends JFrame {
         return true;
     }
 
-    public static JTextArea getMainLabel() {
-        return mainTextLabel;
+    public static JTextPane getMainPane() {
+        return mainTextPane;
     }
 
     public static Supervisor getSv() {
