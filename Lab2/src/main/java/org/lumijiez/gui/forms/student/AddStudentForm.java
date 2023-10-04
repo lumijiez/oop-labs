@@ -2,9 +2,9 @@ package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -15,32 +15,32 @@ import java.util.Date;
 import java.util.Objects;
 
 public class AddStudentForm extends JFrame {
-    private final Supervisor sv;
     private final JLabel titleLabel = new JLabel();
-    private final JComboBox<Group> groupCombo = new JComboBox<>();
-    private final JTextField nameField = new JTextField();
-    private final JButton submitButton = new JButton();
-    private final JButton cancelButton = new JButton();
     private final JLabel nameLabel = new JLabel();
-    private final JTextField surnameField = new JTextField();
-    private final JTextField emailField = new JTextField();
     private final JLabel surnameLabel = new JLabel();
     private final JLabel emailLabel = new JLabel();
-    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
     private final JLabel groupLabel = new JLabel();
     private final JLabel facultyLabel = new JLabel();
-    private final JComboBox<Integer> birthYearField = new JComboBox<>();
-    private final JComboBox<Integer> birthDayField = new JComboBox<>();
-    private final JComboBox<Integer> birthMonthField = new JComboBox<>();
     private final JLabel birthYearLabel = new JLabel();
     private final JLabel birthDayLabel = new JLabel();
     private final JLabel birthMonthLabel = new JLabel();
     private final JLabel enrolDayLabel = new JLabel();
+    private final JLabel enrolMonthLabel = new JLabel();
+    private final JLabel enrolYearLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JButton cancelButton = new JButton();
+    private final JTextField nameField = new JTextField();
+    private final JTextField surnameField = new JTextField();
+    private final JTextField emailField = new JTextField();
+    private final JComboBox<Group> groupCombo = new JComboBox<>();
+    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
+    private final JComboBox<Integer> birthYearField = new JComboBox<>();
+    private final JComboBox<Integer> birthDayField = new JComboBox<>();
+    private final JComboBox<Integer> birthMonthField = new JComboBox<>();
     private final JComboBox<Integer> enrolDayField = new JComboBox<>();
     private final JComboBox<Integer> enrolMonthField = new JComboBox<>();
     private final JComboBox<Integer> enrolYearField = new JComboBox<>();
-    private final JLabel enrolMonthLabel = new JLabel();
-    private final JLabel enrolYearLabel = new JLabel();
+    private final Supervisor sv;
 
     public AddStudentForm(Supervisor sv) {
         this.sv = sv;
@@ -76,7 +76,7 @@ public class AddStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Add a Student");
 
         titleLabel.setText("Add a new student");
@@ -96,11 +96,11 @@ public class AddStudentForm extends JFrame {
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
 
-        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
-        ComboBoxRenderer.setRenderer(groupCombo, sv.getFm().getGm().getGroups().toArray(new Group[0]));
+        ComboRenderer.setRenderer(facultyCombo, sv.facultyManager().getFaculties().toArray(new Faculty[0]));
+        ComboRenderer.setRenderer(groupCombo, sv.groupManager().getGroups().toArray(new Group[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -240,11 +240,11 @@ public class AddStudentForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void cancelButtonActionPerformed(ActionEvent actionEvent) {
+    private void cancelEvent(ActionEvent actionEvent) {
         this.dispose();
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         String name = nameField.getText();
         String surname = surnameField.getText();
         String email = emailField.getText();
@@ -255,11 +255,9 @@ public class AddStudentForm extends JFrame {
 
         if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty()) {
             sv.addStudent(name, surname, email, group, faculty, birthDate, enrolDate);
-            DisplayerManager.displayStudents();
+            DisplayHandler.displayStudents();
             this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(null, "Fill in all the fields!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
-        }
+        } else JOptionPane.showMessageDialog(null, "Fill in all the fields!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
     }
 
     private Group getSelectedGroup() {

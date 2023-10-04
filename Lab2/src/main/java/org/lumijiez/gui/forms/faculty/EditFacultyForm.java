@@ -2,9 +2,9 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -13,15 +13,15 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class EditFacultyForm extends JFrame {
-    private final JTextField abbreviationField = new JTextField();
     private final JLabel abbreviationLabel = new JLabel();
-    private final JButton cancelButton = new JButton();
     private final JLabel facultyLabel = new JLabel();
-    private final JTextField nameField = new JTextField();
     private final JLabel nameLabel = new JLabel();
     private final JLabel specialtyLabel = new JLabel();
-    private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JTextField abbreviationField = new JTextField();
+    private final JTextField nameField = new JTextField();
     private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
     private final JComboBox<StudyField> specialtyCombo = new JComboBox<>();
     private final Supervisor sv;
@@ -35,7 +35,7 @@ public class EditFacultyForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Edit a Faculty");
 
         titleLabel.setText("Edit a faculty");
@@ -47,15 +47,15 @@ public class EditFacultyForm extends JFrame {
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        specialtyCombo.addActionListener(this::specialtyComboActionPerformed);
-        facultyCombo.addActionListener(this::facultyComboActionPerformed);
+        cancelButton.addActionListener(this::cancelEvent);
+        submitButton.addActionListener(this::submitEvent);
+        specialtyCombo.addActionListener(this::specialtyComboEvent);
+        facultyCombo.addActionListener(this::facultyComboEvent);
+
+        ComboRenderer.setRenderer(facultyCombo, sv.facultyManager().getFaculties().toArray(new Faculty[0]));
+        ComboRenderer.setRenderer(specialtyCombo, StudyField.getAllEnums().toArray(new StudyField[0]));
 
         specialtyCombo.setSelectedItem(((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).getField());
-
-        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
-        ComboBoxRenderer.setRenderer(specialtyCombo, StudyField.getAllEnums().toArray(new StudyField[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -87,7 +87,6 @@ public class EditFacultyForm extends JFrame {
                                                                                         .addComponent(submitButton)))
                                                                         .addComponent(nameLabel))))))
                                 .addContainerGap(24, Short.MAX_VALUE)));
-
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -121,24 +120,24 @@ public class EditFacultyForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void facultyComboActionPerformed(ActionEvent actionEvent) {
+    private void facultyComboEvent(ActionEvent actionEvent) {
         specialtyCombo.setSelectedItem(((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).getField());
     }
 
-    private void specialtyComboActionPerformed(ActionEvent actionEvent) {
+    private void specialtyComboEvent(ActionEvent actionEvent) {
         abbreviationField.setText(((StudyField) Objects.requireNonNull(specialtyCombo.getSelectedItem())).getAbbreviation());
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setName(nameField.getText());
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setAbbreviation(abbreviationField.getText());
         ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).setField(((StudyField) Objects.requireNonNull(specialtyCombo.getSelectedItem())));
-        DisplayerManager.displayFaculties();
+        DisplayHandler.displayFaculties();
         sv.getLogger().logOperation("Faculty edited : " + ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).getName());
         this.dispose();
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 

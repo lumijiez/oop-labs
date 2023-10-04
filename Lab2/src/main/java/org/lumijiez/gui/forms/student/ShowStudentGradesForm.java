@@ -2,7 +2,7 @@ package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Grade;
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
 
@@ -12,14 +12,13 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class ShowStudentGradesForm extends JFrame {
-
-    private final JTextArea mainTextLabel;
-    private final JButton cancelButton = new JButton();
-    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JLabel studentLabel = new JLabel();
-    private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final Supervisor sv;
+    private final JTextArea mainTextLabel;
 
     public ShowStudentGradesForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
@@ -31,7 +30,7 @@ public class ShowStudentGradesForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Show Student Grades");
 
         titleLabel.setText("Show Grades");
@@ -41,10 +40,10 @@ public class ShowStudentGradesForm extends JFrame {
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        ComboRenderer.setRenderer(studentCombo, sv.studentManager().getStudents().toArray(new Student[0]));
 
-        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
+        cancelButton.addActionListener(this::cancelEvent);
+        submitButton.addActionListener(this::submitEvent);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,7 +67,6 @@ public class ShowStudentGradesForm extends JFrame {
                                                 .addGap(50, 50, 50)
                                                 .addComponent(titleLabel)))
                                 .addContainerGap(30, Short.MAX_VALUE)));
-
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -90,20 +88,19 @@ public class ShowStudentGradesForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         StringBuilder builder = new StringBuilder();
         builder.append("============================================================\n");
         builder.append("Grades for ").append(student.getFullname()).append(" from ").append(student.getGroup().getName()).append(":\n");
-        for (Grade grade : student.getGrades()) {
+        for (Grade grade : student.getGrades())
             builder.append(grade.getSubject()).append(": ").append(grade.getGrade()).append("\n");
-        }
         builder.append("============================================================\n");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 

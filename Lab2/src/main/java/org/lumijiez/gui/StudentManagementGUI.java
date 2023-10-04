@@ -10,7 +10,7 @@ import org.lumijiez.gui.forms.group.ShowGroupForm;
 import org.lumijiez.gui.forms.student.*;
 import org.lumijiez.gui.loader.BatchGraduater;
 import org.lumijiez.gui.loader.BatchLoader;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -20,32 +20,20 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class StudentManagementGUI extends JFrame {
-    private static final JTextArea mainTextLabel = new javax.swing.JTextArea();
-    private static Supervisor sv;
-    private final JMenuBar menuBar = new JMenuBar();
     private final JMenu fileMenu = new JMenu();
     private final JMenu studentMenu = new JMenu();
     private final JMenu groupMenu = new JMenu();
     private final JMenu facultyMenu = new JMenu();
-    private final JScrollPane mainScrollPane = new javax.swing.JScrollPane();
+    private final JMenuBar menuBar = new JMenuBar();
+    private static final JTextArea mainTextLabel = new JTextArea();
+    private static Supervisor sv;
+    private final JScrollPane mainScrollPane = new JScrollPane();
 
     public StudentManagementGUI() {
-        sv = DataDeserializer.deserialize();
+        sv = (DataDeserializer.deserialize());
         this.setSize(650, 720);
         this.setTitle("Student Management System");
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screenSize.width - this.getWidth()) / 2;
-        int y = (screenSize.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
         initComponents();
-    }
-
-    public static JTextArea getMainLabel() {
-        return mainTextLabel;
-    }
-
-    public static Supervisor getSv() {
-        return sv;
     }
 
     private void initComponents() {
@@ -108,11 +96,10 @@ public class StudentManagementGUI extends JFrame {
             }
         });
 
-
-        loadBatchOption.addActionListener(this::loadBatchOptionActionPerformed);
-        graduateBatchOption.addActionListener(this::graduateBatchOptionActionPerformed);
-        saveAsOption.addActionListener(this::saveAsOptionActionPerformed);
-        saveAndExitOption.addActionListener(this::saveAndExitOptionActionPerformed);
+        loadBatchOption.addActionListener(this::loadBatchEvent);
+        graduateBatchOption.addActionListener(this::graduateBatchEvent);
+        saveAsOption.addActionListener(this::saveAsEvent);
+        saveAndExitOption.addActionListener(this::saveExitEvent);
 
         fileMenu.add(loadBatchOption);
         fileMenu.add(graduateBatchOption);
@@ -122,15 +109,16 @@ public class StudentManagementGUI extends JFrame {
 
         menuBar.add(fileMenu);
 
-        showParticularStudentOption.addActionListener(this::showParticularStudentOptionActionPerformed);
-        showStudentGrade.addActionListener(this::showStudentGradeActionPerformed);
-        gradeStudentOption.addActionListener(this::gradeStudentOptionActionPerformed);
-        addStudentOption.addActionListener(this::addStudentOptionActionPerformed);
-        editStudentOption.addActionListener(this::editStudentOptionActionPerformed);
-        deleteStudentOption.addActionListener(this::deleteStudentOptionActionPerformed);
-        graduateStudent.addActionListener(this::graduateStudentOptionActionPerformed);
-        showEnrolled.addActionListener(this::showEnrolledOptionActionPerformed);
-        showGraduates.addActionListener(this::showGraduatesOptionActionPerformed);
+        showAllStudentsOption.addActionListener(this::showAllStudentsEvent);
+        showParticularStudentOption.addActionListener(this::showStudentEvent);
+        showStudentGrade.addActionListener(this::showGradeEvent);
+        gradeStudentOption.addActionListener(this::gradeStudentEvent);
+        addStudentOption.addActionListener(this::addStudentEvent);
+        editStudentOption.addActionListener(this::editStudentEvent);
+        deleteStudentOption.addActionListener(this::deleteStudentEvent);
+        graduateStudent.addActionListener(this::graduateStudentEvent);
+        showEnrolled.addActionListener(this::showEnrolledEvent);
+        showGraduates.addActionListener(this::showGraduatesEvent);
 
         studentMenu.add(showAllStudentsOption);
         studentMenu.add(showParticularStudentOption);
@@ -146,9 +134,11 @@ public class StudentManagementGUI extends JFrame {
 
         menuBar.add(studentMenu);
 
-        showParticularGroupOption.addActionListener(this::showParticularGroupOptionActionPerformed);
-        addGroupOption.addActionListener(this::addGroupOptionActionPerformed);
-        editGroupOption.addActionListener(this::editGroupOptionActionPerformed);
+        showAllGroupsOption.addActionListener(this::showAllGroupsEvent);
+        showParticularGroupOption.addActionListener(this::showGroupEvent);
+        addGroupOption.addActionListener(this::addGroupEvent);
+        editGroupOption.addActionListener(this::editGroupEvent);
+        deleteGroupOption.addActionListener(this::deleteGroupEvent);
 
         groupMenu.add(showAllGroupsOption);
         groupMenu.add(showParticularGroupOption);
@@ -159,15 +149,12 @@ public class StudentManagementGUI extends JFrame {
 
         menuBar.add(groupMenu);
 
-        showAllGroupsOption.addActionListener(this::showAllGroupsOptionActionPerformed);
-        showAllStudentsOption.addActionListener(this::showAllStudentsOptionActionPerformed);
-        showAllFacultiesOption.addActionListener(this::showAllFacultiesOptionActionPerformed);
-        showParticularFacultyOption.addActionListener(this::showParticularFacultyOptionActionPerformed);
-        showFacultyBySpecialtyOption.addActionListener(this::showFacultySpecialtyActionPerformed);
-        addFacultyOption.addActionListener(this::addFacultyOptionActionPerformed);
-        editFacultyOption.addActionListener(this::editFacultyOptionActionPerformed);
-        deleteGroupOption.addActionListener(this::deleteGroupOptionActionPerformed);
-        removeFacultyOption.addActionListener(this::removeFacultyOptionActionPerformed);
+        showAllFacultiesOption.addActionListener(this::showAllFacultiesEvent);
+        showParticularFacultyOption.addActionListener(this::showFacultyEvent);
+        showFacultyBySpecialtyOption.addActionListener(this::showFacultySpecEvent);
+        addFacultyOption.addActionListener(this::addFacultyEvent);
+        editFacultyOption.addActionListener(this::editFacultyEvent);
+        removeFacultyOption.addActionListener(this::deleteFacultyEvent);
 
         facultyMenu.add(showAllFacultiesOption);
         facultyMenu.add(showParticularFacultyOption);
@@ -181,73 +168,77 @@ public class StudentManagementGUI extends JFrame {
 
         setJMenuBar(menuBar);
 
-        DisplayerManager.displayStudents();
+        DisplayHandler.displayStudents();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE));
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(mainScrollPane, GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE));
         layout.setVerticalGroup(
-                layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
+                layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addComponent(mainScrollPane, GroupLayout.DEFAULT_SIZE, 697, Short.MAX_VALUE));
         pack();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int x = (screenSize.width - this.getWidth()) / 2;
+        int y = (screenSize.height - this.getHeight()) / 2;
+        this.setLocation(x, y);
     }
 
-    private void showFacultySpecialtyActionPerformed(ActionEvent actionEvent) {
+    private void showFacultySpecEvent(ActionEvent actionEvent) {
         ShowSpecialtyFacultyForm form = new ShowSpecialtyFacultyForm(sv, mainTextLabel);
         form.setVisible(true);
     }
 
-    private void graduateBatchOptionActionPerformed(ActionEvent actionEvent) {
+    private void graduateBatchEvent(ActionEvent actionEvent) {
         BatchGraduater picker = new BatchGraduater(sv);
         picker.setVisible(true);
     }
 
-    private void showGraduatesOptionActionPerformed(ActionEvent actionEvent) {
+    private void showGraduatesEvent(ActionEvent actionEvent) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
-            DisplayerManager.displayGraduates();
+            DisplayHandler.displayGraduates();
         }
     }
 
-    private void showEnrolledOptionActionPerformed(ActionEvent actionEvent) {
+    private void showEnrolledEvent(ActionEvent actionEvent) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
-            DisplayerManager.displayEnrolled();
+            DisplayHandler.displayEnrolled();
         }
     }
 
-    private void graduateStudentOptionActionPerformed(ActionEvent actionEvent) {
+    private void graduateStudentEvent(ActionEvent actionEvent) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
             GraduateStudentForm form = new GraduateStudentForm(sv);
             form.setVisible(true);
         }
     }
 
-    private void showAllStudentsOptionActionPerformed(ActionEvent actionEvent) {
+    private void showAllStudentsEvent(ActionEvent actionEvent) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
-            DisplayerManager.displayStudents();
+            DisplayHandler.displayStudents();
         }
     }
 
-    private void showAllGroupsOptionActionPerformed(ActionEvent actionEvent) {
+    private void showAllGroupsEvent(ActionEvent actionEvent) {
         if (checkGroup() && checkFaculty()) {
-            DisplayerManager.displayGroups();
+            DisplayHandler.displayGroups();
         }
     }
 
-    private void deleteGroupOptionActionPerformed(ActionEvent actionEvent) {
+    private void deleteGroupEvent(ActionEvent actionEvent) {
         if (checkGroup() && checkFaculty()) {
             DeleteGroupForm form = new DeleteGroupForm(sv);
             form.setVisible(true);
         }
     }
 
-    private void loadBatchOptionActionPerformed(ActionEvent evt) {
+    private void loadBatchEvent(ActionEvent evt) {
         BatchLoader picker = new BatchLoader(sv);
         picker.setVisible(true);
     }
 
-    private void saveAndExitOptionActionPerformed(ActionEvent evt) {
+    private void saveExitEvent(ActionEvent evt) {
         int result = JOptionPane.showConfirmDialog(
                 StudentManagementGUI.this,
                 "Are you sure you want to exit?",
@@ -262,99 +253,99 @@ public class StudentManagementGUI extends JFrame {
         }
     }
 
-    private void showAllFacultiesOptionActionPerformed(ActionEvent evt) {
+    private void showAllFacultiesEvent(ActionEvent evt) {
         if (checkFaculty()) {
-            DisplayerManager.displayFaculties();
+            DisplayHandler.displayFaculties();
         }
     }
 
-    private void saveAsOptionActionPerformed(ActionEvent evt) {
+    private void saveAsEvent(ActionEvent evt) {
 
     }
 
-    private void showParticularGroupOptionActionPerformed(ActionEvent evt) {
+    private void showGroupEvent(ActionEvent evt) {
         if (checkGroup() && checkFaculty()) {
             ShowGroupForm form = new ShowGroupForm(sv, mainTextLabel);
             form.setVisible(true);
         }
     }
 
-    private void addFacultyOptionActionPerformed(ActionEvent evt) {
+    private void addFacultyEvent(ActionEvent evt) {
         AddFacultyForm form = new AddFacultyForm(sv);
         form.setVisible(true);
     }
 
-    private void addStudentOptionActionPerformed(ActionEvent evt) {
+    private void addStudentEvent(ActionEvent evt) {
         if (checkGroup() && checkFaculty()) {
             AddStudentForm form = new AddStudentForm(sv);
             form.setVisible(true);
         }
     }
 
-    private void gradeStudentOptionActionPerformed(ActionEvent evt) {
+    private void gradeStudentEvent(ActionEvent evt) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
             GradeStudentForm form = new GradeStudentForm(sv, mainTextLabel);
             form.setVisible(true);
         }
     }
 
-    private void editStudentOptionActionPerformed(ActionEvent evt) {
+    private void editStudentEvent(ActionEvent evt) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
             EditStudentForm form = new EditStudentForm(sv);
             form.setVisible(true);
         }
     }
 
-    private void deleteStudentOptionActionPerformed(ActionEvent evt) {
+    private void deleteStudentEvent(ActionEvent evt) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
             DeleteStudentForm form = new DeleteStudentForm(sv);
             form.setVisible(true);
         }
     }
 
-    private void showStudentGradeActionPerformed(ActionEvent evt) {
+    private void showGradeEvent(ActionEvent evt) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
             ShowStudentGradesForm form = new ShowStudentGradesForm(sv, mainTextLabel);
             form.setVisible(true);
         }
     }
 
-    private void showParticularStudentOptionActionPerformed(ActionEvent evt) {
+    private void showStudentEvent(ActionEvent evt) {
         if (checkStudent() && checkGroup() && checkFaculty()) {
             ShowStudentForm form = new ShowStudentForm(sv, mainTextLabel);
             form.setVisible(true);
         }
     }
 
-    private void addGroupOptionActionPerformed(ActionEvent evt) {
+    private void addGroupEvent(ActionEvent evt) {
         if (checkFaculty()) {
             AddGroupForm form = new AddGroupForm(sv);
             form.setVisible(true);
         }
     }
 
-    private void editGroupOptionActionPerformed(ActionEvent evt) {
+    private void editGroupEvent(ActionEvent evt) {
         if (checkGroup() && checkFaculty()) {
             EditGroupForm form = new EditGroupForm(sv);
             form.setVisible(true);
         }
     }
 
-    private void showParticularFacultyOptionActionPerformed(ActionEvent evt) {
+    private void showFacultyEvent(ActionEvent evt) {
         if (checkFaculty()) {
             ShowFacultyForm form = new ShowFacultyForm(sv, mainTextLabel);
             form.setVisible(true);
         }
     }
 
-    private void editFacultyOptionActionPerformed(ActionEvent evt) {
+    private void editFacultyEvent(ActionEvent evt) {
         if (checkFaculty()) {
             EditFacultyForm form = new EditFacultyForm(sv);
             form.setVisible(true);
         }
     }
 
-    private void removeFacultyOptionActionPerformed(ActionEvent evt) {
+    private void deleteFacultyEvent(ActionEvent evt) {
         if (checkFaculty()) {
             RemoveFacultyForm form = new RemoveFacultyForm(sv);
             form.setVisible(true);
@@ -362,7 +353,7 @@ public class StudentManagementGUI extends JFrame {
     }
 
     private boolean checkFaculty() {
-        if (sv.getFm().getFaculties().isEmpty()) {
+        if (sv.facultyManager().getFaculties().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Configure a faculty!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
             return false;
         }
@@ -370,7 +361,7 @@ public class StudentManagementGUI extends JFrame {
     }
 
     private boolean checkGroup() {
-        if (sv.getFm().getGm().getGroups().isEmpty()) {
+        if (sv.groupManager().getGroups().isEmpty()) {
             JOptionPane.showMessageDialog(null, "Configure a group!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
             return false;
         }
@@ -378,10 +369,18 @@ public class StudentManagementGUI extends JFrame {
     }
 
     private boolean checkStudent() {
-        if (sv.getFm().getGm().getSm().getStudents().isEmpty()) {
+        if (sv.studentManager().getStudents().isEmpty()) {
             JOptionPane.showMessageDialog(null, "No students in database!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
             return false;
         }
         return true;
+    }
+
+    public static JTextArea getMainLabel() {
+        return mainTextLabel;
+    }
+
+    public static Supervisor getSv() {
+        return sv;
     }
 }

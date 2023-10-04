@@ -6,9 +6,9 @@ import java.util.List;
 
 public class Group implements Serializable {
 
-    private final List<Student> students = new ArrayList<>();
     private String name;
     private Faculty faculty;
+    private final List<Student> students = new ArrayList<>();
 
     public Group(String name) {
         this.name = name;

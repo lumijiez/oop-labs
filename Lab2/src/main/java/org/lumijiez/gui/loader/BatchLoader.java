@@ -4,7 +4,7 @@ import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.enums.StudyField;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -38,9 +38,9 @@ public class BatchLoader extends JFrame {
         titleLabel.setFont(new java.awt.Font("Segoe UI", Font.PLAIN, 24));
         setTitle("Load a Batch of Students");
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
-        browseButton.addActionListener(this::browseButtonActionPerformed);
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
+        browseButton.addActionListener(this::browseEvent);
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
@@ -107,11 +107,11 @@ public class BatchLoader extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 
-    private void browseButtonActionPerformed(ActionEvent evt) {
+    private void browseEvent(ActionEvent evt) {
         JFileChooser fileChooser = new JFileChooser();
         int returnVal = fileChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -120,87 +120,56 @@ public class BatchLoader extends JFrame {
         }
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         try (BufferedReader reader = new BufferedReader(new FileReader(filePane.getText()))) {
-            String line;
-            String name;
-            String surname;
-            String email;
-            Date birth;
-            Date enrol;
-            String groupName;
-            String facultyName;
-            StudyField specialty;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String line, name = "", surname = "", email = "", groupName = "", facultyName = "";
+            Date birth = new Date(), enrol = new Date();
 
-            while (true) {
-                line = reader.readLine();
-                // Sorry for this
-                if (line == null) break;
-                if (line.isEmpty()) line = reader.readLine();
-                name = line.substring("name: ".length());
+            while ((line = reader.readLine()) != null) {
+                if (line.isEmpty()) continue;
 
-                line = reader.readLine();
-                // Sorry for this
-                if (line == null) break;
-                surname = line.substring("surname: ".length());
+                String[] parts = line.split(": ", 2);
+                if (parts.length != 2) continue;
 
-                line = reader.readLine();
-                // Sorry for this
-                if (line == null) break;
-                email = line.substring("email: ".length());
+                String field = parts[0], value = parts[1];
 
-                line = reader.readLine();
-                // Sorry for this again lol
-                if (line == null) break;
-                groupName = line.substring("group: ".length());
-
-                line = reader.readLine();
-                // Sorry for this again :((
-                if (line == null) break;
-                facultyName = line.substring("faculty: ".length());
-
-                line = reader.readLine();
-                // Please forgive me
-                if (line == null) break;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                birth = dateFormat.parse(line.substring("birthdate: ".length()));
-
-                line = reader.readLine();
-                // I'm really sorry
-                if (line == null) break;
-                enrol = dateFormat.parse(line.substring("enroldate: ".length()));
-
-                line = reader.readLine();
-                // This is the last one please don't hate me
-                if (line == null) break;
-                String spec = line.substring("specialty: ".length());
-
-                if (StudyField.getEnum(spec) == null) {
-                    specialty = StudyField.DEFAULT_UNASSIGNED;
-                } else specialty = StudyField.getEnum(spec);
-
-                Faculty faculty;
-                Group group;
-
-                if (sv.getFacultyByName(facultyName) == null) {
-                    assert specialty != null;
-                    faculty = new Faculty(facultyName, specialty.getAbbreviation(), specialty);
-                    sv.addFaculty(faculty);
-                } else faculty = sv.getFacultyByName(facultyName);
-
-
-                if (sv.getGroupByName(groupName, faculty) == null) {
-                    group = new Group(groupName);
-                    sv.addGroup(group, sv.getFacultyByName(facultyName));
-                } else group = sv.getGroupByName(groupName, faculty);
-
-                sv.addStudent(name, surname, email, group, faculty, birth, enrol);
+                switch (field) {
+                    case "name" -> name = value;
+                    case "surname" -> surname = value;
+                    case "email" -> email = value;
+                    case "group" -> groupName = value;
+                    case "faculty" -> facultyName = value;
+                    case "birthdate" -> birth = dateFormat.parse(value);
+                    case "enroldate" -> enrol = dateFormat.parse(value);
+                    case "specialty" -> handleStudentAddition(name, surname, email, groupName, facultyName, birth, enrol, value);
+                    default -> System.err.println("Error reading file!");
+                }
             }
         } catch (IOException | ParseException ex) {
             throw new RuntimeException(ex);
         }
-        DisplayerManager.displayStudents();
+        DisplayHandler.displayStudents();
 
         this.dispose();
+    }
+
+    private void handleStudentAddition(String name, String surname, String email, String groupName, String facultyName, Date birth, Date enrol, String fieldName) {
+        StudyField specialty = (StudyField.getEnum(fieldName) == null) ? StudyField.DEFAULT_UNASSIGNED : StudyField.getEnum(fieldName);
+
+        Faculty faculty = sv.getFacultyByName(facultyName);
+        if (faculty == null) {
+            assert specialty != null;
+            faculty = new Faculty(facultyName, specialty.getAbbreviation(), specialty);
+            sv.addFaculty(faculty);
+        }
+
+        Group group = sv.getGroupByName(groupName, faculty);
+        if (group == null) {
+            group = new Group(groupName);
+            sv.addGroup(group, faculty);
+        }
+
+        sv.addStudent(name, surname, email, group, faculty, birth, enrol);
     }
 }

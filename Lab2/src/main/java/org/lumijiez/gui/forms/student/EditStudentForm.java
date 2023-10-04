@@ -3,9 +3,9 @@ package org.lumijiez.gui.forms.student;
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -17,32 +17,32 @@ import java.util.Objects;
 
 public class EditStudentForm extends JFrame {
     private final JLabel bdayLabel = new JLabel();
+    private final JLabel bmonthLabel = new JLabel();
+    private final JLabel byearLabel = new JLabel();
+    private final JLabel edayLabel = new JLabel();
+    private final JLabel emailLabel = new JLabel();
+    private final JLabel emonthLabel = new JLabel();
+    private final JLabel eyearLabel = new JLabel();
+    private final JLabel facultyLabel = new JLabel();
+    private final JLabel groupLabel = new JLabel();
+    private final JLabel nameLabel = new JLabel();
+    private final JLabel studentLabel = new JLabel();
+    private final JLabel surnameLabel = new JLabel();
+    private final JLabel titleLabel = new JLabel();
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JTextField nameField = new JTextField();
+    private final JTextField emailField = new JTextField();
+    private final JTextField surnameField = new JTextField();
+    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
+    private final JComboBox<Group> groupCombo = new JComboBox<>();
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JComboBox<Integer> birthdayCombo;
     private final JComboBox<Integer> birthmonthCombo;
     private final JComboBox<Integer> birthyearCombo;
-    private final JLabel bmonthLabel = new JLabel();
-    private final JLabel byearLabel = new JLabel();
-    private final JButton cancelButton = new JButton();
-    private final JLabel edayLabel = new JLabel();
-    private final JTextField emailField = new JTextField();
-    private final JLabel emailLabel = new JLabel();
-    private final JLabel emonthLabel = new JLabel();
     private final JComboBox<Integer> enroldayCombo;
     private final JComboBox<Integer> enrolmonthCombo;
     private final JComboBox<Integer> enrolyearCombo;
-    private final JLabel eyearLabel = new JLabel();
-    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
-    private final JLabel facultyLabel = new JLabel();
-    private final JComboBox<Group> groupCombo = new JComboBox<>();
-    private final JLabel groupLabel = new JLabel();
-    private final JTextField nameField = new JTextField();
-    private final JLabel nameLabel = new JLabel();
-    private final JComboBox<Student> studentCombo = new JComboBox<>();
-    private final JLabel studentLabel = new JLabel();
-    private final JButton submitButton = new JButton();
-    private final JTextField surnameField = new JTextField();
-    private final JLabel surnameLabel = new JLabel();
-    private final JLabel titleLabel = new JLabel();
     private final Supervisor sv;
 
     public EditStudentForm(Supervisor sv) {
@@ -76,7 +76,7 @@ public class EditStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Edit a Student");
 
         titleLabel.setText("Edit a student");
@@ -95,19 +95,18 @@ public class EditStudentForm extends JFrame {
         edayLabel.setText("New enrol day:");
         cancelButton.setText("Cancel");
 
-        studentCombo.addActionListener(this::studentComboActionPerformed);
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        studentCombo.addActionListener(this::studentComboEvent);
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
-        ComboBoxRenderer.setRenderer(groupCombo, sv.getFm().getGm().getGroups().toArray(new Group[0]));
-        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
+        ComboRenderer.setRenderer(facultyCombo, sv.facultyManager().getFaculties().toArray(new Faculty[0]));
+        ComboRenderer.setRenderer(groupCombo, sv.groupManager().getGroups().toArray(new Group[0]));
+        ComboRenderer.setRenderer(studentCombo, sv.studentManager().getStudents().toArray(new Student[0]));
 
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         facultyCombo.setSelectedItem(student.getFaculty());
-        System.out.println("lol:" + facultyCombo.getSelectedItem());
         groupCombo.setSelectedItem(student.getGroup());
         emailField.setText(student.getEmail());
         nameField.setText(student.getName());
@@ -250,11 +249,11 @@ public class EditStudentForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void cancelButtonActionPerformed(ActionEvent actionEvent) {
+    private void cancelEvent(ActionEvent actionEvent) {
         this.dispose();
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         String name = nameField.getText();
         String surname = surnameField.getText();
         String email = emailField.getText();
@@ -282,15 +281,14 @@ public class EditStudentForm extends JFrame {
         Date birthDate = birthCalendar.getTime();
         Date enrolDate = enrolCalendar.getTime();
 
-        if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty()) {
+        if (!name.isEmpty() && !surname.isEmpty() && !email.isEmpty())
             sv.editStudent(student, name, surname, email, group, faculty, birthDate, enrolDate);
-        }
 
-        DisplayerManager.displayStudents();
+        DisplayHandler.displayStudents();
         this.dispose();
     }
 
-    private void studentComboActionPerformed(ActionEvent evt) {
+    private void studentComboEvent(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         facultyCombo.setSelectedItem(student.getFaculty());
         groupCombo.setSelectedItem(student.getGroup());

@@ -2,7 +2,7 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
 
@@ -11,15 +11,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class ShowSpecialtyFacultyForm extends JFrame {
-
-    private final JTextArea mainTextLabel;
-    private final JButton cancelButton = new JButton();
-    private final JComboBox<StudyField> specialtyCombo = new JComboBox<>();
-    private final JLabel facultyLabel = new JLabel();
-    private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
-
+    private final JLabel facultyLabel = new JLabel();
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JComboBox<StudyField> specialtyCombo = new JComboBox<>();
     private final Supervisor sv;
+    private final JTextArea mainTextLabel;
 
     public ShowSpecialtyFacultyForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
@@ -31,7 +29,7 @@ public class ShowSpecialtyFacultyForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Show a Faculty by Specialty");
 
         titleLabel.setText("Show a faculty");
@@ -41,10 +39,10 @@ public class ShowSpecialtyFacultyForm extends JFrame {
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
 
-        ComboBoxRenderer.setRenderer(specialtyCombo, StudyField.getAllEnums().toArray(new StudyField[0]));
+        ComboRenderer.setRenderer(specialtyCombo, StudyField.getAllEnums().toArray(new StudyField[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -66,7 +64,6 @@ public class ShowSpecialtyFacultyForm extends JFrame {
                                                                         .addComponent(submitButton))
                                                                 .addComponent(specialtyCombo, GroupLayout.Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 250, GroupLayout.PREFERRED_SIZE)))))
                                 .addContainerGap(27, Short.MAX_VALUE)));
-
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -88,7 +85,7 @@ public class ShowSpecialtyFacultyForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         StringBuilder builder = new StringBuilder();
         StudyField fac = (StudyField) specialtyCombo.getSelectedItem();
         assert fac != null;
@@ -96,17 +93,15 @@ public class ShowSpecialtyFacultyForm extends JFrame {
         builder.append("Specialty: ").append(fac.getName()).append("\n");
         builder.append("==========\n");
         builder.append("Faculties: ").append("\n");
-        for (Faculty fc : sv.getFm().getFaculties()) {
-            if (fc.getField().equals(fac)) {
+        for (Faculty fc : sv.facultyManager().getFaculties())
+            if (fc.getField().equals(fac))
                 builder.append(fc.getName()).append("\n").append("==========\n");
-            }
-        }
         builder.append("============================================================");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 

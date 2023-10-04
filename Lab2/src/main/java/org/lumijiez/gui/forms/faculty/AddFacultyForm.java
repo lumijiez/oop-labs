@@ -2,9 +2,9 @@ package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.enums.StudyField;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -13,16 +13,16 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class AddFacultyForm extends JFrame {
-    private final Supervisor sv;
     private final JLabel titleLabel = new JLabel();
-    private final JComboBox<StudyField> specialtyCombo = new JComboBox<>();
-    private final JTextField nameField = new JTextField();
-    private final JButton submitButton = new JButton();
-    private final JButton cancelButton = new JButton();
     private final JLabel nameLabel = new JLabel();
-    private final JTextField abbreviationField = new JTextField();
     private final JLabel abbreviationLabel = new JLabel();
     private final JLabel specialtyLabel = new JLabel();
+    private final JButton submitButton = new JButton();
+    private final JButton cancelButton = new JButton();
+    private final JTextField nameField = new JTextField();
+    private final JTextField abbreviationField = new JTextField();
+    private final JComboBox<StudyField> specialtyCombo = new JComboBox<>();
+    private final Supervisor sv;
 
     public AddFacultyForm(Supervisor sv) {
         this.sv = sv;
@@ -33,7 +33,7 @@ public class AddFacultyForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Add a Faculty");
 
         titleLabel.setText("Add a new faculty");
@@ -45,13 +45,13 @@ public class AddFacultyForm extends JFrame {
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        specialtyCombo.addActionListener(this::specialtyComboActionPerformed);
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
-
-        ComboBoxRenderer.setRenderer(specialtyCombo, StudyField.getAllEnums().toArray(new StudyField[0]));
+        ComboRenderer.setRenderer(specialtyCombo, StudyField.getAllEnums().toArray(new StudyField[0]));
 
         abbreviationField.setText(StudyField.getAbbrevFromString(Objects.requireNonNull(specialtyCombo.getSelectedItem()).toString()));
+
+        specialtyCombo.addActionListener(this::specialtyComboEvent);
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -109,25 +109,23 @@ public class AddFacultyForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         String name = nameField.getText();
         String abbreviation = abbreviationField.getText();
         StudyField specialty = StudyField.getEnum(Objects.requireNonNull(specialtyCombo.getSelectedItem()).toString());
         if (!name.isEmpty()) {
             Faculty newFaculty = new Faculty(name, abbreviation, specialty);
             sv.addFaculty(newFaculty);
-            DisplayerManager.displayFaculties();
+            DisplayHandler.displayFaculties();
             this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(null, "Fill in all the fields!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
-        }
+        } else JOptionPane.showMessageDialog(null, "Fill in all the fields!", "Warning!", JOptionPane.INFORMATION_MESSAGE, null);
     }
 
-    private void specialtyComboActionPerformed(ActionEvent evt) {
+    private void specialtyComboEvent(ActionEvent evt) {
         abbreviationField.setText(StudyField.getAbbrevFromString(Objects.requireNonNull(specialtyCombo.getSelectedItem()).toString()));
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 

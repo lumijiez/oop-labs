@@ -3,7 +3,7 @@ package org.lumijiez.gui.forms.student;
 import org.lumijiez.base.Grade;
 import org.lumijiez.base.Student;
 import org.lumijiez.enums.Subjects;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
 
@@ -13,19 +13,18 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class GradeStudentForm extends JFrame {
-    private final Supervisor sv;
-    private final JTextArea mainTextLabel;
-    private final JButton cancelButton = new JButton();
-    private final JComboBox<Subjects> subjectCombo = new JComboBox<>();
+    Integer[] grades = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
     private final JLabel gradeLabel = new JLabel();
-    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JLabel studentLabel = new JLabel();
     private final JLabel subjectLabel = new JLabel();
-    private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
-    Integer[] grades = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JComboBox<Subjects> subjectCombo = new JComboBox<>();
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JComboBox<Integer> gradeCombo = new JComboBox<>(grades);
-
+    private final Supervisor sv;
+    private final JTextArea mainTextLabel;
 
     public GradeStudentForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
@@ -37,7 +36,7 @@ public class GradeStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Grade A Student");
 
         titleLabel.setText("Grade a student");
@@ -49,11 +48,11 @@ public class GradeStudentForm extends JFrame {
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
 
-        ComboBoxRenderer.setRenderer(subjectCombo, Subjects.values());
-        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
+        ComboRenderer.setRenderer(subjectCombo, Subjects.values());
+        ComboRenderer.setRenderer(studentCombo, sv.studentManager().getStudents().toArray(new Student[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,7 +87,6 @@ public class GradeStudentForm extends JFrame {
                                 .addGap(129, 129, 129)
                                 .addComponent(titleLabel)
                                 .addGap(0, 0, Short.MAX_VALUE)));
-
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -117,7 +115,7 @@ public class GradeStudentForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         Subjects subject = Subjects.getEnum(Objects.requireNonNull(subjectCombo.getSelectedItem()).toString());
         int intGrade = (Integer) Objects.requireNonNull(gradeCombo.getSelectedItem());
@@ -127,15 +125,13 @@ public class GradeStudentForm extends JFrame {
         StringBuilder builder = new StringBuilder();
         builder.append("============================================================\n");
         builder.append("Grades for ").append(student.getFullname()).append(" from ").append(student.getGroup().getName()).append(":\n");
-        for (Grade gr : student.getGrades()) {
-            builder.append(gr.getSubject()).append(": ").append(gr.getGrade()).append("\n");
-        }
+        for (Grade gr : student.getGrades()) builder.append(gr.getSubject()).append(": ").append(gr.getGrade()).append("\n");
         builder.append("============================================================\n");
         mainTextLabel.setText(builder.toString());
         this.dispose();
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 

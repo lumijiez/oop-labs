@@ -7,11 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Faculty implements Serializable {
-
-    private final List<Group> groups = new ArrayList<>();
     private String name;
     private String abbreviation;
     private StudyField field;
+    private final List<Group> groups = new ArrayList<>();
     public Faculty(String name, String abbreviation, StudyField field) {
         this.name = name;
         this.abbreviation = abbreviation;

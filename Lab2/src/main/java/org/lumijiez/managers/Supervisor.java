@@ -22,7 +22,7 @@ public class Supervisor implements Serializable {
 
     // Adds a faculty using the FacultyManager
     public void addFaculty(Faculty faculty) {
-        getFm().addFaculty(faculty);
+        facultyManager().addFaculty(faculty);
         logger.logOperation("Faculty added: " + faculty.getName());
     }
 
@@ -30,9 +30,9 @@ public class Supervisor implements Serializable {
     public void deleteFaculty(Faculty faculty) {
         fm.deleteFaculty(faculty);
         for (Group gr : faculty.getGroups()) {
-            getFm().getGm().deleteGroup(gr);
+            groupManager().deleteGroup(gr);
             for (Student st : gr.getStudents()) {
-                getFm().getGm().getSm().deleteStudent(st);
+                studentManager().deleteStudent(st);
             }
         }
         logger.logOperation("Faculty deleted : " + faculty.getName());
@@ -59,9 +59,9 @@ public class Supervisor implements Serializable {
 
     // Deletes a group, then deletes the students.
     public void deleteGroup(Group group) {
-        getFm().getGm().deleteGroup(group);
+        groupManager().deleteGroup(group);
         for (Student st : group.getStudents()) {
-            getFm().getGm().getSm().deleteStudent(st);
+            studentManager().deleteStudent(st);
         }
         logger.logOperation("Group deleted: " + group.getName());
     }
@@ -69,7 +69,7 @@ public class Supervisor implements Serializable {
     // Adds a student, using the StudentManager
     public void addStudent(String name, String surname, String email, Group group, Faculty faculty, Date birth, Date enrol) {
         Student newStudent = new Student(name, surname, email, group, faculty, birth, enrol);
-        getFm().getGm().getSm().addStudent(newStudent);
+        studentManager().addStudent(newStudent);
         logger.logOperation("Student added: " + newStudent.getFullname());
     }
 
@@ -92,21 +92,21 @@ public class Supervisor implements Serializable {
     public void addGroup(Group group, Faculty faculty) {
         group.setFaculty(faculty);
         faculty.addGroup(group);
-        getFm().getGm().addGroup(group);
+        groupManager().addGroup(group);
         logger.logOperation("Group added: " + group.getName());
     }
 
     // Deletes a student, simple as that
     public void deleteStudent(Student st) {
         st.getGroup().deleteStudent(st);
-        getFm().getGm().getSm().deleteStudent(st);
+        studentManager().deleteStudent(st);
         logger.logOperation("Student deleted: " + st.getFullname());
     }
 
     // Iterates through all faculties to get a faculty that matches the name
     // In the future would be great to replace it using an UUID instead of a String name.
     public Faculty getFacultyByName(String facultyName) {
-        for (Faculty faculty : getFm().getFaculties()) {
+        for (Faculty faculty : facultyManager().getFaculties()) {
             if (faculty.getName().equals(facultyName))
                 return faculty;
         }
@@ -115,15 +115,23 @@ public class Supervisor implements Serializable {
 
     // Same thing as getFacultyByName() except for Groups
     public Group getGroupByName(String groupName, Faculty faculty) {
-        for (Group group : getFm().getGm().getGroups()) {
+        for (Group group : groupManager().getGroups()) {
             if (group.getName().equals(groupName) && group.getFaculty().equals(faculty))
                 return group;
         }
         return null;
     }
 
-    public FacultyManager getFm() {
+    public FacultyManager facultyManager() {
         return fm;
+    }
+
+    public GroupManager groupManager() {
+        return fm.getGm();
+    }
+
+    public StudentManager studentManager() {
+        return fm.getGm().getSm();
     }
 
     public LogManager getLogger() {

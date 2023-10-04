@@ -2,9 +2,9 @@ package org.lumijiez.gui.forms.group;
 
 import org.lumijiez.base.Faculty;
 import org.lumijiez.base.Group;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -13,17 +13,16 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class EditGroupForm extends JFrame {
-
-    private final Supervisor sv;
-    private final JButton cancelButton = new JButton();
-    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
-    private final JLabel facultyLabel = new JLabel();
-    private final JComboBox<Group> groupCombo = new JComboBox<>();
-    private final JLabel groupLabel = new JLabel();
-    private final JTextField nameField = new JTextField();
-    private final JLabel nameLabel = new JLabel();
-    private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
+    private final JLabel facultyLabel = new JLabel();
+    private final JLabel groupLabel = new JLabel();
+    private final JLabel nameLabel = new JLabel();
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JTextField nameField = new JTextField();
+    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
+    private final JComboBox<Group> groupCombo = new JComboBox<>();
+    private final Supervisor sv;
 
     public EditGroupForm(Supervisor sv) {
         this.sv = sv;
@@ -34,7 +33,7 @@ public class EditGroupForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Edit a Group");
 
         titleLabel.setText("Edit a group");
@@ -46,11 +45,11 @@ public class EditGroupForm extends JFrame {
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
 
-        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
-        ComboBoxRenderer.setRenderer(groupCombo, sv.getFm().getGm().getGroups().toArray(new Group[0]));
+        ComboRenderer.setRenderer(facultyCombo, sv.facultyManager().getFaculties().toArray(new Faculty[0]));
+        ComboRenderer.setRenderer(groupCombo, sv.groupManager().getGroups().toArray(new Group[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,7 +78,6 @@ public class EditGroupForm extends JFrame {
                                                         .addComponent(facultyCombo, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
                                                         .addComponent(submitButton))))
                                 .addContainerGap(34, Short.MAX_VALUE)));
-
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -111,15 +109,15 @@ public class EditGroupForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         Faculty fac = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
         Group gr = (Group) Objects.requireNonNull(groupCombo.getSelectedItem());
         sv.editGroup(gr, nameField.getText(), fac);
-        DisplayerManager.displayGroups();
+        DisplayHandler.displayGroups();
         this.dispose();
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 

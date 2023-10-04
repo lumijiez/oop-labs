@@ -1,9 +1,9 @@
 package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -12,12 +12,11 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class GraduateStudentForm extends JFrame {
-    private final JButton cancelButton = new JButton();
-    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final JLabel studentLabel = new JLabel();
-    private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
-
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
     private final Supervisor sv;
 
     public GraduateStudentForm(Supervisor sv) {
@@ -32,20 +31,17 @@ public class GraduateStudentForm extends JFrame {
         titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Graduate a Student");
 
-        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
+        ComboRenderer.setRenderer(studentCombo, sv.studentManager().getEnrolled().toArray(new Student[0]));
 
-        studentLabel.setText("Student:");
+        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
+
         submitButton.setText("Submit");
         cancelButton.setText("Cancel");
         titleLabel.setText("Graduate a Student");
+        studentLabel.setText("Student:");
 
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-
-        submitButton.setBackground(new Color(204, 255, 204));
-        cancelButton.setBackground(new Color(255, 204, 204));
-
-        ComponentDecorator.submitAndCancel(submitButton, cancelButton);
+        submitButton.addActionListener(this::cancelEvent);
+        cancelButton.addActionListener(this::submitEvent);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,7 +63,6 @@ public class GraduateStudentForm extends JFrame {
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(titleLabel)
                                 .addGap(51, 51, 51)));
-
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -89,14 +84,14 @@ public class GraduateStudentForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         student.setGraduated(true);
-        DisplayerManager.displayStudents();
+        DisplayHandler.displayStudents();
         this.dispose();
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         this.dispose();
     }
 }

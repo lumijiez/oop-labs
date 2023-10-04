@@ -1,9 +1,9 @@
 package org.lumijiez.gui.forms.student;
 
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -12,12 +12,12 @@ import java.awt.event.ActionEvent;
 import java.util.Objects;
 
 public class DeleteStudentForm extends JFrame {
-    private final Supervisor sv;
-    private final JButton cancelButton = new JButton();
-    private final JComboBox<Student> studentCombo = new JComboBox<>();
-    private final JLabel studentLabel = new JLabel();
-    private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
+    private final JLabel studentLabel = new JLabel();
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JComboBox<Student> studentCombo = new JComboBox<>();
+    private final Supervisor sv;
 
     public DeleteStudentForm(Supervisor sv) {
         this.sv = sv;
@@ -28,20 +28,20 @@ public class DeleteStudentForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Delete a Student");
 
-        ComboBoxRenderer.setRenderer(studentCombo, sv.getFm().getGm().getSm().getStudents().toArray(new Student[0]));
-
-        studentLabel.setText("Student:");
-        submitButton.setText("Submit");
-        cancelButton.setText("Cancel");
-        titleLabel.setText("Delete Student");
+        ComboRenderer.setRenderer(studentCombo, sv.studentManager().getStudents().toArray(new Student[0]));
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        cancelButton.setText("Cancel");
+        titleLabel.setText("Delete Student");
+        submitButton.setText("Submit");
+        studentLabel.setText("Student:");
+
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -63,7 +63,6 @@ public class DeleteStudentForm extends JFrame {
                                 .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(titleLabel)
                                 .addGap(51, 51, 51)));
-
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -85,14 +84,14 @@ public class DeleteStudentForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         Student student = ((Student) Objects.requireNonNull(studentCombo.getSelectedItem()));
         sv.deleteStudent(student);
-        DisplayerManager.displayStudents();
+        DisplayHandler.displayStudents();
         this.dispose();
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 }

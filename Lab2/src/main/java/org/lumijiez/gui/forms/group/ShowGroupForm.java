@@ -2,7 +2,7 @@ package org.lumijiez.gui.forms.group;
 
 import org.lumijiez.base.Group;
 import org.lumijiez.base.Student;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.managers.Supervisor;
 
@@ -13,14 +13,13 @@ import java.util.Objects;
 
 
 public class ShowGroupForm extends JFrame {
-
-    private final JTextArea mainTextLabel;
-    private final JButton cancelButton = new JButton();
-    private final JComboBox<Group> groupCombo = new JComboBox<>();
-    private final JLabel groupLabel = new JLabel();
-    private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
+    private final JLabel groupLabel = new JLabel();
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JComboBox<Group> groupCombo = new JComboBox<>();
     private final Supervisor sv;
+    private final JTextArea mainTextLabel;
 
     public ShowGroupForm(Supervisor sv, JTextArea mainTextLabel) {
         this.sv = sv;
@@ -32,7 +31,7 @@ public class ShowGroupForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Show a Group");
 
         titleLabel.setText("Show a group");
@@ -42,10 +41,10 @@ public class ShowGroupForm extends JFrame {
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
 
-        ComboBoxRenderer.setRenderer(groupCombo, sv.getFm().getGm().getGroups().toArray(new Group[0]));
+        ComboRenderer.setRenderer(groupCombo, sv.groupManager().getGroups().toArray(new Group[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -67,7 +66,6 @@ public class ShowGroupForm extends JFrame {
                                                 .addGap(47, 47, 47)
                                                 .addComponent(titleLabel)))
                                 .addContainerGap(24, Short.MAX_VALUE)));
-
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
@@ -89,23 +87,20 @@ public class ShowGroupForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         StringBuilder text = new StringBuilder();
         Group gr = (Group) Objects.requireNonNull(groupCombo.getSelectedItem());
-
         text.append("======================= Group Info =========================\n");
         text.append("=================== Group: ").append(gr.getName()).append("=====================\n");
-
-        for (Student student : gr.getStudents()) {
+        for (Student student : gr.getStudents())
             text.append("Name: ").append(student.getName()).append("\nEmail: ").append(student.getEmail())
-                    .append("\nEnrol date: ").append(student.getEnrollmentDate());
-            text.append("\n===============================================\n");
-        }
+                    .append("\nEnrol date: ").append(student.getEnrollmentDate())
+                    .append("\n===============================================\n");
         mainTextLabel.setText(text.toString());
         this.dispose();
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 }

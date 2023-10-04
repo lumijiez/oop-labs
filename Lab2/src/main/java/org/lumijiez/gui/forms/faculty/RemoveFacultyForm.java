@@ -1,9 +1,9 @@
 package org.lumijiez.gui.forms.faculty;
 
 import org.lumijiez.base.Faculty;
-import org.lumijiez.gui.util.ComboBoxRenderer;
+import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
-import org.lumijiez.gui.util.DisplayerManager;
+import org.lumijiez.gui.util.DisplayHandler;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -11,13 +11,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class RemoveFacultyForm extends JFrame {
-
-    private final Supervisor sv;
-    private final JButton cancelButton = new JButton();
-    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
     private final JLabel facultyLabel = new JLabel();
-    private final JButton submitButton = new JButton();
     private final JLabel titleLabel = new JLabel();
+    private final JButton cancelButton = new JButton();
+    private final JButton submitButton = new JButton();
+    private final JComboBox<Faculty> facultyCombo = new JComboBox<>();
+    private final Supervisor sv;
 
     public RemoveFacultyForm(Supervisor sv) {
         this.sv = sv;
@@ -28,7 +27,7 @@ public class RemoveFacultyForm extends JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        titleLabel.setFont(new java.awt.Font("sansserif", Font.PLAIN, 18));
+        titleLabel.setFont(new Font("sansserif", Font.PLAIN, 18));
         setTitle("Remove a Faculty");
 
         titleLabel.setText("Remove a faculty");
@@ -38,10 +37,10 @@ public class RemoveFacultyForm extends JFrame {
 
         ComponentDecorator.submitAndCancel(submitButton, cancelButton);
 
-        submitButton.addActionListener(this::submitButtonActionPerformed);
-        cancelButton.addActionListener(this::cancelButtonActionPerformed);
+        submitButton.addActionListener(this::submitEvent);
+        cancelButton.addActionListener(this::cancelEvent);
 
-        ComboBoxRenderer.setRenderer(facultyCombo, sv.getFm().getFaculties().toArray(new Faculty[0]));
+        ComboRenderer.setRenderer(facultyCombo, sv.facultyManager().getFaculties().toArray(new Faculty[0]));
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -83,13 +82,13 @@ public class RemoveFacultyForm extends JFrame {
         this.setLocation(x, y);
     }
 
-    private void submitButtonActionPerformed(ActionEvent evt) {
+    private void submitEvent(ActionEvent evt) {
         sv.deleteFaculty(((Faculty) facultyCombo.getSelectedItem()));
-        DisplayerManager.displayFaculties();
+        DisplayHandler.displayFaculties();
         this.dispose();
     }
 
-    private void cancelButtonActionPerformed(ActionEvent evt) {
+    private void cancelEvent(ActionEvent evt) {
         this.dispose();
     }
 

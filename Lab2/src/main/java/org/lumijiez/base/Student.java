@@ -7,24 +7,16 @@ import java.util.List;
 
 public class Student implements Serializable {
 
-    private final List<Grade> grades = new ArrayList<>();
-    private boolean graduated = false;
-
     private String name;
-
     private String surname;
-
     private String fullname;
-
     private String email;
-
     private Date enrollmentDate;
-
     private Date dateOfBirth;
-
     private Faculty faculty;
-
     private Group group;
+    private boolean graduated = false;
+    private final List<Grade> grades = new ArrayList<>();
 
     public Student(String name, String surname, String email, Group group, Faculty faculty, Date birth, Date enrol) {
         this.name = name;

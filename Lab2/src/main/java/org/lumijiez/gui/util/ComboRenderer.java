@@ -3,7 +3,8 @@ package org.lumijiez.gui.util;
 import javax.swing.*;
 import java.awt.*;
 
-public class ComboBoxRenderer {
+// Generic function that takes a ComboBox with a <T> object and sets the DefaultListCellRenderer according to the object
+public class ComboRenderer {
     public static <T> void setRenderer(JComboBox<T> comboBox, T[] items) {
         comboBox.setModel(new DefaultComboBoxModel<>(items));
         comboBox.setRenderer(new DefaultListCellRenderer() {
