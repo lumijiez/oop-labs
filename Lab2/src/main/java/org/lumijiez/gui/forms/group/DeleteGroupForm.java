@@ -4,6 +4,7 @@ import org.lumijiez.base.Group;
 import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayHandler;
+import org.lumijiez.gui.util.WindowConfig;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -77,10 +78,7 @@ public class DeleteGroupForm extends JFrame {
                                         .addComponent(submitButton))
                                 .addContainerGap(18, Short.MAX_VALUE)));
         pack();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screenSize.width - this.getWidth()) / 2;
-        int y = (screenSize.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        WindowConfig.center(this);
     }
 
     private void submitEvent(ActionEvent evt) {

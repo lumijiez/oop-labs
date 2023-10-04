@@ -5,6 +5,7 @@ import org.lumijiez.enums.StudyField;
 import org.lumijiez.gui.util.ComboRenderer;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayHandler;
+import org.lumijiez.gui.util.WindowConfig;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -114,14 +115,13 @@ public class EditFacultyForm extends JFrame {
                                         .addComponent(submitButton))
                                 .addGap(14, 14, 14)));
         pack();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screenSize.width - this.getWidth()) / 2;
-        int y = (screenSize.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        WindowConfig.center(this);
     }
 
     private void facultyComboEvent(ActionEvent actionEvent) {
-        specialtyCombo.setSelectedItem(((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem())).getField());
+        Faculty fac = ((Faculty) Objects.requireNonNull(facultyCombo.getSelectedItem()));
+        specialtyCombo.setSelectedItem(fac.getField());
+        nameField.setText(fac.getName());
     }
 
     private void specialtyComboEvent(ActionEvent actionEvent) {

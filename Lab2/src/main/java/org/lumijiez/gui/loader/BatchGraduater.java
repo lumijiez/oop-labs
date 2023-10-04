@@ -6,6 +6,7 @@ import org.lumijiez.base.Student;
 import org.lumijiez.enums.StudyField;
 import org.lumijiez.gui.util.ComponentDecorator;
 import org.lumijiez.gui.util.DisplayHandler;
+import org.lumijiez.gui.util.WindowConfig;
 import org.lumijiez.managers.Supervisor;
 
 import javax.swing.*;
@@ -49,7 +50,6 @@ public class BatchGraduater extends JFrame {
         browseButton.setText("Browse");
         formatLabel.setText("File format example:");
         cancelButton.setText("Cancel");
-
 
         exampleText.setColumns(15);
         exampleText.setRows(5);
@@ -99,10 +99,7 @@ public class BatchGraduater extends JFrame {
                                         .addComponent(submitButton))
                                 .addGap(23, 23, 23)));
         pack();
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int x = (screenSize.width - this.getWidth()) / 2;
-        int y = (screenSize.height - this.getHeight()) / 2;
-        this.setLocation(x, y);
+        WindowConfig.center(this);
     }
 
     private void cancelEvent(ActionEvent evt) {
