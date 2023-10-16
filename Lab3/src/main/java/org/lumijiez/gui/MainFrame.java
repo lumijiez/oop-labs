@@ -3,7 +3,10 @@ import org.lumijiez.tracker.TrackerThread;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
+import java.util.*;
 
 public class MainFrame extends JFrame {
     private final JScrollPane fileListScrollPane = new JScrollPane();
@@ -19,47 +22,38 @@ public class MainFrame extends JFrame {
     private final JMenuItem pickFolder = new JMenuItem();
     private final JMenu settingsMenu = new JMenu();
     private final JMenuItem settings = new JMenuItem();
+    private final Map<File, byte[]> fileContents = new HashMap<>();
+    private TrackerThread tracker;
 
-    public MainFrame() {
+    public MainFrame() throws IOException {
         initComponents();
     }
 
     private void initComponents() {
 
+        mainTextPane.setContentType("text/html");
 
         JFileChooser folderChooser = new JFileChooser();
         folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-        int returnVal = folderChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            System.out.println("Selected folder: " + folderChooser.getSelectedFile().getAbsolutePath());
-            TrackerThread tr = new TrackerThread(mainTextPane, Path.of(folderChooser.getSelectedFile().getAbsolutePath()));
-            tr.start();
-        }
-
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        fileList.setModel(new AbstractListModel<>() {
-            final String[] strings = {"Item 1", "Item 2", "Item 3", "Item 4", "Item 5"};
+        int returnVal = folderChooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            tracker = new TrackerThread(mainTextPane, Path.of(folderChooser.getSelectedFile().getAbsolutePath()), fileContents, fileList);
+            tracker.start();
+        }
 
-            public int getSize() {
-                return strings.length;
-            }
-
-            public String getElementAt(int i) {
-                return strings[i];
-            }
-        });
         fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         fileListScrollPane.setViewportView(fileList);
 
         snapshotLabel.setFont(new java.awt.Font("Trebuchet MS", Font.PLAIN, 18)); // NOI18N
-        snapshotLabel.setText("Last snapshot:");
+        snapshotLabel.setText("Last snapshot: " + new Date());
 
         mainScrollPane.setViewportView(mainTextPane);
 
         pathLabel.setFont(new java.awt.Font("Trebuchet MS", Font.PLAIN, 18)); // NOI18N
-        pathLabel.setText("Currently tracking: ");
+        pathLabel.setText("Currently tracking: " + folderChooser.getSelectedFile().getAbsolutePath());
 
         CommitButton.setText("Commit");
         CommitButton.addActionListener(this::CommitButtonActionPerformed);
@@ -119,13 +113,14 @@ public class MainFrame extends JFrame {
                                                 .addComponent(CommitButton)
                                                 .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(StatusButton)))
-                                .addContainerGap())
-        );
-
+                                .addContainerGap()));
         pack();
     }
 
     private void CommitButtonActionPerformed(java.awt.event.ActionEvent evt) {
+        tracker.reset();
+        mainTextPane.setText("");
+        snapshotLabel.setText("Last snapshot: " + new Date());
     }
 
     private void StatusButtonActionPerformed(java.awt.event.ActionEvent evt) {

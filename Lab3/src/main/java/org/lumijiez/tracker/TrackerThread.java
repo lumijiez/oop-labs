@@ -1,60 +1,100 @@
 package org.lumijiez.tracker;
 
+import org.lumijiez.util.DiffType;
+import org.lumijiez.util.FileDiffer;
+import org.lumijiez.util.StateType;
+
 import javax.swing.*;
-import java.io.IOException;
+import java.io.File;
 import java.nio.file.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TrackerThread extends Thread {
     private final JTextPane textPane;
     private final Path path;
+    private Map<File, byte[]> fileContents;
+    private final JList<String> fileList;
+    private final Map<File, StateType> fileStates = new HashMap<>();
 
-    public TrackerThread(JTextPane textPane, Path path) {
+    public TrackerThread(JTextPane textPane, Path path, Map<File, byte[]> files, JList<String> fileList) {
         this.textPane = textPane;
         this.path = path;
+        this.fileContents = files;
+        this.fileList = fileList;
+        init();
     }
 
-    public void checkDirectory(Path path) {
-        try {
-            WatchService watchService = FileSystems.getDefault().newWatchService();
-            path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE, StandardWatchEventKinds.ENTRY_MODIFY, StandardWatchEventKinds.ENTRY_DELETE);
+    public void init() {
+        System.out.println("Init called");
+        fileContents = FileDiffer.crawlDirectory(path);
 
-            while (true) {
-                WatchKey key;
-                try {
-                    key = watchService.take();
-                } catch (InterruptedException e) {
-                    return;
-                }
+        ArrayList<String> fileNames = new ArrayList<>();
 
-                for (WatchEvent<?> event : key.pollEvents()) {
-                    WatchEvent.Kind<?> kind = event.kind();
+        for (File file : fileContents.keySet()) {
+            fileNames.add(file.getName());
+        }
+        fileList.setModel(new AbstractListModel<>() {
+            public int getSize() {
+                return fileNames.size();
+            }
+            public String getElementAt(int i) {
+                return fileNames.get(i);
+            }
+        });
+    }
 
-                    @SuppressWarnings("unchecked")
-                    WatchEvent<Path> ev = (WatchEvent<Path>) event;
-                    Path fileName = ev.context();
+    public void reset() {
+        fileStates.clear();
+    }
 
-                    System.out.println(kind.name() + ": " + fileName);
+    public void checkDirectory() {
+        Map<DiffType, ArrayList<File>> result = FileDiffer.diff(fileContents, FileDiffer.crawlDirectory(path));
 
-                    if (kind == StandardWatchEventKinds.ENTRY_CREATE) {
-                        textPane.setText(textPane.getText() + " file created\n");
-                    } else if (kind == StandardWatchEventKinds.ENTRY_MODIFY) {
-                        textPane.setText(textPane.getText() + " file modified\n");
-                    } else if (kind == StandardWatchEventKinds.ENTRY_DELETE) {
-                        textPane.setText(textPane.getText() + " file deleted\n");
-                    }
-                }
+        StringBuilder toShow = new StringBuilder();
 
-                boolean valid = key.reset();
-                if (!valid) {
-                    break;
+        boolean created = false, deleted = false, modified = false;
+        if (!result.get(DiffType.CREATE).isEmpty()) {
+            created = true;
+            for (File file : result.get(DiffType.CREATE)) {
+                fileStates.put(file, StateType.NEW);
+            }
+            System.out.println("Created");
+        }
+
+        if (!result.get(DiffType.DELETE).isEmpty()) {
+            deleted = true;
+            for (File file : result.get(DiffType.DELETE)) {
+                fileStates.put(file, StateType.DELETED);
+            }
+            System.out.println("Deleted");
+        }
+
+        if (!result.get(DiffType.MODIFY).isEmpty()) {
+            modified = true;
+            for (File file : result.get(DiffType.MODIFY)) {
+                fileStates.put(file, StateType.MODIFIED);
+            }
+            System.out.println("Modified");
+        }
+
+        if (created || deleted || modified) {
+            init();
+            for (File file : fileStates.keySet()) {
+                if (fileStates.get(file) != StateType.NONE) {
+                    toShow.append(file.getName()).append(" has been ").append(fileStates.get(file).getName()).append("<br>");
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            textPane.setText(toShow.toString());
         }
     }
+
     @Override
     public void run() {
-        checkDirectory(path);
+        while(this.isAlive()) {
+            checkDirectory();
+            //Thread.sleep(200);
+        }
     }
 }
