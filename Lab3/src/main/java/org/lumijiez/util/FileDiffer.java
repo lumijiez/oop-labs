@@ -1,8 +1,8 @@
 package org.lumijiez.util;
 
+import org.lumijiez.base.Document;
 import org.lumijiez.enums.DiffType;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,13 +13,13 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 public class FileDiffer {
-    public static Map<DiffType, ArrayList<File>> diff(Map<File, byte[]> oldFiles, Map<File, byte[]> newFiles) {
-        Map<DiffType, ArrayList<File>> result = Map.of(
+    public static Map<DiffType, ArrayList<Document>> diff(Map<Document, byte[]> oldFiles, Map<Document, byte[]> newFiles) {
+        Map<DiffType, ArrayList<Document>> result = Map.of(
                         DiffType.CREATE, new ArrayList<>(),
                         DiffType.DELETE, new ArrayList<>(),
                         DiffType.MODIFY, new ArrayList<>());
 
-        for (File file : oldFiles.keySet()) {
+        for (Document file : oldFiles.keySet()) {
             if (newFiles.get(file) != null) {
                 if (Arrays.compare(oldFiles.get(file), newFiles.get(file)) != 0) {
                     result.get(DiffType.MODIFY).add(file);
@@ -29,7 +29,7 @@ public class FileDiffer {
             }
         }
 
-        for (File file : newFiles.keySet()) {
+        for (Document file : newFiles.keySet()) {
             if (oldFiles.get(file) == null) {
                 result.get(DiffType.CREATE).add(file);
             }
@@ -38,13 +38,14 @@ public class FileDiffer {
         return result;
     }
 
-    public static Map<File, byte[]> crawlDirectory(Path path) {
-        Map<File, byte[]> newFileContents = new HashMap<>();
+    public static Map<Document, byte[]> crawlDirectory(Path path) {
+        Map<Document, byte[]> newFileContents = new HashMap<>();
         try (Stream<Path> paths = Files.walk(path)) {
             paths.forEach(p -> {
-                if (Files.isRegularFile(p)) {
+                Document doc = new Document(p);
+                if (Files.isRegularFile(doc.toPath())) {
                     try {
-                        newFileContents.put(p.toFile(), Files.readAllBytes(p));
+                        newFileContents.put(doc, Files.readAllBytes(doc.toPath()));
                     } catch (IOException e) {
                         throw new RuntimeException(e);
                     }

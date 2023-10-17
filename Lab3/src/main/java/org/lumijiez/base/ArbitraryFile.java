@@ -6,4 +6,9 @@ public class ArbitraryFile extends Document{
     public ArbitraryFile(Path path) {
         super(path);
     }
+
+    @Override
+    public String getInfo() {
+        return "ARBITRARY";
+    }
 }

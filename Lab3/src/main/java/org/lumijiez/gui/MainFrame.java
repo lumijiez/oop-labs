@@ -1,9 +1,9 @@
 package org.lumijiez.gui;
+import org.lumijiez.base.Document;
 import org.lumijiez.tracker.TrackerThread;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.File;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -11,7 +11,7 @@ public class MainFrame extends JFrame {
     public static Path FOLDER_PATH;
     private final JScrollPane fileListScrollPane = new JScrollPane();
     private final JScrollPane fileInfoScrollPane = new JScrollPane();
-    private final JList<String> fileList = new JList<>();
+    private final JList<Document> fileList = new JList<>();
     private final JLabel pathLabel = new JLabel();
     private final JScrollPane mainScrollPane = new JScrollPane();
     private final JTextPane mainTextPane = new JTextPane();
@@ -24,7 +24,7 @@ public class MainFrame extends JFrame {
     private final JMenuItem pickFolder = new JMenuItem();
     private final JMenu settingsMenu = new JMenu();
     private final JMenuItem settings = new JMenuItem();
-    private final Map<File, byte[]> fileContents = new HashMap<>();
+    private final Map<Document, byte[]> fileContents = new HashMap<>();
     private TrackerThread tracker;
 
     public MainFrame() {
@@ -43,7 +43,7 @@ public class MainFrame extends JFrame {
         int returnVal = folderChooser.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             FOLDER_PATH = Path.of(folderChooser.getSelectedFile().getAbsolutePath());
-            tracker = new TrackerThread(mainTextPane, fileContents, fileList);
+            tracker = new TrackerThread(mainTextPane, fileContents, fileList, fileInfoTextPane);
             tracker.start();
         }
 

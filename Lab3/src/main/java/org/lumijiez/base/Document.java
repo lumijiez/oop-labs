@@ -56,4 +56,20 @@ public class Document extends File implements IDocument {
     public FileType getFileType() {
         return fileType;
     }
+
+    @Override
+    public long getFilesizeKB() {
+        try {
+            BasicFileAttributes fileAttributes = Files.readAttributes(Path.of(this.getPath()), BasicFileAttributes.class);
+            return fileAttributes.size() / 1024;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    @Override
+    public String getInfo() {
+        return "Name: " + getName() + " Size: " + getFilesizeKB() + "Type: " + getFileType().getTypeName();
+    }
 }

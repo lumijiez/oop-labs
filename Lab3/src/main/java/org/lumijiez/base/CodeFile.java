@@ -6,4 +6,9 @@ public class CodeFile extends Document{
     public CodeFile(Path path) {
         super(path);
     }
+
+    @Override
+    public String getInfo() {
+        return "CODE";
+    }
 }

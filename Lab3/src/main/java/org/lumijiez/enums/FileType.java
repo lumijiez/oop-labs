@@ -4,12 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public enum FileType {
-    IMAGE("Image"), PLAINTEXT("Plaintext"), FILE("File"), CODE("Code"), NONE("None");
-    public List<String> typeExtensions;
-    public final String typeName;
+    IMAGE("Image", new ArrayList<>(List.of("jpg", "png"))),
+    PLAINTEXT("Plaintext", new ArrayList<>(List.of("txt", "csv"))),
+    FILE("File", new ArrayList<>(List.of("doc", "pdf", "zip"))),
+    CODE("Code", new ArrayList<>(List.of("java", "cpp", "py"))),
+    NONE("None", new ArrayList<>());
 
-    FileType(String typeName) {
+    private final List<String> typeExtensions;
+    private final String typeName;
+
+    FileType(String typeName, ArrayList<String> list) {
         this.typeName = typeName;
+        this.typeExtensions = list;
     }
 
     public static FileType getFileType(String extension) {
@@ -21,10 +27,9 @@ public enum FileType {
         return NONE;
     }
 
-    static {
-        IMAGE.typeExtensions = new ArrayList<>(List.of("jpg", "png"));
-        PLAINTEXT.typeExtensions = new ArrayList<>(List.of("txt", "csv"));
-        FILE.typeExtensions = new ArrayList<>(List.of("doc", "pdf", "zip"));
-        CODE.typeExtensions = new ArrayList<>(List.of("java", "cpp", "py"));
+    public String getTypeName() {
+        return typeName;
     }
+
+
 }
