@@ -6,6 +6,7 @@ import org.lumijiez.enums.DiffType;
 import org.lumijiez.util.FileDiffer;
 import org.lumijiez.enums.StateType;
 import org.lumijiez.util.FileFactory;
+import org.lumijiez.util.NotificationHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,10 +53,7 @@ public class TrackerThread extends Thread {
 
         fileList.addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) {
-                Document selectedDocument = fileList.getSelectedValue();
-                if (selectedDocument != null) {
-                    fileInfoTextPane.setText(selectedDocument.getInfo());
-                }
+                refreshFileInfo();
             }
         });
     }
@@ -63,6 +61,16 @@ public class TrackerThread extends Thread {
     public void reset() {
         fileStates.clear();
     }
+
+    public void refreshFileInfo() {
+        Document selectedDocument = fileList.getSelectedValue();
+        if (selectedDocument != null) {
+            fileInfoTextPane.setText(selectedDocument.getInfo());
+        } else {
+            fileInfoTextPane.setText("");
+        }
+    }
+
 
     public void checkDirectory() {
         Map<DiffType, ArrayList<Document>> result = FileDiffer.diff(fileContents, FileDiffer.crawlDirectory(MainFrame.FOLDER_PATH));
@@ -81,6 +89,7 @@ public class TrackerThread extends Thread {
 
         if (somethingNew) {
             init();
+            refreshFileInfo();
             for (File file : fileStates.keySet()) {
                 if (fileStates.get(file) != StateType.NONE) {
                     if (fileStates.get(file) == StateType.NEW) {
@@ -93,6 +102,7 @@ public class TrackerThread extends Thread {
                         toShow.append("<span color=\"orange\">");
                     }
                     toShow.append(file.getName()).append(" has been ").append(fileStates.get(file).getAction()).append("</span><br>");
+                    NotificationHandler.showNotification(file.getName(), fileStates.get(file));
                 }
             }
             textPane.setText(toShow.toString());
