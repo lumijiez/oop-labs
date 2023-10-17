@@ -16,10 +16,10 @@ import java.util.Map;
 
 public class TrackerThread extends Thread {
     private final JTextPane textPane;
+    private final JTextPane fileInfoTextPane;
+    private final JList<Document> fileList;
     private Map<Document, byte[]> fileContents;
     private final Map<File, StateType> fileStates = new HashMap<>();
-    private final JList<Document> fileList;
-    private final JTextPane fileInfoTextPane;
 
     public TrackerThread(JTextPane textPane, Map<Document, byte[]> files, JList<Document> fileList, JTextPane fileInfoTextPane) {
         this.textPane = textPane;
@@ -60,7 +60,6 @@ public class TrackerThread extends Thread {
         });
     }
 
-
     public void reset() {
         fileStates.clear();
     }
@@ -96,7 +95,6 @@ public class TrackerThread extends Thread {
                     toShow.append(file.getName()).append(" has been ").append(fileStates.get(file).getAction()).append("</span><br>");
                 }
             }
-            // System.out.println(toShow.toString());
             textPane.setText(toShow.toString());
         }
     }

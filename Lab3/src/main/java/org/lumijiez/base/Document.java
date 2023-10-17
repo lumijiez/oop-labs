@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Document extends File implements IDocument {
@@ -31,10 +32,18 @@ public class Document extends File implements IDocument {
     }
 
     @Override
-    public Date getCreatedTime() {
+    public String getCreatedTime() {
         try {
             BasicFileAttributes fileAttributes = Files.readAttributes(Path.of(this.getPath()), BasicFileAttributes.class);
-            return new Date(fileAttributes.creationTime().toMillis());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+            Date date = new Date(fileAttributes.creationTime().toMillis());
+
+            String formattedDate = dateFormat.format(date);
+            String formattedTime = timeFormat.format(date);
+
+            return formattedTime + " " + formattedDate;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -42,10 +51,18 @@ public class Document extends File implements IDocument {
     }
 
     @Override
-    public Date getModificationTime() {
+    public String getModificationTime() {
         try {
             BasicFileAttributes fileAttributes = Files.readAttributes(Path.of(this.getPath()), BasicFileAttributes.class);
-            return new Date(fileAttributes.lastAccessTime().toMillis());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy");
+            SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+            Date date = new Date(fileAttributes.lastModifiedTime().toMillis());
+
+            String formattedDate = dateFormat.format(date);
+            String formattedTime = timeFormat.format(date);
+
+            return formattedTime + " " + formattedDate;
         } catch (IOException e) {
             e.printStackTrace();
         }

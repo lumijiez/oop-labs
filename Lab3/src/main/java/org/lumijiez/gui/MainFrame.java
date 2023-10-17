@@ -11,7 +11,6 @@ public class MainFrame extends JFrame {
     public static Path FOLDER_PATH;
     private final JScrollPane fileListScrollPane = new JScrollPane();
     private final JScrollPane fileInfoScrollPane = new JScrollPane();
-    private final JList<Document> fileList = new JList<>();
     private final JLabel pathLabel = new JLabel();
     private final JScrollPane mainScrollPane = new JScrollPane();
     private final JTextPane mainTextPane = new JTextPane();
@@ -19,11 +18,12 @@ public class MainFrame extends JFrame {
     private final JLabel snapshotLabel = new JLabel();
     private final JButton CommitButton = new JButton();
     private final JButton StatusButton = new JButton();
-    private final JMenuBar MainMenubar = new JMenuBar();
+    private final JMenuBar mainMenubar = new JMenuBar();
     private final JMenu fileMenu = new JMenu();
     private final JMenuItem pickFolder = new JMenuItem();
     private final JMenu settingsMenu = new JMenu();
     private final JMenuItem settings = new JMenuItem();
+    private final JList<Document> fileList = new JList<>();
     private final Map<Document, byte[]> fileContents = new HashMap<>();
     private TrackerThread tracker;
 
@@ -33,53 +33,49 @@ public class MainFrame extends JFrame {
 
     private void initComponents() {
 
+        setResizable(false);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         mainTextPane.setContentType("text/html");
+        fileInfoTextPane.setContentType("text/html");
+
+        mainTextPane.setEditable(false);
+        fileInfoTextPane.setEditable(false);
 
         JFileChooser folderChooser = new JFileChooser();
         folderChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        int returnVal = folderChooser.showOpenDialog(this);
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
+        if (folderChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             FOLDER_PATH = Path.of(folderChooser.getSelectedFile().getAbsolutePath());
             tracker = new TrackerThread(mainTextPane, fileContents, fileList, fileInfoTextPane);
             tracker.start();
         }
 
+        snapshotLabel.setFont(new java.awt.Font("Trebuchet MS", Font.PLAIN, 18));
+        pathLabel.setFont(new java.awt.Font("Trebuchet MS", Font.PLAIN, 18));
+
         fileList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         fileListScrollPane.setViewportView(fileList);
-
-        snapshotLabel.setFont(new java.awt.Font("Trebuchet MS", Font.PLAIN, 18));
-        snapshotLabel.setText("Last snapshot: " + new Date());
-
         mainScrollPane.setViewportView(mainTextPane);
         fileInfoScrollPane.setViewportView(fileInfoTextPane);
 
-        pathLabel.setFont(new java.awt.Font("Trebuchet MS", Font.PLAIN, 18));
-        pathLabel.setText("Currently tracking: " + FOLDER_PATH.toString());
-
-        CommitButton.setText("Commit");
         CommitButton.addActionListener(this::CommitButtonActionPerformed);
 
-        StatusButton.setText("Status");
-        StatusButton.addActionListener(this::StatusButtonActionPerformed);
-
-        fileMenu.setText("File");
-
-        pickFolder.setText("Pick another folder");
         fileMenu.add(pickFolder);
-
-        MainMenubar.add(fileMenu);
-
-        settingsMenu.setText("Edit");
-
-        settings.setText("Settings");
         settingsMenu.add(settings);
+        mainMenubar.add(fileMenu);
+        mainMenubar.add(settingsMenu);
 
-        MainMenubar.add(settingsMenu);
+        StatusButton.setText("Status");
+        pathLabel.setText("Currently tracking: " + FOLDER_PATH.toString());
+        CommitButton.setText("Commit");
+        snapshotLabel.setText("Last snapshot: " + new Date());
+        fileMenu.setText("File");
+        pickFolder.setText("Pick another folder");
+        settingsMenu.setText("Edit");
+        settings.setText("Settings");
 
-        setJMenuBar(MainMenubar);
+        setJMenuBar(mainMenubar);
 
         GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -98,8 +94,7 @@ public class MainFrame extends JFrame {
                                                 .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                                                         .addComponent(CommitButton, GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
                                                         .addComponent(fileInfoScrollPane))))
-                                .addContainerGap())
-        );
+                                .addContainerGap()));
         layout.setVerticalGroup(
                 layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                         .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -122,8 +117,5 @@ public class MainFrame extends JFrame {
         tracker.reset();
         mainTextPane.setText("");
         snapshotLabel.setText("Last snapshot: " + new Date());
-    }
-
-    private void StatusButtonActionPerformed(java.awt.event.ActionEvent evt) {
     }
 }
