@@ -1,5 +1,7 @@
 package org.lumijiez.util;
 
+import org.lumijiez.enums.DiffType;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,31 +14,26 @@ import java.util.stream.Stream;
 
 public class FileDiffer {
     public static Map<DiffType, ArrayList<File>> diff(Map<File, byte[]> oldFiles, Map<File, byte[]> newFiles) {
-        Map<DiffType, ArrayList<File>> result = new HashMap<>();
-
-        ArrayList<File> newFileList = new ArrayList<>();
-        ArrayList<File> deletedFileList = new ArrayList<>();
-        ArrayList<File> modifiedFileList = new ArrayList<>();
+        Map<DiffType, ArrayList<File>> result = Map.of(
+                        DiffType.CREATE, new ArrayList<>(),
+                        DiffType.DELETE, new ArrayList<>(),
+                        DiffType.MODIFY, new ArrayList<>());
 
         for (File file : oldFiles.keySet()) {
             if (newFiles.get(file) != null) {
                 if (Arrays.compare(oldFiles.get(file), newFiles.get(file)) != 0) {
-                    modifiedFileList.add(file);
+                    result.get(DiffType.MODIFY).add(file);
                 }
             } else {
-                deletedFileList.add(file);
+                result.get(DiffType.DELETE).add(file);
             }
         }
 
         for (File file : newFiles.keySet()) {
             if (oldFiles.get(file) == null) {
-                newFileList.add(file);
+                result.get(DiffType.CREATE).add(file);
             }
         }
-
-        result.put(DiffType.CREATE, newFileList);
-        result.put(DiffType.DELETE, deletedFileList);
-        result.put(DiffType.MODIFY, modifiedFileList);
 
         return result;
     }

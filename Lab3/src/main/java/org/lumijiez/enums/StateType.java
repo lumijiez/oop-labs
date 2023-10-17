@@ -1,14 +1,14 @@
-package org.lumijiez.util;
+package org.lumijiez.enums;
 
 public enum StateType {
     NEW("Created"), MODIFIED("Modified"), DELETED("Deleted"), NONE("Nothing");
 
-    private final String name;
+    private final String action;
     StateType(String name) {
-        this.name = name;
+        this.action = name;
     }
 
-    public String getName() {
-        return this.name;
+    public String getAction() {
+        return this.action;
     }
 }
