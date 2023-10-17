@@ -45,7 +45,48 @@ public class Utils {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
+    public static int countClasses(Document doc) {
+        try {
+            int classCount = 0;
+
+            BufferedReader reader = new BufferedReader(new FileReader(doc));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("class ")) {
+                    classCount++;
+                }
+            }
+            reader.close();
+            return classCount;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public static int countMethods(Document doc) {
+        try {
+            int methodCount = 0;
+
+            BufferedReader reader = new BufferedReader(new FileReader(doc));
+            String line;
+
+            while ((line = reader.readLine()) != null) {
+                if (line.matches(".*\\b\\w+\\s+\\w+\\(.*\\)\\s*\\{.*")) {
+                    methodCount++;
+                } else if (line.contains("def ")) {
+                    methodCount++;
+                }
+            }
+
+            reader.close();
+            return methodCount;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
 }

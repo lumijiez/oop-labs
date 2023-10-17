@@ -16,6 +16,8 @@ public class CodeFile extends Document{
         info.append("Extension: ").append(getExtension().toUpperCase()).append("<br>");
         info.append("File size: ").append(getFilesizeKB()).append(" KB").append("<br>");
         info.append("Lines: ").append(Utils.countLines(this)).append("<br>");
+        info.append("Classes: ").append(Utils.countClasses(this)).append("<br>");
+        info.append("Methods: ").append(Utils.countMethods(this)).append("<br>");
         info.append("Created at: ").append(getCreatedTime()).append("<br>");
         info.append("Modified at: ").append(getModificationTime()).append("<br>");
         return info.toString();
