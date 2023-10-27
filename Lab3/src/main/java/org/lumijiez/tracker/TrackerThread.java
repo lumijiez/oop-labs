@@ -71,12 +71,10 @@ public class TrackerThread extends Thread {
         }
     }
 
-
     public void checkDirectory() {
-        Map<DiffType, ArrayList<Document>> result = FileDiffer.diff(fileContents, FileDiffer.crawlDirectory(MainFrame.FOLDER_PATH));
+        Map<DiffType, ArrayList<Document>> result = FileDiffer.diff(fileContents, FileDiffer.crawlDirectory(MainFrame.FOLDER_PATH.toFile()));
 
         StringBuilder toShow = new StringBuilder();
-
         boolean somethingNew = false;
 
         for (DiffType type : result.keySet()) {

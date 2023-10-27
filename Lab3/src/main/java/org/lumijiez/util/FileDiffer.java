@@ -3,6 +3,7 @@ package org.lumijiez.util;
 import org.lumijiez.base.Document;
 import org.lumijiez.enums.DiffType;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -41,6 +42,25 @@ public class FileDiffer {
     public static Map<Document, byte[]> crawlDirectory(Path path) {
         Map<Document, byte[]> newFileContents = new HashMap<>();
         try (Stream<Path> paths = Files.walk(path)) {
+            paths.forEach(p -> {
+                Document doc = new Document(p);
+                if (Files.isRegularFile(doc.toPath())) {
+                    try {
+                        newFileContents.put(doc, Files.readAllBytes(doc.toPath()));
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return newFileContents;
+    }
+
+    public static Map<Document, byte[]> crawlDirectory(File file) {
+        Map<Document, byte[]> newFileContents = new HashMap<>();
+        try (Stream<Path> paths = Files.walk(file.toPath())) {
             paths.forEach(p -> {
                 Document doc = new Document(p);
                 if (Files.isRegularFile(doc.toPath())) {

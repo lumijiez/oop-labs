@@ -4,7 +4,7 @@ import org.lumijiez.util.Utils;
 
 import java.nio.file.Path;
 
-public class CodeFile extends Document{
+public class CodeFile extends Document {
     public CodeFile(Path path) {
         super(path);
     }
